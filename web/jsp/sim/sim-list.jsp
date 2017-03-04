@@ -8,6 +8,9 @@
         <div class="panel-heading">แสดงรายการ Sim ทั้งหมด</div>
         <div class="panel-body">
             <a href="${context}/SimFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                <c:if test="${!empty message}">
+                    <p>Status : ${message}</p>
+                </c:if>
         </div>
         <table class="table table-bordered table-striped">
             <thead>
