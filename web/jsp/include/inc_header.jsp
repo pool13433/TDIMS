@@ -90,6 +90,15 @@
                         <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
                             <a href="${context}/jsp/report/report-list.jsp?menu=report"><i class="glyphicon glyphicon-file"></i> รายงาน</a>
                         </li>
+                        <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
+                            <a href="${context}/ConfigListServlet"><i class="glyphicon glyphicon-cog"></i> จัดการ Configuration</a>
+                        </li>
+                        <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
+                            <a href="${context}/DepertmentListServlet"><i class="glyphicon glyphicon-list-alt"></i> จัดการ Department</a>
+                        </li>
+                        <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
+                            <a href="${context}/PositionListServlet"><i class="glyphicon glyphicon-map-marker"></i> จัดการ Position</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">              
