@@ -56,6 +56,54 @@
         <servlet-name>ChangeProfileServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.authen.ChangeProfileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ConfigFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.config.ConfigFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfigListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.config.ConfigListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfigSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.config.ConfigSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfigDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.config.ConfigDeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepertmentListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.department.DepertmentListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepartmentFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.department.DepartmentFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepartmentSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.department.DepartmentSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepartmentDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.department.DepartmentDeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PositionListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.position.PositionListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PositionFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.position.PositionFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PositionSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.position.PositionSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PositionDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.position.PositionDeleteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -126,6 +174,54 @@
     <servlet-mapping>
         <servlet-name>ChangeProfileServlet</servlet-name>
         <url-pattern>/ChangeProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfigFormServlet</servlet-name>
+        <url-pattern>/ConfigFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfigListServlet</servlet-name>
+        <url-pattern>/ConfigListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfigSaveServlet</servlet-name>
+        <url-pattern>/ConfigSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfigDeleteServlet</servlet-name>
+        <url-pattern>/ConfigDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepertmentListServlet</servlet-name>
+        <url-pattern>/DepertmentListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentFormServlet</servlet-name>
+        <url-pattern>/DepartmentFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentSaveServlet</servlet-name>
+        <url-pattern>/DepartmentSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartmentDeleteServlet</servlet-name>
+        <url-pattern>/DepartmentDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PositionListServlet</servlet-name>
+        <url-pattern>/PositionListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PositionFormServlet</servlet-name>
+        <url-pattern>/PositionFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PositionSaveServlet</servlet-name>
+        <url-pattern>/PositionSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PositionDeleteServlet</servlet-name>
+        <url-pattern>/PositionDeleteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
