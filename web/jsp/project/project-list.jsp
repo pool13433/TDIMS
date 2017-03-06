@@ -5,7 +5,7 @@
 <jsp:include page="../include/inc_header.jsp"/>
 <div class="container">    
     <div class="panel panel-ais">        
-        <div class="panel-heading">แสดงรายการ Project ทั้งหมด</div>
+        <div class="panel-heading">แสดงรายการ Project ทั้งหมด</div>  
         <div class="panel-body">
             <a href="${context}/ProjectFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
         </div>
@@ -37,3 +37,8 @@
     </div>
 </div>
 <jsp:include page="../include/inc_footer.jsp"/>
+<script lang="javascript">
+  
+    
+    
+</script>

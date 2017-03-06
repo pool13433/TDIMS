@@ -225,6 +225,39 @@ public class SimDao {
         return exe;
     }
     
+    public List<Sim> findSim(String searching) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Sim> simList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
+            sql.append(" `region_code`, `env`, `site`, `usage_type`, `assign_team`, ");
+            sql.append(" `email_contact`, `project`, ");
+            sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
+            sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
+            sql.append(" FROM `sim` ");
+            sql.append(" WHERE mobile_no=? ");
+            
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, searching);
+            rs = pstm.executeQuery();
+            simList = new ArrayList<Sim>();
+            while (rs.next()) {
+                simList.add(getEntitySim(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("find Sim error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return simList;
+    }
+    
 
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {

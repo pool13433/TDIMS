@@ -151,6 +151,29 @@ public class ProjectDao {
         return exe;
     }
 
+    public List<Project> findProject(String projectName) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Project> projectList = new ArrayList<Project>();
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `proj_id`, `proj_name`, `proj_desc`, `proj_status` FROM `project`  WHERE proj_name=?");            
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, projectName);
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                projectList.add(getEntityProject(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getProject error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return projectList;
+    }
+    
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {
