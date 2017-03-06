@@ -58,6 +58,109 @@ public class PositionDao {
         }
         return positionList;
     }
+    
+    public Position getPosition(String posId) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Position position = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT p.pos_id, p.pos_name, p.pos_desc, p.dep_id, ");
+            sql.append(" (SELECT dep_name FROM department d WHERE d.dep_id = p.dep_id ) as dep_name");
+            sql.append(" FROM `position` p ");
+            sql.append(" WHERE p.pos_id = ? ");
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, posId);
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                position = new Position();
+                position.setPosId(rs.getString("pos_id"));
+                position.setPosName(rs.getString("pos_name"));
+                position.setPosDesc(rs.getString("pos_desc"));
+                position.setDepId(rs.getString("dep_id"));
+                position.setDepName(rs.getString("dep_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getPosition error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return position;
+    }
+    
+    public int createPosition(Position position){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" INSERT INTO `position` ");
+            sql.append(" ( `pos_name`, `pos_desc`, `dep_id` ) ");
+            sql.append(" VALUES ");
+            sql.append(" (?,?,?)");
+            
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setString(1, position.getPosName());
+            pstm.setString(2, position.getPosDesc());
+            pstm.setInt(3, Integer.parseInt(position.getDepId()));
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("save position error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+    
+    public int updatePosition(Position position){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" UPDATE `position` SET ");
+            sql.append(" `pos_name`=?, `pos_desc`=?, `dep_id`=? ");
+            sql.append(" WHERE `pos_id`=?");
+
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setString(1, position.getPosName());
+            pstm.setString(2, position.getPosName());
+            pstm.setInt(3, Integer.parseInt(position.getDepId()));      
+            pstm.setString(4, position.getPosId());
+            
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("update position error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+    
+    public int deletePosition(int posId){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" DELETE FROM `position` WHERE pos_id=?");
+            
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setInt(1, posId);      
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("delete position error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
 
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {

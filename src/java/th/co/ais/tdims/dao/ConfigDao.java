@@ -76,6 +76,132 @@ public class ConfigDao {
         }
         return configList;
     }
+    
+    public Config getConfig(String configId) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Config config = null;
+        try {
+            conn = new DbConnection().open();
+            String sql = "SELECT c.* FROM config c WHERE c.con_id = ? ";
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, configId);
+            rs = pstm.executeQuery();
+            while (rs.next()) { 
+                config = new Config();
+                config.setConId(rs.getString("con_id"));
+                config.setConCode(rs.getString("con_code"));
+                config.setConName(rs.getString("con_name"));
+                config.setConValue(rs.getString("con_value"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getConfig error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return config;
+    }
+    
+    public List<Config> getAllConfig() {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Config> configList = null;
+        try {
+            conn = new DbConnection().open();
+            String sql = "SELECT c.* FROM config c ORDER BY c.con_id";
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+            configList = new ArrayList<Config>();
+            while (rs.next()) {                
+                Config config = new Config();
+                config.setConId(rs.getString("con_id"));
+                config.setConCode(rs.getString("con_code"));
+                config.setConName(rs.getString("con_name"));
+                config.setConValue(rs.getString("con_value"));
+                configList.add(config);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getAllConfig error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return configList;
+    }
+    
+     public int createConfig(Config config){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" INSERT INTO `config` ");
+            sql.append(" ( `con_code`, `con_name`, `con_value` ) ");
+            sql.append(" VALUES ");
+            sql.append(" (?,?,?)");
+            
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setString(1, config.getConCode());
+            pstm.setString(2, config.getConName());
+            pstm.setString(3, config.getConValue());
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("createConfig error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+    
+    public int updateConfig(Config config){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" UPDATE `config` SET ");
+            sql.append(" `con_code`=?,`con_name`=?,`con_value`=? ");
+            sql.append(" WHERE `con_id`=?");
+
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setString(1, config.getConCode());
+            pstm.setString(2, config.getConName());
+            pstm.setString(3, config.getConValue());      
+            pstm.setString(4, config.getConId());
+            
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("saveSim error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+    
+    public int deleteConfig(int configId){
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" DELETE FROM `config` WHERE con_id=?");
+            
+            pstm = conn.prepareStatement(sql.toString());     
+            pstm.setInt(1, configId);      
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("deleteConfig error", e);
+        }finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
 
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
