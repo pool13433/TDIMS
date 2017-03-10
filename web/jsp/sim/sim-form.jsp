@@ -50,22 +50,18 @@
                     <select class="form-control" class="form-control" id="env" name="env" placeholder="env" required>
                         <c:forEach items="${envList}" var="env">                            
                             <c:choose>
-                                <c:when test="${sim.env == env.conName}">
-                                    <option value="${env.conName}" selected>${env.conValue}</option>
+                                <c:when test="${sim.enviroment == env.envId}">
+                                    <option value="${env.envId}" selected>${env.envCode}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${env.conName}">${env.conValue}</option>
+                                    <option value="${env.envId}">${env.envCode}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="site" class="col-sm-1 control-label">Site</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control"  value="${sim.site}" id="site" name="site" placeholder="site" required>
-                </div>                
+            <div class="form-group">           
                 <label for="usageType" class="col-sm-1 control-label">Usage Type</label>
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="usageType" name="usageType" placeholder="usageType" required>
@@ -81,31 +77,39 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label for="assignTeam" class="col-sm-1 control-label">Assign Team</label>
+                <label for="system" class="col-sm-1 control-label">System</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="${sim.assignTeam}"  id="assignTeam" name="assignTeam" placeholder="assignTeam" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-1 control-label">Email</label>
-                <div class="col-sm-3">
-                    <input type="email" class="form-control" value="${sim.emailContact}"  id="email" name="email" placeholder="email" required>
-                </div>                
-                <label for="project" class="col-sm-1 control-label">Project</label>
-                <div class="col-sm-3">
-                    <select class="form-control" class="form-control" id="project" name="project" placeholder="project" required>
-                        <c:forEach items="${projectList}" var="project">                            
+                    <select class="form-control" class="form-control" id="system" name="system"  required>
+                        <c:forEach items="${systemList}" var="system">                            
                             <c:choose>
-                                <c:when test="${sim.project == project.projId}">
-                                    <option value="${project.projId}">${project.projName}</option>
+                                <c:when test="${sim.system == system.conName}">
+                                    <option value="${system.conName}" selected>${system.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${project.projId}">${project.projName}</option>
+                                    <option value="${system.conName}">${system.conValue}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </select>
                 </div>
+                <label for="owner" class="col-sm-1 control-label">Owner</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="owner" name="owner" required>
+                        <c:forEach items="${ownerList}" var="owner">                            
+                            <c:choose>
+                                <c:when test="${sim.owner == owner.profileId}">
+                                    <option value="${owner.profileId}" selected>${owner.username}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${owner.profileId}">${owner.username}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-group">
                 <label for="status" class="col-sm-1 control-label">Status</label>
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="status" name="status" placeholder="status" required>
@@ -122,24 +126,6 @@
                     </select>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="validDate" class="col-sm-1 control-label">Valid Date</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control datepicker"  value="${sim.validDate}"  id="validDate" name="validDate" placeholder="validDate" readonly required>
-                </div>         
-                <label for="expireDate" class="col-sm-1 control-label">Expire Date</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control datepicker"  value="${sim.expireDate}"  id="expireDate" name="expireDate" placeholder="expireDate" readonly required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="remark" class="col-sm-1 control-label">Remark</label>
-                <div class="col-sm-11">
-                    <textarea class="form-control" name="remark" id="remark" placeholder="remark">${sim.remark}</textarea>
-                </div>      
-            </div>
-
             <div class="form-group">
                 <div class="col-sm-offset-1 col-sm-10">
                     <button type="submit" class="btn btn-success">Save</button>

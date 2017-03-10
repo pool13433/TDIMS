@@ -17,10 +17,12 @@ public class Sim {
     private String imsi;
     private String chargeType;
     private String regionCode;
+    private String system;
     private String enviroment;
     private String site;
     private String usageType;
     private String simStatus;
+    private String owner;
     private String teamId;
     private String emailContact;
     private String projectId;
@@ -82,6 +84,16 @@ public class Sim {
         this.regionCode = regionCode;
     }
 
+    public String getSystem() {
+        return system;
+    }
+
+    public void setSystem(String system) {
+        this.system = system;
+    }
+    
+    
+
     public String getEnviroment() {
         return enviroment;
     }
@@ -113,6 +125,16 @@ public class Sim {
     public void setSimStatus(String simStatus) {
         this.simStatus = simStatus;
     }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+    
+    
 
     public String getTeamId() {
         return teamId;

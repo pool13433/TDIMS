@@ -5,7 +5,6 @@
  */
 package th.co.ais.tdims.action.sim;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,39 +35,27 @@ public class SimSaveServlet extends HttpServlet {
             String imsi = CharacterUtil.removeNull(request.getParameter("imsi"));
             String chargeType = CharacterUtil.removeNull(request.getParameter("chargeType"));
             String regionCode = CharacterUtil.removeNull(request.getParameter("regionCode"));
-            String env = CharacterUtil.removeNull(request.getParameter("env"));
-            String site = CharacterUtil.removeNull(request.getParameter("site"));
-            String usageType = CharacterUtil.removeNull(request.getParameter("usageType"));
-            String assignTeam = CharacterUtil.removeNull(request.getParameter("assignTeam"));
-            String email = CharacterUtil.removeNull(request.getParameter("email"));
-            String project = CharacterUtil.removeNull(request.getParameter("project"));
+            String env = CharacterUtil.removeNull(request.getParameter("env"));            
+            String usageType = CharacterUtil.removeNull(request.getParameter("usageType"));                        
             String status = CharacterUtil.removeNull(request.getParameter("status"));
-            String validDate = CharacterUtil.removeNull(request.getParameter("validDate"));
-            String expireDate = CharacterUtil.removeNull(request.getParameter("expireDate"));
-            String remark = CharacterUtil.removeNull(request.getParameter("remark"));
             String simId = CharacterUtil.removeNull(request.getParameter("simId"));
+            String system = CharacterUtil.removeNull(request.getParameter("system"));
+            String owner = CharacterUtil.removeNull(request.getParameter("owner"));
 
-            Sim sim = new Sim();
-            sim.setTeamId(assignTeam);
+            Sim sim = new Sim();            
             sim.setChargeType(chargeType);
-            sim.setCreateBy(DUMMY_USER);
-            sim.setCreateDate(expireDate);
-            sim.setEmailContact(email);
-            sim.setEnviroment(env);
-            sim.setExpireDate(expireDate);
+            sim.setCreateBy(DUMMY_USER);                     
+            sim.setEnviroment(env);            
             sim.setImsi(imsi);
-            sim.setMobileNo(mobileNo);
-            sim.setProjectId(project);
-            sim.setRegionCode(regionCode);
-            sim.setRemark(remark);
+            sim.setMobileNo(mobileNo);            
+            sim.setRegionCode(regionCode);            
             sim.setSerialNo(serialNo);
             sim.setSerialNo(serialNo);            
-            sim.setSimStatus(status);
-            sim.setSite(site);
-            sim.setUpdateBy(DUMMY_USER);
-            sim.setUpdateDate(expireDate);
-            sim.setUsageType(usageType);
-            sim.setValidDate(validDate);
+            sim.setSimStatus(status);            
+            sim.setUpdateBy(DUMMY_USER);            
+            sim.setUsageType(usageType);           
+            sim.setSystem(system);
+            sim.setOwner(owner);
             SimDao simDao = new SimDao();
             
             logger.info("simId ::=="+simId);

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.dao.EnvironmentDao;
+import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.model.Sim;
@@ -45,7 +47,9 @@ public class SimFormServlet extends HttpServlet {
             request.setAttribute("chargeTypeList", configDao.getConfigList("CHARGE_TYPE"));
             request.setAttribute("usageTypeList", configDao.getConfigList("USAGE_TYPE"));
             request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
-            request.setAttribute("envList", configDao.getConfigList("ENV"));
+            request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
+            request.setAttribute("ownerList", new ProfileDao().getAllUser());
+            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
             request.setAttribute("projectList", projecDao.getProjectAll());
             request.setAttribute("sim", sim);
 
