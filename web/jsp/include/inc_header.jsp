@@ -23,6 +23,15 @@
         <style type="text/css">
             body *{font-family: 'Marmelad', sans-serif;}
             a{color: #0B0F00;font-weight: bold}
+            
+          /*boostrap checkbox*/
+          .btn span.glyphicon{
+              opacity: 0;
+          }
+          .btn.active span.glyphicon{
+              opacity: 1;
+          }
+          
         </style>
     </head>
     <body>
@@ -100,5 +109,18 @@
                             <a href="${context}/PositionListServlet"><i class="glyphicon glyphicon-map-marker"></i> จัดการ Position</a>
                         </li>
                     </ul>
+                    <ul class="nav nav-sidebar">
+                        <li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">
+                            <a href="${context}/SimSearchServlet?menu=sim_search"><i class="glyphicon glyphicon-credit-card"></i> ค้นหา SIM</a>
+                        </li>
+                        <li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">
+                            <a href="${context}/KnowledgeSearchServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> ค้นหา Knowledge</a>
+                        </li>
+                        <li class="<c:out value="${menu == 'testcase_search' ? 'active': ''}"/>">
+                            <a href="${context}/TestcaseSearchServlet?menu=testcase_search"><i class="glyphicon glyphicon-folder-open"></i> ค้นหา Testcase</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">              
+
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">      
+    

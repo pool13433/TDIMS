@@ -104,6 +104,18 @@
         <servlet-name>PositionDeleteServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.position.PositionDeleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestcaseSearchServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.testcase.TestcaseSearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SimSearchServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.sim.SimSearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeamListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.team.TeamListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -222,6 +234,18 @@
     <servlet-mapping>
         <servlet-name>PositionDeleteServlet</servlet-name>
         <url-pattern>/PositionDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestcaseSearchServlet</servlet-name>
+        <url-pattern>/TestcaseSearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SimSearchServlet</servlet-name>
+        <url-pattern>/SimSearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeamListServlet</servlet-name>
+        <url-pattern>/TeamListServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

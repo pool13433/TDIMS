@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.TestcastDao;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;
@@ -27,12 +28,17 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
         Testcase tc = new Testcase();
         logger.debug("TestcaseSearchServlet");
         String dirFile = request.getParameter("pathDir");
+        ProjectDao projectCombo = new ProjectDao();
         try {
+            //DropdownList
+            request.setAttribute("projectCombo", projectCombo.getProjectComboList());
             String searching = CharacterUtil.removeNull(request.getParameter("searchBox"));
-            System.out.println("searching name = "+searching);
+            String projectSelected = CharacterUtil.removeNull(request.getParameter("projectSelected"));
+            System.out.println("searching name = "+searching +"pId: "+ projectSelected);
             TestcastDao testcaseDao= new TestcastDao();
             
-            if(!"".equals(searching)){
+            if(!"".equals(searching) || projectSelected != null){
+                tc.setProjectId(projectSelected.substring(0, 1));
                 tc.setTestcaseDetails(searching);
                 tc.setTestcaseTitle(searching);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));

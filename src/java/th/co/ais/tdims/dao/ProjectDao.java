@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
+import th.co.ais.tdims.model.Combo;
 import th.co.ais.tdims.model.Project;
 
 /**
@@ -26,6 +27,7 @@ public class ProjectDao {
     private Connection conn = null;
 
     public List<Project> getProjectAll() {
+        logger.info("getProjectAll");
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Project> projectList = null;
@@ -69,6 +71,33 @@ public class ProjectDao {
             this.close(pstm, rs);
         }
         return project;
+    }
+    
+    public List<Combo> getProjectComboList() {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Combo> combo = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `proj_id`, `proj_name`, `proj_desc` FROM `project`  ORDER BY proj_name ASC");            
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            combo = new ArrayList<Combo>();
+            while (rs.next()) {
+                Combo c = new Combo();
+                c.setId(rs.getString("proj_id"));
+                c.setValue1(rs.getString("proj_name"));
+                c.setValue2(rs.getString("proj_desc"));
+                combo.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getProjectAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return combo;
     }
 
     private Project getEntityProject(ResultSet rs) throws SQLException {

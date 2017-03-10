@@ -15,9 +15,21 @@
                     <h3><span class="label label-primary">Search Criteria</span></h3>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Project</div>
+                            <div class="panel-body">
+                                <div class="dropdown">
+                                    <select  class="form-control" id="projectSelected" name="projectSelected" value="${p.id}" >
+                                        <option>  ALL  </option>
+                                        <c:forEach items="${projectCombo}" var="p" >
+                                            <option ><a href="#">${p.id} - ${p.value1}</a></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>  
                     </div>
-                       
                 </div>
                 <div class="row">
                     <div class="col-sm-4">

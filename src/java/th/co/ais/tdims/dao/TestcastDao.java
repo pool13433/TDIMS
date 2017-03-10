@@ -31,6 +31,7 @@ public class TestcastDao {
     private final String DATE_TO_STR = " '%d-%m-%Y' ";
     
     public List<Testcase> getTestcaseAll() {
+        logger.debug("getTestcaseAll");
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Testcase> testcaseList = null;
@@ -72,6 +73,9 @@ public class TestcastDao {
             sql.append(" FROM `testcase` ");            
             sql.append(" WHERE 1=1 ");
             
+            if(!"".equals(CharacterUtil.removeNull(tc.getProjectId()))){
+                sql.append(" and `project_id` = '"+tc.getProjectId()+"'");
+            }
             if(!"".equals(CharacterUtil.removeNull(tc.getTestcaseTitle()))){
                 sql.append(" and `testcase_title` LIKE '%"+tc.getTestcaseTitle()+"%'");
             }

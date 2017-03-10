@@ -5,6 +5,7 @@
  */
 package th.co.ais.tdims.action.sim;
 
+import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +24,7 @@ public class SimSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(SimSaveServlet.class);
 
-    private int DUMMY_USER = 1;
+    private String DUMMY_USER = "1";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -48,16 +49,16 @@ public class SimSaveServlet extends HttpServlet {
             String simId = CharacterUtil.removeNull(request.getParameter("simId"));
 
             Sim sim = new Sim();
-            sim.setAssignTeam(assignTeam);
+            sim.setTeamId(assignTeam);
             sim.setChargeType(chargeType);
             sim.setCreateBy(DUMMY_USER);
             sim.setCreateDate(expireDate);
             sim.setEmailContact(email);
-            sim.setEnv(env);
+            sim.setEnviroment(env);
             sim.setExpireDate(expireDate);
             sim.setImsi(imsi);
             sim.setMobileNo(mobileNo);
-            sim.setProject(Integer.parseInt(project));
+            sim.setProjectId(project);
             sim.setRegionCode(regionCode);
             sim.setRemark(remark);
             sim.setSerialNo(serialNo);
@@ -80,6 +81,8 @@ public class SimSaveServlet extends HttpServlet {
                 simDao.updateSim(sim);
             }
             request.setAttribute("message", "save sim success");
+            
+            
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,4 +91,5 @@ public class SimSaveServlet extends HttpServlet {
         }
         response.sendRedirect(request.getContextPath() + "/SimListServlet");
     }
+    
 }

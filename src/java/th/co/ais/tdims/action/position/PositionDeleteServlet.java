@@ -3,40 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package th.co.ais.tdims.action.project;
+
+package th.co.ais.tdims.action.position;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import th.co.ais.tdims.dao.ProjectDao;
+import th.co.ais.tdims.dao.PositionDao;
+import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
-public class ProjectListServlet extends HttpServlet {
-
-    final static Logger logger = Logger.getLogger(ProjectListServlet.class);
+public class PositionDeleteServlet extends HttpServlet {
+    final static Logger logger = Logger.getLogger(PositionDeleteServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-logger.debug("ProjectListServlet");
         try {
-
-            ProjectDao projectDao = new ProjectDao();
-
-            request.setAttribute("projectList", projectDao.getProjectAll());
-
+            int exe = new PositionDao().deletePosition(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("posId"))));
+            request.setAttribute("message", "delete position success");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("ProjectList Error", e);
+            logger.error("delete position error", e);
+            request.setAttribute("message", "delete position error");
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/project-list.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/PositionListServlet");
     }
 }

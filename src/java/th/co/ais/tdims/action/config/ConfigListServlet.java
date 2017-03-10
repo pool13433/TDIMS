@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package th.co.ais.tdims.action.project;
+package th.co.ais.tdims.action.config;
 
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -12,31 +12,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import th.co.ais.tdims.dao.ProjectDao;
+import th.co.ais.tdims.dao.ConfigDao;
 
-/**
- *
- * @author POOL_LAPTOP
- */
-public class ProjectListServlet extends HttpServlet {
-
-    final static Logger logger = Logger.getLogger(ProjectListServlet.class);
+public class ConfigListServlet extends HttpServlet {
+    final static Logger logger = Logger.getLogger(ConfigListServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-logger.debug("ProjectListServlet");
         try {
-
-            ProjectDao projectDao = new ProjectDao();
-
-            request.setAttribute("projectList", projectDao.getProjectAll());
+            request.setAttribute("confList", new ConfigDao().getAllConfig());
 
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("ProjectList Error", e);
+            logger.error("confList Error", e);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/project/project-list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/config/config-list.jsp");
         dispatcher.forward(request, response);
     }
+
 }

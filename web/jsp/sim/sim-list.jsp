@@ -41,9 +41,9 @@
                         <td>${sim.serialNo}</td>
                         <td>${sim.imsi}</td>
                         <td>${sim.regionCode}</td>
-                        <td>${sim.project}</td>
+                        <td>${sim.projectId}</td>
                         <td>${sim.chargeType}</td>
-                        <td>${sim.env}</td>                        
+                        <td>${sim.enviroment}</td>                        
                         <td>${sim.validDate}</td>
                         <td>${sim.expireDate}</td>
                         <td>${sim.simStatus}</td>                    

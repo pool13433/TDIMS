@@ -17,21 +17,21 @@ public class Sim {
     private String imsi;
     private String chargeType;
     private String regionCode;
-    private String env;
+    private String enviroment;
     private String site;
     private String usageType;
     private String simStatus;
-    private String assignTeam;
+    private String teamId;
     private String emailContact;
-    private int project;
+    private String projectId;
     private String validDate;
     private String expireDate;
     private String remark;
     private String createDate;
-    private int createBy;
+    private String createBy;
     private String createByUsername;
     private String updateDate;
-    private int updateBy;
+    private String updateBy;
     private String updateByUsername;
 
     public String getSimId() {
@@ -41,10 +41,6 @@ public class Sim {
     public void setSimId(String simId) {
         this.simId = simId;
     }
-
-   
-
-   
 
     public String getMobileNo() {
         return mobileNo;
@@ -86,14 +82,14 @@ public class Sim {
         this.regionCode = regionCode;
     }
 
-    public String getEnv() {
-        return env;
+    public String getEnviroment() {
+        return enviroment;
     }
 
-    public void setEnv(String env) {
-        this.env = env;
+    public void setEnviroment(String enviroment) {
+        this.enviroment = enviroment;
     }
-
+    
     public String getSite() {
         return site;
     }
@@ -118,12 +114,12 @@ public class Sim {
         this.simStatus = simStatus;
     }
 
-    public String getAssignTeam() {
-        return assignTeam;
+    public String getTeamId() {
+        return teamId;
     }
 
-    public void setAssignTeam(String assignTeam) {
-        this.assignTeam = assignTeam;
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
     public String getEmailContact() {
@@ -134,12 +130,12 @@ public class Sim {
         this.emailContact = emailContact;
     }
 
-    public int getProject() {
-        return project;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setProject(int project) {
-        this.project = project;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public String getValidDate() {
@@ -174,21 +170,11 @@ public class Sim {
         this.createDate = createDate;
     }
 
-   
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public int getCreateBy() {
+    public String getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(int createBy) {
+    public void setCreateBy(String createBy) {
         this.createBy = createBy;
     }
 
@@ -200,11 +186,19 @@ public class Sim {
         this.createByUsername = createByUsername;
     }
 
-    public int getUpdateBy() {
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(int updateBy) {
+    public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
 
@@ -216,6 +210,5 @@ public class Sim {
         this.updateByUsername = updateByUsername;
     }
 
-   
-
+    
 }
