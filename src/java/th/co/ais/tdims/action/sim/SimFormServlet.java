@@ -43,7 +43,6 @@ public class SimFormServlet extends HttpServlet {
             }else{
                 sim = simDao.getSim(Integer.parseInt(simId));
             }
-
             request.setAttribute("chargeTypeList", configDao.getConfigList("CHARGE_TYPE"));
             request.setAttribute("usageTypeList", configDao.getConfigList("USAGE_TYPE"));
             request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
@@ -52,7 +51,6 @@ public class SimFormServlet extends HttpServlet {
             request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
             request.setAttribute("projectList", projecDao.getProjectAll());
             request.setAttribute("sim", sim);
-
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("sim form error", e);
