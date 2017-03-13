@@ -215,7 +215,7 @@ public class SimDao {
         return exe;
     }
     
-    public List<Sim> findSim(String searching) {
+    public List<Sim> findSim(Sim searching) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Sim> simList = null;
@@ -229,11 +229,22 @@ public class SimDao {
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
             sql.append(" FROM `sim` ");
-            sql.append(" WHERE mobile_no=? ");
+            sql.append(" WHERE 1=1 ");
 
-            //logger.info("sql ::=="+sql);
+            if(!"".equals(searching.getMobileNo())){
+                sql.append(" and `mobile_no` ='"+searching.getMobileNo()+"'");
+            }
+            if(!"".equals(searching.getEnviroment())){
+                sql.append(" and `env_id` ="+searching.getEnviroment());
+            }
+            if(!"".equals(searching.getSystem())){
+                sql.append(" and `system` ='"+searching.getSystem()+"'");
+            }
+            if(!"".equals(searching.getSimStatus())){
+                sql.append(" and `sim_status` ='"+searching.getSimStatus()+"'");
+            }
+            logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
-            pstm.setString(1, searching);
             rs = pstm.executeQuery();
             simList = new ArrayList<Sim>();
             while (rs.next()) {
