@@ -5,6 +5,7 @@
  */
 package th.co.ais.tdims.action.sim;
 
+import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.dao.EnvironmentDao;
+import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.dao.TeamDao;
@@ -30,7 +34,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.debug("SimSearchServlet");
+        logger.debug("GET SimSearchServlet");
         RequestDispatcher dispatcher = null;
         try {
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
@@ -40,7 +44,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             request.setAttribute("projectList", projectDao.getProjectAll());
             //teamList
             TeamDao teamDao = new TeamDao();
-            request.setAttribute("teamList", teamDao.getTeamAll());
+            request.setAttribute("teamList", teamDao.getTeamAll());            
             
             String[] simSelected = request.getParameterValues("simSelected");
             String simStr = ""; 
@@ -58,15 +62,35 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             
             dispatcher = request.getRequestDispatcher("/jsp/sim/sim-booking.jsp");
             }else{
-                String searching = CharacterUtil.removeNull(request.getParameter("searchBox"));
+                //Combo List
+                ProjectDao projectDao = new ProjectDao();
+                request.setAttribute("projectList", projectDao.getProjectAll());
+                ConfigDao configDao = new ConfigDao();
+                request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
+                request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+                request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
                 SimDao simDao = new SimDao();
-                if(!"".equals(searching)){
-                    request.setAttribute("simList", simDao.findSim(searching));
+                Sim sim = new Sim();
+                String searchMobile = CharacterUtil.removeNull(request.getParameter("mobileNo"));
+                sim.setMobileNo(searchMobile);
+                request.setAttribute("mobileNo", searchMobile);
+                String searchEnv = CharacterUtil.removeNull(request.getParameter("env"));
+                sim.setEnviroment(searchEnv);
+                request.setAttribute("env", searchEnv);
+                String searchSystem = CharacterUtil.removeNull(request.getParameter("system"));
+                sim.setSystem(searchSystem);
+                request.setAttribute("system", searchSystem);
+                String searchStatus = CharacterUtil.removeNull(request.getParameter("status"));
+                sim.setSimStatus(searchStatus);
+                request.setAttribute("status", searchStatus);
+                
+                if("searching".equals(menu)){
+                    request.setAttribute("simList", simDao.findSim(sim));
                 }else{
                     request.setAttribute("simList", simDao.getSimAll());
                 }
 
-                request.setAttribute("searchBox", searching);
+                //request.setAttribute("searchBox", searching);
                 dispatcher = request.getRequestDispatcher("/jsp/sim/sim-search.jsp");
             }
             

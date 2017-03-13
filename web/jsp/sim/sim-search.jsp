@@ -7,7 +7,68 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">ค้นหา Sim</div>
         <div class="panel-body">
-            <form id="bookingSim" action="${context}/SimSearchServlet"   method="get">   
+            <form id="searchSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">   
+                <input type="hidden" id="menu" name="menu" value="searching"/>
+                <div class="form-group">
+                    <label for="mobileNo" class="col-sm-1 control-label">MobileNo</label>
+                    <div class="col-sm-3">
+                        <input type="hidden" value="${sim.simId}" id="simId" name="simId">
+                        <input type="text" class="form-control" value="${sim.mobileNo}" id="mobileNo" name="mobileNo" placeholder="mobileNo">
+                    </div>
+                    <label for="mobileNo" class="col-sm-1 control-label">Environment</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" class="form-control" id="env" name="env" placeholder="env">
+                            <option value="" selected>   All environment  </option>                                                       
+                            <c:forEach items="${envList}" var="e">                            
+                            <c:choose>
+                                <c:when test="${env == e.envId}">
+                                    <option value="${e.envId}" selected>${e.envCode}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${e.envId}">${e.envCode}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"> 
+                    <label for="system" class="col-sm-1 control-label">System</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" class="form-control" id="system" name="system" >
+                            <option value="" selected>    All system  </option>
+                            <c:forEach items="${systemList}" var="sys">                            
+                                <c:choose>
+                                    <c:when test="${system == sys.conName}">
+                                        <option value="${sys.conName}" selected>${sys.conValue}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${sys.conName}">${sys.conValue}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>    
+                        </select>
+                    </div>
+                    <label for="status" class="col-sm-1 control-label">Status</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" class="form-control" id="status" name="status" placeholder="status">                           
+                            <option value="" selected>    All status</option>                                                      
+                            <c:forEach items="${simStatusList}" var="s">                            
+                                <c:choose>
+                                    <c:when test="${status == s.conName}">
+                                        <option value="${s.conName}" selected>${s.conValue}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${s.conName}">${s.conValue}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          </div>
+                </div>
+            </form>        
+            <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
                 <input type="hidden" id="menu" name="menu" value="booking"/>
                 <table class="table table-bordered table-striped">
                     <div id="msgBox" class="alert alert-warning" hidden="">
@@ -18,7 +79,7 @@
                             <th>#</th>
                             <th>mobile</th>                    
                             <th>imsi</th>
-                            <th>serail</th>
+                            <th>serial</th>
                             <th>chargeType</th>
                             <th>regionCode</th>
                             <th>env</th>
@@ -33,7 +94,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="sim" items="${simList}">
+                        <c:forEach var="sim" items="${simList}" >                           
                             <tr>                    
                                 <td>
                                     <div class="btn-group" data-toggle="buttons">
@@ -59,6 +120,11 @@
                                 <td>${sim.remark}</td>
                             </tr>
                         </c:forEach>
+                        <c:if test="${simList.isEmpty()}">
+                            <tr>                    
+                                <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
+                            </tr>
+                        </c:if>
                     </tbody>
                 </table> 
                 <div class="panel-body">
