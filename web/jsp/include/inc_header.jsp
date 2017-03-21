@@ -84,6 +84,9 @@
                         <li class="<c:out value="${menu == 'sim' ? 'active': ''}"/>">
                             <a href="${context}/SimListServlet?menu=sim"><i class="glyphicon glyphicon-credit-card"></i> จัดการ SIM</a>
                         </li>
+                        <li class="<c:out value="${menu == 'expiredsim' ? 'active': ''}"/>">
+                            <a href="${context}/ExpiredSimServlet?menu=expiredsim"><i class="glyphicon glyphicon-credit-card"></i> Expired SIM</a>
+                        </li>
                         <li class="<c:out value="${menu == 'project' ? 'active': ''}"/>">
                             <a href="${context}/ProjectListServlet?menu=project"><i class="glyphicon glyphicon-ban-circle"></i> จัดการ Project</a>
                         </li>
