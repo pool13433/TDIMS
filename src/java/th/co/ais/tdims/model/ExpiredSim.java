@@ -1,0 +1,234 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package th.co.ais.tdims.model;
+
+/**
+ *
+ * @author Parinya
+ */
+public class ExpiredSim {
+    
+    private String simId;
+    private String mobileNo;
+    private String serialNo;
+    private String imsi;
+    private String chargeType;
+    private String regionCode;
+    private String system;
+    private String enviroment;
+    private String site;
+    private String usageType;
+    private String simStatus;
+    private String owner;
+    private String teamName;
+    private String emailContact;
+    private String projectName;
+    private String validDate;
+    private String expireDate;
+    private String remark;
+    private String createDate;
+    private String createBy;
+    private String createByUsername;
+    private String updateDate;
+    private String updateBy;
+    private String updateByUsername;
+
+    public String getSimId() {
+        return simId;
+    }
+
+    public void setSimId(String simId) {
+        this.simId = simId;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public String getImsi() {
+        return imsi;
+    }
+
+    public void setImsi(String imsi) {
+        this.imsi = imsi;
+    }
+
+    public String getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(String chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public String getRegionCode() {
+        return regionCode;
+    }
+
+    public void setRegionCode(String regionCode) {
+        this.regionCode = regionCode;
+    }
+
+    public String getSystem() {
+        return system;
+    }
+
+    public void setSystem(String system) {
+        this.system = system;
+    }
+    
+    
+
+    public String getEnviroment() {
+        return enviroment;
+    }
+
+    public void setEnviroment(String enviroment) {
+        this.enviroment = enviroment;
+    }
+    
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getUsageType() {
+        return usageType;
+    }
+
+    public void setUsageType(String usageType) {
+        this.usageType = usageType;
+    }
+
+    public String getSimStatus() {
+        return simStatus;
+    }
+
+    public void setSimStatus(String simStatus) {
+        this.simStatus = simStatus;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+    
+    
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getEmailContact() {
+        return emailContact;
+    }
+
+    public void setEmailContact(String emailContact) {
+        this.emailContact = emailContact;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getValidDate() {
+        return validDate;
+    }
+
+    public void setValidDate(String validDate) {
+        this.validDate = validDate;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getCreateByUsername() {
+        return createByUsername;
+    }
+
+    public void setCreateByUsername(String createByUsername) {
+        this.createByUsername = createByUsername;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public String getUpdateByUsername() {
+        return updateByUsername;
+    }
+
+    public void setUpdateByUsername(String updateByUsername) {
+        this.updateByUsername = updateByUsername;
+    }
+}

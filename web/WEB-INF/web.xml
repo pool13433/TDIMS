@@ -17,6 +17,10 @@
         <servlet-class>th.co.ais.tdims.action.sim.SimListServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ExpiredSimServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.sim.ExpiredSimServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SimFormServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.sim.SimFormServlet</servlet-class>
     </servlet>
@@ -116,6 +120,10 @@
         <servlet-name>TeamListServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.team.TeamListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendMailServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.mail.SendMailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -158,6 +166,10 @@
     <servlet-mapping>
         <servlet-name>SimDeleteServlet</servlet-name>
         <url-pattern>/SimDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExpiredSimServlet</servlet-name>
+        <url-pattern>/ExpiredSimServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectListServlet</servlet-name>
@@ -246,6 +258,10 @@
     <servlet-mapping>
         <servlet-name>TeamListServlet</servlet-name>
         <url-pattern>/TeamListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendMailServlet</servlet-name>
+        <url-pattern>/SendMailServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
+import th.co.ais.tdims.model.ExpiredSim;
 import th.co.ais.tdims.model.Sim;
 
 /**
@@ -58,6 +59,38 @@ public class SimDao {
         return simList;
     }
     
+    public List<ExpiredSim> getExpiredSim() {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<ExpiredSim> simList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT s.sim_id, s.mobile_no, s.serial_no, s.imsi, s.charge_type, ");
+            sql.append(" s.region_code, s.system,e.env_code, e.env_site, s.usage_type, s.owner, t.team_name, ");
+            sql.append(" s.email_contact, p.proj_name, ");
+            sql.append(" DATE_FORMAT(s.valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(s.expire_date,").append(DATE_TO_STR).append(") expire_date, ");
+            sql.append(" DATE_FORMAT(s.create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(s.update_date,").append(DATE_TO_STR).append(") update_date, ");
+            sql.append(" s.remark, s.create_by, s.update_by, s.sim_status ");
+            sql.append(" FROM sim s, team t, project p, enviroment e ");
+            sql.append(" WHERE s.expire_date < CURDATE() AND s.team_id=t.team_id AND s.env_id=e.env_id AND s.project_id=p.proj_id ");
+            sql.append(" GROUP BY s.team_id, s.system ");
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            simList = new ArrayList<ExpiredSim>();
+            while (rs.next()) {                
+                simList.add(getEntityExpiredSim(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getExpiredSimAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return simList;
+    }
+    
     private Sim getEntitySim(ResultSet rs) throws SQLException {
         Sim sim = new Sim();
         sim.setTeamId(rs.getString("team_id"));
@@ -82,6 +115,34 @@ public class SimDao {
         sim.setValidDate(rs.getString("valid_date"));
         sim.setSystem(rs.getString("system"));
         sim.setOwner(rs.getString("owner"));
+        return sim;
+    }
+    
+    private ExpiredSim getEntityExpiredSim(ResultSet rs) throws SQLException {
+        ExpiredSim sim = new ExpiredSim();
+        sim.setTeamName(rs.getString("team_name"));
+        sim.setChargeType(rs.getString("charge_type"));
+        sim.setCreateBy(rs.getString("create_by"));
+        sim.setCreateDate(rs.getString("create_date"));
+        sim.setEmailContact(rs.getString("email_contact"));
+        sim.setEnviroment(rs.getString("env_code"));
+        sim.setExpireDate(rs.getString("expire_date"));
+        sim.setImsi(rs.getString("imsi"));
+        sim.setMobileNo(rs.getString("mobile_no"));
+        sim.setProjectName(rs.getString("proj_name"));
+        sim.setRegionCode(rs.getString("region_code"));
+        sim.setRemark(rs.getString("remark"));
+        sim.setSerialNo(rs.getString("serial_no"));
+        sim.setSimId(rs.getString("sim_id"));
+        sim.setSimStatus(rs.getString("sim_status"));
+        //sim.setSite(rs.getString("site_id"));
+        sim.setUpdateBy(rs.getString("update_by"));
+        sim.setUpdateDate(rs.getString("update_date"));
+        sim.setUsageType(rs.getString("usage_type"));
+        sim.setValidDate(rs.getString("valid_date"));
+        sim.setSystem(rs.getString("system"));
+        sim.setOwner(rs.getString("owner"));
+        sim.setSite(rs.getString("env_site"));
         return sim;
     }
     
