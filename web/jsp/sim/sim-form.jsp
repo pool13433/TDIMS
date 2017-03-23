@@ -46,7 +46,7 @@
                     <input type="text" class="form-control"  value="${sim.regionCode}"  id="regionCode" name="regionCode" placeholder="regionCode" required>
                 </div>
                 <label for="env" class="col-sm-1 control-label">Environment</label>
-                <div class="col-sm-3">
+                <div class="col-sm-3 ">
                     <select class="form-control" class="form-control" id="env" name="env" placeholder="env" required>
                         <c:forEach items="${envList}" var="env">                            
                             <c:choose>

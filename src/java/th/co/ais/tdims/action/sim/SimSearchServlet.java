@@ -5,9 +5,7 @@
  */
 package th.co.ais.tdims.action.sim;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
 import th.co.ais.tdims.dao.EnvironmentDao;
-import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.dao.TeamDao;
@@ -34,7 +31,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.debug("GET SimSearchServlet");
+        logger.debug("doGet SimSearchServlet");
         RequestDispatcher dispatcher = null;
         try {
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
@@ -107,7 +104,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("sim booking");
+        logger.info("doPost SimSearchServlet -> sim booking");
         String simSelected = request.getParameter("simSelected"); 
         try {      
             
@@ -140,7 +137,13 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             
             simDao = new SimDao();            
             request.setAttribute("simList", simDao.getSimAll());
-            
+            //Combo List
+                ProjectDao projectDao = new ProjectDao();
+                request.setAttribute("projectList", projectDao.getProjectAll());
+                ConfigDao configDao = new ConfigDao();
+                request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
+                request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+                request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("message", "save sim error");

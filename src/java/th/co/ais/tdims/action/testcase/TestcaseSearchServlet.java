@@ -37,8 +37,10 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             System.out.println("searching name = "+searching +"pId: "+ projectSelected);
             TestcastDao testcaseDao= new TestcastDao();
             
-            if(!"".equals(searching) || projectSelected != null){
-                tc.setProjectId(projectSelected.substring(0, 1));
+            if((!"".equals(searching) ||  !"".equals(projectSelected)) && !"ALL".equals(projectSelected)){
+                if(!"".equals(projectSelected)){
+                    tc.setProjectId(projectSelected.substring(0, 1));
+                }                
                 tc.setTestcaseDetails(searching);
                 tc.setTestcaseTitle(searching);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));

@@ -38,9 +38,9 @@ public class TestcastDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `testcase_id`, `project_id`, `user_id`, ");
-            sql.append(" `systems`, `enviroment`, `issue_no`, `path_dir`, ");
-            sql.append(" `testcase_details`, `testcase_title`,`defect_no`,  ");
+            sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
+            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
+            sql.append(" `path_dir`, `user_id`,  ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `testcase` ");
             logger.info("sql ::=="+sql);

@@ -5,7 +5,7 @@
 <jsp:include page="../include/inc_header.jsp"/>
 <div class="container" style="padding-right: 100px;">
     <div class="panel panel-ais">        
-        <div class="panel-heading">ฟอร์มกรอกข้อมูลยืม Sim</div>
+        <div class="panel-heading">ฟอร์มกรอก ข้อมูลการยืม Sim</div>
         <div class="panel-body">
             <a href="${context}/SimSearchServlet?menu=sim_search" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
         </div>
