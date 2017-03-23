@@ -109,10 +109,6 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         try {      
             
             String assignTeam = CharacterUtil.removeNull(request.getParameter("team"));
-            String subTeam[] = assignTeam.split("|");
-            if(subTeam.length > 1){
-                assignTeam = subTeam[1];
-            }
             String email = CharacterUtil.removeNull(request.getParameter("emailContact"));
             String project = CharacterUtil.removeNull(request.getParameter("project"));
             String status = CharacterUtil.removeNull(request.getParameter("status"));
