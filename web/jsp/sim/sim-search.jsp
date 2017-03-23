@@ -137,7 +137,7 @@
             <script type="text/javascript">
                 $(document).ready(function(){
                     $("#bookingSim").submit(function(){
-                        var checkBox = $("#simSelected").prop('checked');
+                        var checkBox = $("input#simSelected").is(':checked');
                         if(!checkBox){
                             $("#msg").text("กรุณาเลือกอย่างน้อย 1 รายการ");
                             $("#msgBox").show();

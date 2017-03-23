@@ -8,7 +8,6 @@ package th.co.ais.tdims.util;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
 import th.co.ais.tdims.dao.ConfigDao;
 /**
  *

@@ -7,43 +7,99 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ Search Testcase ทั้งหมด</div>
         <div class="panel-body">
-        <form id="searching" method="get" action="${context}/TestcaseSearchServlet">
-            <input type="hidden" id="searchFlag" name="searchFlag" />
-            <div class="panel-body" >
-            <div class="form-group">  
-                <div class="row">
-                    <h3><span class="label label-primary">Search Criteria</span></h3>
+        <form id="searching" method="get" action="${context}/TestcaseSearchServlet" class="form-horizontal">   
+            <input type="hidden" id="menu" name="menu" value="searching"/>
+            <div class="form-group">
+                <label for="projectSelected" class="col-sm-1 control-label">Project</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="projectSelected" name="projectSelected" placeholder="env">
+                        <option value="" selected>   All project  </option>                                                       
+                        <c:forEach items="${projectCombo}" var="p">                            
+                        <c:choose>
+                            <c:when test="${projectSelected == p.id}">
+                                <option value="{p.id}" selected><a href="#">${p.id} - ${p.value1}</a></option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="{p.id}" ><a href="#">${p.id} - ${p.value1}</a></option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    </select>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Project</div>
-                            <div class="panel-body">
-                                <div class="dropdown">
-                                    <select  class="form-control" id="projectSelected" name="projectSelected" value="${p.id}" >
-                                        <option>  ALL  </option>
-                                        <c:forEach items="${projectCombo}" var="p" >
-                                            <option ><a href="#">${p.id} - ${p.value1}</a></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>  
-                    </div>
+                <label for="searchBox" class="col-sm-1 control-label">Details </label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" name="searchBox" id="searchBox" value="${searchBox}" placeholder="Search testcase details...">
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <input class="form-control" type="text" name="searchBox" id="searchBox" value="${searchBox}" placeholder="Search Testcase...">
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i></button>
-                    </div>
+            </div>
+            <div class="form-group"> 
+                <label for="system" class="col-sm-1 control-label">System</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="system" name="system" >
+                        <option value="" selected>    All system  </option>
+                        <c:forEach items="${systemList}" var="sys">                            
+                            <c:choose>
+                                <c:when test="${system == sys.conName}">
+                                    <option value="${sys.conName}" selected>${sys.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${sys.conName}">${sys.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>    
+                    </select>
                 </div>
-                   
-                                 
-            </div>                      
-        </div>
+                <label for="createDate" class="col-sm-1 control-label">Date </label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control datepicker"  value="${createDate}"  id="createDate" name="createDate" placeholder="createDate" readonly >
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="userId" class="col-sm-1 control-label">Tester</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="userId" name="userId" >
+                        <option value="" selected>    All Tester  </option>
+                        <c:forEach items="" var="t">                            
+                            <c:choose>
+                                <c:when test="${userId == ''}">
+                                    <option value="" selected></option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value=""></option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>    
+                    </select>
+                </div>
+                <label for="issueNo" class="col-sm-1 control-label">Issue No. </label>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" name="issueNo" id="issueNo" value="${issueNo}" placeholder="Issue No...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="defectNo" class="col-sm-1 control-label">Ticket/Defect No.</label>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" name="defectNo" id="defectNo" value="${defectNo}" placeholder="Defect No...">
+                </div>
+                <label for="env" class="col-sm-1 control-label">Environment </label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="env" name="env" placeholder="env">
+                        <option value="" selected>   All environment  </option>                                                       
+                        <c:forEach items="${envList}" var="e">                            
+                        <c:choose>
+                            <c:when test="${env == e.envId}">
+                                <option value="${e.envId}" selected>${e.envCode}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${e.envId}">${e.envCode}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    </select>
+                </div>
+                <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button></div>
+            </div>
         </form>
+        
         </div>
         <table class="table table-bordered table-striped">
             <thead>
