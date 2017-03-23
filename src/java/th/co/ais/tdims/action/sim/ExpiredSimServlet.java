@@ -76,6 +76,7 @@ public class ExpiredSimServlet extends HttpServlet {
                 fullExpiredSimList.add(simMap);
             }
             request.setAttribute("simList", fullExpiredSimList);
+            request.setAttribute("isFromSendMail", "N");
             
         } catch (Exception e) {
             e.printStackTrace();

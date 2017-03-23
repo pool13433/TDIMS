@@ -89,6 +89,7 @@ public class SendMailServlet extends HttpServlet {
                 fullExpiredSimList.add(simMap);
             }
             request.setAttribute("simList", fullExpiredSimList);
+            request.setAttribute("isFromSendMail", "Y");
             
         } catch (Exception e) {
             e.printStackTrace();
