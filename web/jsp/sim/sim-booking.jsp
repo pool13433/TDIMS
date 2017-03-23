@@ -17,8 +17,7 @@
                     <select class="form-control" id="team" name="team" placeholder="team" required>
                         <option value="" selected>   Please select team   </option>
                         <c:forEach items="${teamList}" var="team">
-                            <option value="${team.teamId}|${team.teamEmail}" >${team.teamName}
-                           
+                            <option value="${team.teamId}" data-id="${team.teamEmail} ">${team.teamName}                           
                                 </option>
                             <c:set var="teamEmail" value="${team.teamEmail}"/>
                         </c:forEach>
@@ -83,15 +82,10 @@
 $(document).ready(function(){
     $("#team").change(function(){
         var str = "";
-        var email = "";
         $("#team option:selected").each(function(){
-            str = $("#team").val()+"";
+            str = $(this).attr('data-id');
+            $("#emailContact").val(str);
         });
-        var subTeam = str.split('|');
-        if(subTeam.length > 1){
-            email = subTeam[1].toString();
-        }
-        $("#emailContact").val(email);
     })
     .change();
 });
