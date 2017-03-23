@@ -5,19 +5,30 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="../include/inc_header.jsp"/>
+<c:if test="${isFromSendMail == 'N'}">
+    <div style="background-color: #6ef442; height: 30px;">
+        <b> Email(s) has/have Sent!! </b>
+    </div>
+</c:if>
 <div class="container" style="padding-right: 100px;">    
     <div class="panel panel-ais">        
-        <div class="panel-heading">Number List : Expired</div>
+        <div class="panel-heading">Expired List</div>
         <form action="${context}/SendMailServlet" method="post" class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-offset-0 col-sm-10">
-                    <button type="submit" class="btn btn-success">Submit</button>
+            <c:if test="${fn:length(simList) > 0}">
+                <div class="form-group">
+                    <div class="col-sm-offset-0 col-sm-10">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
                 </div>
-            </div>
+            </c:if>
+            <c:if test="${fn:length(simList) == 0}">
+                No expired List
+            </c:if>
             <c:forEach var="subSimList" items="${simList}">
                 Team : ${subSimList.team} System : ${subSimList.system}
                 <table class="table table-bordered table-striped" style="table-layout: fixed;">
