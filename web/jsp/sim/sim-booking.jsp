@@ -88,6 +88,18 @@ $(document).ready(function(){
         });
     })
     .change();
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth()+1;
+    m = m<10?"0"+m:m;
+    var y = date.getFullYear();
+    if($('#validDate').is(":empty")){
+       $('#validDate').val(d+"-"+m+"-"+y); 
+    }
+    if($('#expireDate').is(":empty")){
+       $('#expireDate').val(d+"-"+m+"-"+y);
+    }
+    
 });
 </script>
 <jsp:include page="../include/inc_footer.jsp"/>

@@ -17,10 +17,10 @@
                         <c:forEach items="${projectCombo}" var="p">                            
                         <c:choose>
                             <c:when test="${projectSelected == p.id}">
-                                <option value="{p.id}" selected><a href="#">${p.id} - ${p.value1}</a></option>
+                                <option value="${p.id}" selected><a href="#">${p.value1}</a></option>
                             </c:when>
                             <c:otherwise>
-                                <option value="{p.id}" ><a href="#">${p.id} - ${p.value1}</a></option>
+                                <option value="${p.id}" ><a href="#">${p.value1}</a></option>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
@@ -58,16 +58,16 @@
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="userId" name="userId" >
                         <option value="" selected>    All Tester  </option>
-                        <c:forEach items="" var="t">                            
+                        <c:forEach items="${ownerList}" var="owner">                            
                             <c:choose>
-                                <c:when test="${userId == ''}">
-                                    <option value="" selected></option>
+                                <c:when test="${userId == owner.profileId}">
+                                    <option value="${owner.profileId}" selected>${owner.username}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value=""></option>
+                                    <option value="${owner.profileId}">${owner.username}</option>
                                 </c:otherwise>
                             </c:choose>
-                        </c:forEach>    
+                        </c:forEach>  
                     </select>
                 </div>
                 <label for="issueNo" class="col-sm-1 control-label">Issue No. </label>

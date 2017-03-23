@@ -77,7 +77,8 @@
                     <thead>                    
                         <tr>
                             <th>#</th>
-                            <th>mobile</th>                    
+                            <th>mobile</th>   
+                            <th>system</th>
                             <th>imsi</th>
                             <th>serial</th>
                             <th>chargeType</th>
@@ -105,6 +106,7 @@
                                     </div>
                                 </td>
                                 <td>${sim.mobileNo}</td>
+                                <td>${sim.system}</td>
                                 <td>${sim.imsi}</td>
                                 <td>${sim.serialNo}</td>
                                 <td>${sim.chargeType}</td>                        
