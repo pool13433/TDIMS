@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.dao.EnvironmentDao;
+import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.TestcastDao;
 import th.co.ais.tdims.model.Testcase;
@@ -32,15 +35,40 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
         try {
             //DropdownList
             request.setAttribute("projectCombo", projectCombo.getProjectComboList());
+            String menu = CharacterUtil.removeNull(request.getParameter("menu"));
             String searching = CharacterUtil.removeNull(request.getParameter("searchBox"));
-            String projectSelected = CharacterUtil.removeNull(request.getParameter("projectSelected"));
-            System.out.println("searching name = "+searching +"pId: "+ projectSelected);
+            request.setAttribute("searchBox", searching);
+            String projectId = CharacterUtil.removeNull(request.getParameter("projectSelected"));
+            request.setAttribute("projectSelected", projectId);
+            ConfigDao configDao = new ConfigDao();
+            request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
+            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+            request.setAttribute("ownerList", new ProfileDao().getAllUser());
+            
+            String system = CharacterUtil.removeNull(request.getParameter("system"));
+            request.setAttribute("system", system);
+            String createDate = CharacterUtil.removeNull(request.getParameter("createDate"));
+            request.setAttribute("createDate", createDate);
+            String userId = CharacterUtil.removeNull(request.getParameter("userId"));
+            request.setAttribute("userId", userId);
+            String issueNo = CharacterUtil.removeNull(request.getParameter("issueNo"));
+            request.setAttribute("issueNo", issueNo);
+            String defectNo = CharacterUtil.removeNull(request.getParameter("defectNo"));
+            request.setAttribute("defectNo", defectNo);
+            String env = CharacterUtil.removeNull(request.getParameter("env"));
+            request.setAttribute("env", env);
+            
             TestcastDao testcaseDao= new TestcastDao();
             
-            if((!"".equals(searching) ||  !"".equals(projectSelected)) && !"ALL".equals(projectSelected)){
-                if(!"".equals(projectSelected)){
-                    tc.setProjectId(projectSelected.substring(0, 1));
-                }                
+            if("searching".equals(menu)){
+                System.out.println("menu ="+menu);
+                tc.setProjectId(projectId);
+                tc.setSystems(system);
+                tc.setCreateDate(createDate);
+                tc.setUserId(userId);
+                tc.setIssueNo(issueNo);
+                tc.setDefectNo(defectNo);
+                tc.setEnviroment(env);
                 tc.setTestcaseDetails(searching);
                 tc.setTestcaseTitle(searching);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));
@@ -60,7 +88,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
                     logger.error("KnowledgeOpenDir Error", e);
                 }
             }
-            request.setAttribute("searchBox", searching);
+            
 
         } catch (Exception e) {
             e.printStackTrace();

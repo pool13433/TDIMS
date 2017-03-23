@@ -9,7 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import static th.co.ais.tdims.dao.SimDao.logger;
@@ -81,6 +84,24 @@ public class TestcastDao {
             }
             if(!"".equals(CharacterUtil.removeNull(tc.getTestcaseDetails()))){
                 sql.append(" and `testcase_details` LIKE '%"+tc.getTestcaseDetails()+"%'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getSystems()))){
+                sql.append(" and `systems` = '"+tc.getSystems()+"'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getEnviroment()))){
+                sql.append(" and `enviroment` = '"+tc.getEnviroment()+"'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getIssueNo()))){
+                sql.append(" and `issue_no` = '"+tc.getIssueNo()+"'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getDefectNo()))){
+                sql.append(" and `defect_no` = '"+tc.getDefectNo()+"'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getCreateDate()))){
+                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
+                Date date = d1.parse(tc.getCreateDate());
+                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
+                sql.append(" and `create_date` = '"+d2.format(date)+"'");
             }
             System.out.println("SQL : "+sql.toString());
             pstm = conn.prepareStatement(sql.toString());
