@@ -35,17 +35,10 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         RequestDispatcher dispatcher = null;
         try {
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
-            if("booking".equals(menu)){
-            //projectList
-            ProjectDao projectDao = new ProjectDao();
-            request.setAttribute("projectList", projectDao.getProjectAll());
-            //teamList
-            TeamDao teamDao = new TeamDao();
-            request.setAttribute("teamList", teamDao.getTeamAll());            
-            
-            String[] simSelected = request.getParameterValues("simSelected");
+            String cancelBooking = CharacterUtil.removeNull(request.getParameter("cancelBooking"));            
             String simStr = ""; 
-            if(simSelected.length > 0){
+            String[] simSelected = request.getParameterValues("simSelected");
+            if(simSelected !=null && simSelected.length > 0){
                 for(int i=0 ; i<simSelected.length ; i++){
                     if(i==0){
                         simStr = "'"+simSelected[i]+"'";
@@ -56,6 +49,14 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             }
             
             request.setAttribute("simSelected", simStr);
+            
+            if("booking".equals(menu) && !"Y".equals(cancelBooking)){                
+            //projectList
+            ProjectDao projectDao = new ProjectDao();
+            request.setAttribute("projectList", projectDao.getProjectAll());
+            //teamList
+            TeamDao teamDao = new TeamDao();
+            request.setAttribute("teamList", teamDao.getTeamAll());  
             
             dispatcher = request.getRequestDispatcher("/jsp/sim/sim-booking.jsp");
             }else{
@@ -83,12 +84,16 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 
                 if("searching".equals(menu)){
                     request.setAttribute("simList", simDao.findSim(sim));
-                }else{
+                }else{     
+                    if("Y".equals(cancelBooking)){
+                        simDao.resetBookingSim(sim, simStr);
+                    }
                     request.setAttribute("simList", simDao.getSimAll());
                 }
-
+                request.setAttribute("cancelBooking", "");
                 //request.setAttribute("searchBox", searching);
                 dispatcher = request.getRequestDispatcher("/jsp/sim/sim-search.jsp");
+                
             }
             
         } catch (Exception e) {
@@ -127,8 +132,9 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             sim.setUpdateBy(DUMMY_USER);
             sim.setUpdateDate(expireDate);            
             
-            SimDao simDao = new SimDao();   
+            SimDao simDao = new SimDao();  
             simDao.bookSim(sim, simSelected);
+            
             request.setAttribute("message", "booking sim success");
             
             simDao = new SimDao();            

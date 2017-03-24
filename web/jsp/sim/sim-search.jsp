@@ -56,7 +56,7 @@
                             <c:forEach items="${simStatusList}" var="s">                            
                                 <c:choose>
                                     <c:when test="${status == s.conName}">
-                                        <option value="${s.conName}" selected>${s.conValue}</option>
+                                        <option value="${s.conName}" selected>${s.conName}</option>
                                     </c:when>
                                     <c:otherwise>
                                         <option value="${s.conName}">${s.conValue}</option>
@@ -70,6 +70,7 @@
             </form>        
             <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
                 <input type="hidden" id="menu" name="menu" value="booking"/>
+                <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
                 <table class="table table-bordered table-striped">
                     <div id="msgBox" class="alert alert-warning" hidden="">
                         <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
@@ -77,21 +78,22 @@
                     <thead>                    
                         <tr>
                             <th>#</th>
-                            <th>mobile</th>   
-                            <th>system</th>
-                            <th>imsi</th>
-                            <th>serial</th>
-                            <th>chargeType</th>
-                            <th>regionCode</th>
-                            <th>env</th>
-                            <th>type</th>
-                            <th>status</th>
-                            <th>assign team</th>
-                            <th>email contact</th>                    
-                            <th>project</th>
-                            <th>valid_Date</th>
-                            <th>expire_Date</th>
-                            <th>remark</th>               
+                            <th>MOBILE</th>   
+                            <th>SYSTEM</th>
+                            <th>IMSI</th>
+                            <th>SERIAL</th>
+                            <th>CHARGE_TYPE</th>
+                            <th>REGION_CODE</th>
+                            <th>ENV</th>
+                            <th>SITE</th>
+                            <th>TYPE</th>
+                            <th>STATUS</th>
+                            <th>ASSIGN_TEAM</th>
+                            <th>EMAIL_CONTACT</th>                    
+                            <th>PROJECT</th>
+                            <th>VALID_DATE</th>
+                            <th>EXPIRE_DATE</th>
+                            <th>REMARK</th>               
                         </tr>
                     </thead>
                     <tbody>
@@ -112,6 +114,7 @@
                                 <td>${sim.chargeType}</td>                        
                                 <td>${sim.regionCode}</td>
                                 <td>${sim.enviroment}</td>
+                                <td>${sim.site}</td>
                                 <td>${sim.usageType}</td>
                                 <td>${sim.simStatus}</td>
                                 <td>${sim.teamId}</td>
@@ -130,14 +133,21 @@
                     </tbody>
                 </table> 
                 <div class="panel-body">
-                <button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-pencil"></i> booking</button>          
+                    <button id="ok" type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-pencil"></i> booking</button>   
+                    <button id="cancel"     class="btn btn-default btn-danger"> cancel booking</button>
+
+                        <div id="dialog" title="ยืนยันการคืนซิม?">
+                        </br>กด OK เพื่อยืนยันการ reset SIM สู่สถานะ Available</br>                             
+                        </div>​
             </form>
+                 
         </div>        
     </div>        
 </div>   
   
             <script type="text/javascript">
                 $(document).ready(function(){
+                    
                     $("#bookingSim").submit(function(){
                         var checkBox = $("input#simSelected").is(':checked');
                         if(!checkBox){
@@ -146,6 +156,94 @@
                             return false;
                         }
                     });
+                    
+                   $( "#dialog" ).dialog({
+                    autoOpen: false,
+                        modal: true,
+                    buttons: [
+                      {
+                        text: "OK",
+                        click: function() {
+                          document.getElementById("cancelBooking").value = "Y";
+                                 $(this).dialog("close");
+                                 $("#bookingSim").submit();
+                        }                        
+                      },
+                      {
+                          text: "cancel",
+                          btnClass: 'btn-blue',
+                          click: function() {
+                          $( this ).dialog( "close" );
+                        }
+                      }
+                    ]
+                  }); 
+                   $("#dialog9").dialog({
+                        autoOpen: false,
+                        modal: true,
+                        
+                        
+                        /*
+                         buttons : {
+                             "Confirm" :{function() {
+                                 document.getElementById("cancelBooking").value = "Y";
+                                 $(this).dialog("close");
+                                 $("#bookingSim").submit();
+                             },
+                                
+                             "Cancel" : function(){
+                                   $(this).dialog("close");
+                                                         
+                             }
+                           }
+                       } 
+                         * 
+                         */
+                     
+                        
+                    });
+                    
+                     $("#cancel").on("click", function(e) {
+                         e.preventDefault();
+                         $("#dialog").dialog("open");
+                     });
+                    /*
+                    $('#clickme').click(function(){
+                                alert('clickme');
+                        $.confirm({
+                            buttons: {
+                                confirm: function{
+                                    $alert('Confirm!');
+                                },
+                                cancel: function{
+                                    text:'cancel!',
+                                    action: function(){
+                                        $.alert('you click cancel');
+                                    }
+                                }
+                            }
+                        })
+                    });
+                    
+                    
+                     * $(".confirm").confirm({
+                            title:"ยืนยันการคืนซิม",
+                            text:"หากกดปุ่ม ตกลง ระบบจะทำการ reset ข้อมูลซิมสู่สถานะ Available",
+                            confirm:function(button){
+                                return true;
+                            },
+                            cancle:fuction(){
+                                return false;
+                            },
+                            confirmButton:"ตกลง",
+                            cancelButton:"ยกเลิก",
+                            post:true,
+                            confirmButtonClass:"btn-danger",
+                            CANCELButtonClass:"btn-default",
+                            dialogClass:"model-dialog model-lg"
+                        });
+                     */
+                    
                 });
             </script>
 

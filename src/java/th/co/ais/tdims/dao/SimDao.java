@@ -37,12 +37,12 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, system,`env_id`, `usage_type`,owner, `team_id`, ");
-            sql.append(" `email_contact`, `project_id`, ");
+            sql.append(" `region_code`, system,`env`, site, `usage_type`,owner, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
+            sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
-            sql.append(" FROM `sim` ");
+            sql.append(" FROM `sim` s ");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -73,7 +73,7 @@ public class SimDao {
             sql.append(" DATE_FORMAT(s.create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(s.update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" s.remark, s.create_by, s.update_by, s.sim_status ");
             sql.append(" FROM sim s, team t, project p, enviroment e ");
-            sql.append(" WHERE s.expire_date < CURDATE() AND s.team_id=t.team_id AND s.env_id=e.env_id AND s.project_id=p.proj_id ");
+            sql.append(" WHERE s.expire_date < CURDATE() AND s.team_id=t.team_id AND s.env=e.env AND s.project_id=p.proj_id ");
             sql.append(" GROUP BY s.team_id, s.system ");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -98,7 +98,7 @@ public class SimDao {
         sim.setCreateBy(rs.getString("create_by"));
         sim.setCreateDate(rs.getString("create_date"));
         sim.setEmailContact(rs.getString("email_contact"));
-        sim.setEnviroment(rs.getString("env_id"));
+        sim.setEnviroment(rs.getString("env"));
         sim.setExpireDate(rs.getString("expire_date"));
         sim.setImsi(rs.getString("imsi"));
         sim.setMobileNo(rs.getString("mobile_no"));
@@ -108,7 +108,7 @@ public class SimDao {
         sim.setSerialNo(rs.getString("serial_no"));
         sim.setSimId(rs.getString("sim_id"));
         sim.setSimStatus(rs.getString("sim_status"));
-        //sim.setSite(rs.getString("site_id"));
+        sim.setSite(rs.getString("site"));
         sim.setUpdateBy(rs.getString("update_by"));
         sim.setUpdateDate(rs.getString("update_date"));
         sim.setUsageType(rs.getString("usage_type"));
@@ -125,7 +125,7 @@ public class SimDao {
         sim.setCreateBy(rs.getString("create_by"));
         sim.setCreateDate(rs.getString("create_date"));
         sim.setEmailContact(rs.getString("email_contact"));
-        sim.setEnviroment(rs.getString("env_code"));
+        sim.setEnviroment(rs.getString("env"));
         sim.setExpireDate(rs.getString("expire_date"));
         sim.setImsi(rs.getString("imsi"));
         sim.setMobileNo(rs.getString("mobile_no"));
@@ -135,7 +135,7 @@ public class SimDao {
         sim.setSerialNo(rs.getString("serial_no"));
         sim.setSimId(rs.getString("sim_id"));
         sim.setSimStatus(rs.getString("sim_status"));
-        //sim.setSite(rs.getString("site_id"));
+        sim.setSite(rs.getString("site"));
         sim.setUpdateBy(rs.getString("update_by"));
         sim.setUpdateDate(rs.getString("update_date"));
         sim.setUsageType(rs.getString("usage_type"));
@@ -154,7 +154,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, system, `env_id`, `usage_type`, owner, `team_id`, ");
+            sql.append(" `region_code`, system, `env`, site, `usage_type`, owner, `team_id`, ");
             sql.append(" `email_contact`, `project_id`, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
@@ -185,7 +185,7 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `sim` ");
             sql.append(" (`mobile_no`, `serial_no`, `imsi`, `charge_type`, `region_code`,");
-            sql.append("  `system`, `env_id`, `usage_type`, `owner`,`create_date`, ");
+            sql.append("  `system`, `env`, `usage_type`, `owner`,`create_date`, ");
             sql.append("  `create_by`, `update_date`, `update_by`, `sim_status`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,?,");
@@ -226,7 +226,7 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `sim` SET ");
             sql.append(" `mobile_no`=?,`serial_no`=?,`imsi`=?,`charge_type`=?,`region_code`=?,");
-            sql.append(" system=?,`env_id`=?,`usage_type`=?,owner=?,`update_date`=NOW(),");
+            sql.append(" system=?,`env`=?,`usage_type`=?,owner=?,`update_date`=NOW(),");
             sql.append(" `update_by`=?,`sim_status`=? ");
             sql.append(" WHERE `sim_id`=?");
 
@@ -284,19 +284,19 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, `env_id`, system, `usage_type`, owner, `team_id`, ");
-            sql.append(" `email_contact`, `project_id`, ");
+            sql.append(" `region_code`, `env`, site, system, `usage_type`, owner, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
+            sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
-            sql.append(" FROM `sim` ");
+            sql.append(" FROM `sim` s ");
             sql.append(" WHERE 1=1 ");
 
             if(!"".equals(searching.getMobileNo())){
                 sql.append(" and `mobile_no` ='"+searching.getMobileNo()+"'");
             }
             if(!"".equals(searching.getEnviroment())){
-                sql.append(" and `env_id` ="+searching.getEnviroment());
+                sql.append(" and `env` ="+searching.getEnviroment());
             }
             if(!"".equals(searching.getSystem())){
                 sql.append(" and `system` ='"+searching.getSystem()+"'");
@@ -320,7 +320,7 @@ public class SimDao {
         return simList;
     }
     
-    public List<Sim> bookSim(Sim sim, String simId) {
+    public int bookSim(Sim sim, String simId) {
         logger.info("Booking Sim");
         int exe = 0;
         PreparedStatement pstm = null;
@@ -352,7 +352,32 @@ public class SimDao {
             this.close(pstm, null);
         }
         
-        return this.getSimAll();
+        return exe;
+    }
+    
+    public int resetBookingSim(Sim sim, String simId) {
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" UPDATE `sim` SET ");
+            sql.append(" `team_id` = 0, `email_contact` = '', `project_id` = 0, `valid_date` = null, `expire_date` = null,");
+            sql.append(" `update_by` = ?, `update_date`=NOW(), ");
+            sql.append(" `sim_status` = 'Available', remark='' ");
+            sql.append(" WHERE `sim_id` in(" + simId + ")");
+            
+            pstm = conn.prepareStatement(sql.toString());  
+            pstm.setString(1, sim.getUpdateBy());       
+            logger.info("pstm ::=="+pstm.toString());
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("resetBookingSim error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
     }
     
     private void close(PreparedStatement pstm, ResultSet rs) {
