@@ -83,13 +83,15 @@ public class DepartmentDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `department` ");
-            sql.append(" ( `dep_name`, `dep_desc` ) ");
+            sql.append(" ( `dep_name`, `dep_desc`,create_date,create_by,update_date,update_by ) ");
             sql.append(" VALUES ");
-            sql.append(" (?,?)");
+            sql.append(" (?,?,NOW(),?,NOW(),?)");
             
             pstm = conn.prepareStatement(sql.toString());     
             pstm.setString(1, dep.getDepName());
             pstm.setString(2, dep.getDepDesc());
+            pstm.setString(3, dep.getCreateBy());
+            pstm.setString(4, dep.getCreateBy());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,13 +109,14 @@ public class DepartmentDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `department` SET ");
-            sql.append(" `dep_name`=?,`dep_desc`=?  ");
+            sql.append(" `dep_name`=?,`dep_desc`=?,update_date=NOW(),update_by =? ");
             sql.append(" WHERE `dep_id`=?");
 
             pstm = conn.prepareStatement(sql.toString());     
             pstm.setString(1, dep.getDepName());
             pstm.setString(2, dep.getDepDesc());
-            pstm.setString(3, dep.getDepId());
+            pstm.setString(3, dep.getUpdateBy());
+            pstm.setString(4, dep.getDepId());
             
             exe = pstm.executeUpdate();
         } catch (Exception e) {

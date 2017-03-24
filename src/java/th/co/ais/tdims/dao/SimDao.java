@@ -21,14 +21,14 @@ import th.co.ais.tdims.model.Sim;
  * @author POOL_LAPTOP
  */
 public class SimDao {
-    
+
     final static Logger logger = Logger.getLogger(SimDao.class);
-    
+
     private Connection conn = null;
-    
+
     private final String STR_TO_DATE = " '%d-%m-%Y' ";
     private final String DATE_TO_STR = " '%d-%m-%Y' ";
-    
+
     public List<Sim> getSimAll() {
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -37,17 +37,18 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, system,`env`, site, `usage_type`,owner, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
+            sql.append(" `region_code`, system,`env`, site, `usage_type`, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
             sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
+            sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.owner) as owner");
             sql.append(" FROM `sim` s ");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             simList = new ArrayList<Sim>();
-            while (rs.next()) {                
+            while (rs.next()) {
                 simList.add(getEntitySim(rs));
             }
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class SimDao {
         }
         return simList;
     }
-    
+
     public List<ExpiredSim> getExpiredSim() {
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -79,7 +80,7 @@ public class SimDao {
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             simList = new ArrayList<ExpiredSim>();
-            while (rs.next()) {                
+            while (rs.next()) {
                 simList.add(getEntityExpiredSim(rs));
             }
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class SimDao {
         }
         return simList;
     }
-    
+
     private Sim getEntitySim(ResultSet rs) throws SQLException {
         Sim sim = new Sim();
         sim.setTeamId(rs.getString("team_id"));
@@ -101,6 +102,7 @@ public class SimDao {
         sim.setEnviroment(rs.getString("env"));
         sim.setExpireDate(rs.getString("expire_date"));
         sim.setImsi(rs.getString("imsi"));
+        sim.setSystem(rs.getString("system"));
         sim.setMobileNo(rs.getString("mobile_no"));
         sim.setProjectId(rs.getString("project_id"));
         sim.setRegionCode(rs.getString("region_code"));
@@ -113,11 +115,10 @@ public class SimDao {
         sim.setUpdateDate(rs.getString("update_date"));
         sim.setUsageType(rs.getString("usage_type"));
         sim.setValidDate(rs.getString("valid_date"));
-        sim.setSystem(rs.getString("system"));
         sim.setOwner(rs.getString("owner"));
         return sim;
     }
-    
+
     private ExpiredSim getEntityExpiredSim(ResultSet rs) throws SQLException {
         ExpiredSim sim = new ExpiredSim();
         sim.setTeamName(rs.getString("team_name"));
@@ -145,7 +146,7 @@ public class SimDao {
         sim.setSite(rs.getString("env_site"));
         return sim;
     }
-    
+
     public Sim getSim(int simId) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -176,7 +177,7 @@ public class SimDao {
         }
         return sim;
     }
-    
+
     public int createSim(Sim sim) {
         int exe = 0;
         PreparedStatement pstm = null;
@@ -185,29 +186,30 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `sim` ");
             sql.append(" (`mobile_no`, `serial_no`, `imsi`, `charge_type`, `region_code`,");
-            sql.append("  `system`, `env`, `usage_type`, `owner`,`create_date`, ");
-            sql.append("  `create_by`, `update_date`, `update_by`, `sim_status`) ");
+            sql.append("  `system`, `env`, site,`usage_type`, `owner`, ");
+            sql.append("  `create_date`,`create_by`, `update_date`, `update_by`, `sim_status`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,?,");
-            sql.append(" ?,?,?,?,NOW(),");            
-            sql.append(" ?,NOW(),?,? )");
+            sql.append(" ?,?,?,?,?,");
+            sql.append(" NOW(),?,NOW(),?,? )");
 
             //logger.info("sql ::=="+sql);
-            pstm = conn.prepareStatement(sql.toString());            
+            pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, sim.getMobileNo());
             pstm.setString(2, sim.getSerialNo());
             pstm.setString(3, sim.getImsi());
             pstm.setString(4, sim.getChargeType());
             pstm.setString(5, sim.getRegionCode());
-            
-            pstm.setString(6, sim.getSystem());            
-            pstm.setString(7, sim.getEnviroment());            
-            pstm.setString(8, sim.getUsageType());
-            pstm.setString(9, sim.getOwner());
-            pstm.setString(10, sim.getCreateBy());
-            
-            pstm.setString(11, sim.getUpdateBy());
-            pstm.setString(12, sim.getSimStatus());            
+
+            pstm.setString(6, sim.getSystem());
+            pstm.setString(7, sim.getEnviroment());
+            pstm.setString(8, sim.getSite());
+            pstm.setString(9, sim.getUsageType());
+            pstm.setString(10, sim.getOwner());
+
+            pstm.setString(11, sim.getCreateBy());
+            pstm.setString(12, sim.getUpdateBy());
+            pstm.setString(13, sim.getSimStatus());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,7 +219,7 @@ public class SimDao {
         }
         return exe;
     }
-    
+
     public int updateSim(Sim sim) {
         int exe = 0;
         PreparedStatement pstm = null;
@@ -226,26 +228,27 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `sim` SET ");
             sql.append(" `mobile_no`=?,`serial_no`=?,`imsi`=?,`charge_type`=?,`region_code`=?,");
-            sql.append(" system=?,`env`=?,`usage_type`=?,owner=?,`update_date`=NOW(),");
-            sql.append(" `update_by`=?,`sim_status`=? ");
+            sql.append(" system=?,`env`=?,site=?,`usage_type`=?,owner=?,");
+            sql.append(" `update_date`=NOW(),`update_by`=?,`sim_status`=? ");
             sql.append(" WHERE `sim_id`=?");
 
             //logger.info("sql ::=="+sql);
-            pstm = conn.prepareStatement(sql.toString());            
+            pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, sim.getMobileNo());
             pstm.setString(2, sim.getSerialNo());
             pstm.setString(3, sim.getImsi());
             pstm.setString(4, sim.getChargeType());
             pstm.setString(5, sim.getRegionCode());
-            
+
             pstm.setString(6, sim.getSystem());
-            pstm.setString(7, sim.getEnviroment());            
-            pstm.setString(8, sim.getUsageType());
-            pstm.setString(9, sim.getOwner());            
-            pstm.setString(10, sim.getUpdateBy());
+            pstm.setString(7, sim.getEnviroment());
+            pstm.setString(8, sim.getSite());
+            pstm.setString(9, sim.getUsageType());
+            pstm.setString(10, sim.getOwner());
             
-            pstm.setString(11, sim.getSimStatus());            
-            pstm.setString(12, sim.getSimId());            
+            pstm.setString(11, sim.getUpdateBy());
+            pstm.setString(12, sim.getSimStatus());
+            pstm.setString(13, sim.getSimId());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,7 +258,7 @@ public class SimDao {
         }
         return exe;
     }
-    
+
     public int deleteSim(int simId) {
         int exe = 0;
         PreparedStatement pstm = null;
@@ -263,9 +266,9 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" DELETE FROM `sim` WHERE sim_id=?");
-            
-            pstm = conn.prepareStatement(sql.toString());            
-            pstm.setInt(1, simId);            
+
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setInt(1, simId);
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,7 +278,7 @@ public class SimDao {
         }
         return exe;
     }
-    
+
     public List<Sim> findSim(Sim searching) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -292,19 +295,19 @@ public class SimDao {
             sql.append(" FROM `sim` s ");
             sql.append(" WHERE 1=1 ");
 
-            if(!"".equals(searching.getMobileNo())){
-                sql.append(" and `mobile_no` ='"+searching.getMobileNo()+"'");
+            if (!"".equals(searching.getMobileNo())) {
+                sql.append(" and `mobile_no` ='" + searching.getMobileNo() + "'");
             }
-            if(!"".equals(searching.getEnviroment())){
-                sql.append(" and `env` ="+searching.getEnviroment());
+            if (!"".equals(searching.getEnviroment())) {
+                sql.append(" and `env` =" + searching.getEnviroment());
             }
-            if(!"".equals(searching.getSystem())){
-                sql.append(" and `system` ='"+searching.getSystem()+"'");
+            if (!"".equals(searching.getSystem())) {
+                sql.append(" and `system` ='" + searching.getSystem() + "'");
             }
-            if(!"".equals(searching.getSimStatus())){
-                sql.append(" and `sim_status` ='"+searching.getSimStatus()+"'");
+            if (!"".equals(searching.getSimStatus())) {
+                sql.append(" and `sim_status` ='" + searching.getSimStatus() + "'");
             }
-            logger.info("sql ::=="+sql);
+            logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             simList = new ArrayList<Sim>();
@@ -319,7 +322,7 @@ public class SimDao {
         }
         return simList;
     }
-    
+
     public int bookSim(Sim sim, String simId) {
         logger.info("Booking Sim");
         int exe = 0;
@@ -333,7 +336,7 @@ public class SimDao {
             sql.append(" `remark` =?, `update_by`=?,`sim_status`=? ");
             sql.append(" WHERE `sim_id` in(" + simId + ")");
             logger.info("sql ::==" + sql.toString());
-            pstm = conn.prepareStatement(sql.toString());            
+            pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, sim.getTeamId());
             pstm.setString(2, sim.getEmailContact());
             pstm.setString(3, sim.getProjectId());
@@ -351,10 +354,10 @@ public class SimDao {
         } finally {
             this.close(pstm, null);
         }
-        
+
         return exe;
     }
-    
+
     public int resetBookingSim(Sim sim, String simId) {
         int exe = 0;
         PreparedStatement pstm = null;
@@ -366,10 +369,10 @@ public class SimDao {
             sql.append(" `update_by` = ?, `update_date`=NOW(), ");
             sql.append(" `sim_status` = 'Available', remark='' ");
             sql.append(" WHERE `sim_id` in(" + simId + ")");
-            
-            pstm = conn.prepareStatement(sql.toString());  
-            pstm.setString(1, sim.getUpdateBy());       
-            logger.info("pstm ::=="+pstm.toString());
+
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, sim.getUpdateBy());
+            logger.info("pstm ::==" + pstm.toString());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,7 +382,7 @@ public class SimDao {
         }
         return exe;
     }
-    
+
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {
