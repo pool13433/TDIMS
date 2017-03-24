@@ -11,22 +11,22 @@
         </div>
         <form action="${context}/SimSaveServlet" method="post" class="form-horizontal">
             <div class="form-group">
-                <label for="mobileNo" class="col-sm-1 control-label">Mobile No</label>
+                <label for="mobileNo" class="col-sm-1 control-label">MOBILE_NO </label>
                 <div class="col-sm-3">
                     <input type="hidden" value="${sim.simId}" id="simId" name="simId">
                     <input type="text" class="form-control" value="${sim.mobileNo}" id="mobileNo" name="mobileNo" placeholder="mobileNo" required>
                 </div>
-                <label for="serialNo" class="col-sm-1 control-label">Serial No</label>
+                <label for="serialNo" class="col-sm-1 control-label">SERIAL_NO</label>
                 <div class="col-sm-3">
                     <input type="text" class="form-control" value="${sim.serialNo}" id="serialNo" name="serialNo" placeholder="serialNo" required>
                 </div>
-                <label for="imsi" class="col-sm-1 control-label">Imsi</label>
+                <label for="imsi" class="col-sm-1 control-label">IMSI </label>
                 <div class="col-sm-3">
                     <input type="text" class="form-control" value="${sim.imsi}"  id="imsi" name="imsi" placeholder="imsi" required>
                 </div>
             </div>
             <div class="form-group">
-                <label for="chargeType" class="col-sm-1 control-label">Charge Type</label>
+                <label for="chargeType" class="col-sm-1 control-label">CHARGE_TYPE</label>
                 <div class="col-sm-3">
                     <select class="form-control" id="chargeType" name="chargeType" placeholder="chargeType" required>
                         <c:forEach items="${chargeTypeList}" var="charge">
@@ -41,43 +41,11 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label for="regionCode" class="col-sm-1 control-label">Region Code</label>
+                <label for="regionCode" class="col-sm-1 control-label">REGION_CODE</label>
                 <div class="col-sm-3">
                     <input type="text" class="form-control"  value="${sim.regionCode}"  id="regionCode" name="regionCode" placeholder="regionCode" required>
                 </div>
-                <label for="env" class="col-sm-1 control-label">Environment</label>
-                <div class="col-sm-3 ">
-                    <select class="form-control" class="form-control" id="env" name="env" placeholder="env" required>
-                        <c:forEach items="${envList}" var="env">                            
-                            <c:choose>
-                                <c:when test="${sim.enviroment == env.envId}">
-                                    <option value="${env.envId}" selected>${env.envCode}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${env.envId}">${env.envCode}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">           
-                <label for="usageType" class="col-sm-1 control-label">Usage Type</label>
-                <div class="col-sm-3">
-                    <select class="form-control" class="form-control" id="usageType" name="usageType" placeholder="usageType" required>
-                        <c:forEach items="${usageTypeList}" var="usage">                            
-                            <c:choose>
-                                <c:when test="${sim.usageType == usage.conName}">
-                                    <option value="${usage.conName}" selected>${usage.conValue}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${usage.conName}">${usage.conValue}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </select>
-                </div>
-                <label for="system" class="col-sm-1 control-label">System</label>
+                <label for="system" class="col-sm-1 control-label">SYSTEM</label>
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="system" name="system"  required>
                         <c:forEach items="${systemList}" var="system">                            
@@ -92,25 +60,58 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label for="owner" class="col-sm-1 control-label">Owner</label>
-                <div class="col-sm-3">
-                    <select class="form-control" class="form-control" id="owner" name="owner" required>
-                        <c:forEach items="${ownerList}" var="owner">                            
+
+            </div>
+            <div class="form-group">           
+                <label for="env" class="col-sm-1 control-label">ENV</label>
+                <div class="col-sm-3 ">
+                    <select class="form-control" class="form-control" id="env" name="env" placeholder="env" required>
+                        <c:forEach items="${envList}" var="env">                            
                             <c:choose>
-                                <c:when test="${sim.owner == owner.profileId}">
-                                    <option value="${owner.profileId}" selected>${owner.username}</option>
+                                <c:when test="${sim.enviroment == env.conName}">
+                                    <option value="${env.conName}" selected>${env.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${owner.profileId}">${owner.username}</option>
+                                    <option value="${env.conName}">${env.conValue}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </select>
                 </div>
-
+                <label for="site" class="col-sm-1 control-label">SITE</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="usageType" name="site" required>
+                        <c:forEach items="${siteList}" var="site">                            
+                            <c:choose>
+                                <c:when test="${sim.site == site.conName}">
+                                    <option value="${site.conName}" selected>${site.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${site.conName}">${site.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
+                <label for="usageType" class="col-sm-1 control-label">TYPE</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="usageType" name="usageType" placeholder="usageType" required>
+                        <c:forEach items="${usageTypeList}" var="usage">                            
+                            <c:choose>
+                                <c:when test="${sim.usageType == usage.conName}">
+                                    <option value="${usage.conName}" selected>${usage.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${usage.conName}">${usage.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
-                <label for="status" class="col-sm-1 control-label">Status</label>
+                
+                <label for="status" class="col-sm-1 control-label">STATUS</label>
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="status" name="status" placeholder="status" required>
                         <c:forEach items="${simStatusList}" var="status">                            
@@ -120,6 +121,21 @@
                                 </c:when>
                                 <c:otherwise>
                                     <option value="${status.conName}">${status.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
+                <label for="owner" class="col-sm-1 control-label">OWNER</label>
+                <div class="col-sm-3">
+                    <select class="form-control" class="form-control" id="owner" name="owner" required>
+                        <c:forEach items="${ownerList}" var="owner">                            
+                            <c:choose>
+                                <c:when test="${sim.owner == owner.profileId}">
+                                    <option value="${owner.profileId}" selected>${owner.username}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${owner.profileId}">${owner.username}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package th.co.ais.tdims.action.position;
 
 import java.io.IOException;
@@ -14,31 +13,34 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.PositionDao;
 import th.co.ais.tdims.model.Position;
+import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class PositionSaveServlet extends HttpServlet {
-    
+
     final static Logger logger = Logger.getLogger(PositionSaveServlet.class);
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
             Position position = new Position();
             position.setPosId(CharacterUtil.removeNull(request.getParameter("posId")));
             position.setPosName(CharacterUtil.removeNull(request.getParameter("posName")));
             position.setPosDesc(CharacterUtil.removeNull(request.getParameter("posDesc")));
             position.setDepId(CharacterUtil.removeNull(request.getParameter("department")));
-
+            position.setCreateBy(profile.getProfileId());
             PositionDao positionDao = new PositionDao();
-            
-            logger.info("posId ::=="+position.getPosId());
-            
-            if(position.getPosId().equals("")){
+
+            logger.info("posId ::==" + position.getPosId());
+
+            if (position.getPosId().equals("")) {
                 logger.info(" create ");
                 positionDao.createPosition(position);
-            }else{
+            } else {
                 logger.info(" update ");
+                position.setUpdateBy(profile.getProfileId());
                 positionDao.updatePosition(position);
             }
             request.setAttribute("message", "save position success");
@@ -47,8 +49,7 @@ public class PositionSaveServlet extends HttpServlet {
             logger.error("save position error", e);
         }
         response.sendRedirect(request.getContextPath() + "/PositionListServlet");
-        
-        
+
     }
 
 }

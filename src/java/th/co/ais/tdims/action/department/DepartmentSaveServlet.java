@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.DepartmentDao;
 import th.co.ais.tdims.model.Department;
+import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class DepartmentSaveServlet extends HttpServlet {
@@ -23,12 +24,12 @@ public class DepartmentSaveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
             Department dep = new Department();
             dep.setDepId(CharacterUtil.removeNull(request.getParameter("depId")));
             dep.setDepName(CharacterUtil.removeNull(request.getParameter("depName")));
             dep.setDepDesc(CharacterUtil.removeNull(request.getParameter("depDesc")));
-
+            dep.setCreateBy(profile.getProfileId());
             DepartmentDao depDao = new DepartmentDao();
             
             logger.info("depId ::=="+dep.getDepId());
@@ -38,6 +39,7 @@ public class DepartmentSaveServlet extends HttpServlet {
                 depDao.createDepartment(dep);
             }else{
                 logger.info(" update ");
+                dep.setUpdateBy(profile.getProfileId());
                 depDao.updateDepartment(dep);
             }
             request.setAttribute("message", "save Department success");

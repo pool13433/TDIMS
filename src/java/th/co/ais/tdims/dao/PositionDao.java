@@ -98,14 +98,16 @@ public class PositionDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `position` ");
-            sql.append(" ( `pos_name`, `pos_desc`, `dep_id` ) ");
+            sql.append(" ( `pos_name`, `pos_desc`, `dep_id`,create_date,create_by,update_date,update_by ) ");
             sql.append(" VALUES ");
-            sql.append(" (?,?,?)");
+            sql.append(" (?,?,?,NOW(),?,NOW(),?)");
             
             pstm = conn.prepareStatement(sql.toString());     
             pstm.setString(1, position.getPosName());
             pstm.setString(2, position.getPosDesc());
             pstm.setInt(3, Integer.parseInt(position.getDepId()));
+            pstm.setString(4, position.getCreateBy());
+            pstm.setString(5, position.getCreateBy());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,14 +125,15 @@ public class PositionDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `position` SET ");
-            sql.append(" `pos_name`=?, `pos_desc`=?, `dep_id`=? ");
+            sql.append(" `pos_name`=?, `pos_desc`=?, `dep_id`=?,update_date=NOW(),update_by=? ");
             sql.append(" WHERE `pos_id`=?");
 
             pstm = conn.prepareStatement(sql.toString());     
             pstm.setString(1, position.getPosName());
             pstm.setString(2, position.getPosName());
             pstm.setInt(3, Integer.parseInt(position.getDepId()));      
-            pstm.setString(4, position.getPosId());
+            pstm.setString(4, position.getUpdateBy());
+            pstm.setString(5, position.getPosId());
             
             exe = pstm.executeUpdate();
         } catch (Exception e) {
