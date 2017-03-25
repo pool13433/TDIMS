@@ -12,11 +12,12 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>        
+                    <th>#</th> 
+                    <th>projectId</th>
+                    <th>serverName</th>
+                    <th>pathFolder</th>
+                    <th>createBy</th>
+                           
                 </tr>
             </thead>
             <tbody>
@@ -24,14 +25,14 @@
                     <tr>                    
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                <a href="${context}/KnowledgeFormServlet?simId=${knl.id}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a href="${context}/KnowledgeDeleteServlet?simId=${knl.id}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="${context}/KnowledgeFormServlet?knlId=${knl.id}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/KnowledgeDeleteServlet?knlId=${knl.id}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
                             </div>
                         </td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
+                        <td>${knl.projectId}</td>
+                        <td>${knl.serverName}</td>
+                        <td>${knl.pathFolder}</td>
+                        <td>${knl.createBy}</td>
                     </tr>
                 </c:forEach>
             </tbody>
