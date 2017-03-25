@@ -109,7 +109,7 @@
                         </ul>
                         <ul class="nav nav-sidebar">
                             <li class="<c:out value="${menu == 'testcase' ? 'active': ''}"/>">
-                                <a href="${context}/jsp/testcase/testcase-list.jsp?menu=testcase"><i class="glyphicon glyphicon-folder-open"></i> จัดการ Testcase</a>
+                                <a href="${context}/TestcaseListServlet?menu=testcase"><i class="glyphicon glyphicon-folder-open"></i> จัดการ Testcase</a>
                             </li>
                             <li class="<c:out value="${menu == 'testcase_search' ? 'active': ''}"/>">
                                 <a href="${context}/TestcaseSearchServlet?menu=testcase_search"><i class="glyphicon glyphicon-folder-open"></i> ค้นหา Testcase</a>
@@ -117,7 +117,7 @@
                         </ul>
                         <ul class="nav nav-sidebar">
                             <li class="<c:out value="${menu == 'user' ? 'active': ''}"/>">
-                                <a href="${context}/jsp/user/user-list.jsp?menu=user"><i class="glyphicon glyphicon-user"></i> จัดการ User</a>
+                                <a href="${context}/UserListServlet?menu=user"><i class="glyphicon glyphicon-user"></i> จัดการ User</a>
                             </li>                      
                             <li class="<c:out value="${menu == 'project' ? 'active': ''}"/>">
                                 <a href="${context}/ProjectListServlet?menu=project"><i class="glyphicon glyphicon-ban-circle"></i> จัดการ Project</a>

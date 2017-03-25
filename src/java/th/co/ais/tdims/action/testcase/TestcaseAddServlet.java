@@ -47,7 +47,7 @@ public class TestcaseAddServlet extends HttpServlet {
             String system = CharacterUtil.removeNull(request.getParameter("systems"));
             String owner = CharacterUtil.removeNull(request.getParameter("tester"));
             String env = CharacterUtil.removeNull(request.getParameter("env"));        
-
+            logger.info(filepath);
             Testcase data = new Testcase();
             data.setUserId(owner);
             data.setDefectNo(td);
