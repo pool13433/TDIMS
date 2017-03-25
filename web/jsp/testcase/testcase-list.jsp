@@ -3,12 +3,12 @@
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="../include/inc_header.jsp"/>
-<<<<<<< OURS
+
 <div class="container" style="padding-right: 100px;">    
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ Testcase ทั้งหมด</div>
         <div class="panel-body">
-            <a href="${context}/jsp/testcase/testcase-form.jsp?menu=user" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+            <a href="${context}/TestcaseFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                 <c:if test="${!empty message}">
                     <p>Status : ${message}</p>
                 </c:if>
@@ -35,8 +35,8 @@
                     <tr>                    
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                <a href="${context}/SimFormServlet?simId=${testcase.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a href="${context}/SimDeleteServlet?simId=${testcase.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="${context}/TestcaseFormServlet?testcaseId=${testcase.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/TestcaseDeleteServlet?testcaseId=${testcase.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
                             </div>
                         </td>
                         <td>${testcase.testcaseTitle}</td>
@@ -54,9 +54,4 @@
             </tbody>
         </table>
     </div>
-=======
-<div class="container">
-    <h1>testcase-list</h1>
->>>>>>> THEIRS
-</div>
 <jsp:include page="../include/inc_footer.jsp"/>

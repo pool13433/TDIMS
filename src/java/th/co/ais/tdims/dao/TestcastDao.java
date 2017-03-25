@@ -153,5 +153,126 @@ public class TestcastDao {
         }
     }
     
+    public int deleteTestcase(int testcaseId) {
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" DELETE FROM `testcase` WHERE testcase_id=?");
+            
+            pstm = conn.prepareStatement(sql.toString());            
+            pstm.setInt(1, testcaseId);            
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("deleteTestcase error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
     
+    public int createTestcase(Testcase testcase) {
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" INSERT INTO `testcase` ");
+            sql.append(" (`testcase_title`, `testcase_details`, `systems`, `enviroment`,");
+            sql.append("  `defect_no`, `issue_no`, project_id,`path_dir`, `user_id`, ");
+            sql.append("  `create_date`) ");
+            sql.append(" VALUES ");
+            sql.append(" (?,?,?,?,");
+            sql.append(" ?,?,?,?,?,");
+            sql.append(" ? )");
+
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, testcase.getTestcaseTitle());
+            pstm.setString(2, testcase.getTestcaseDetails());
+            pstm.setString(3, testcase.getSystems());
+            pstm.setString(4, testcase.getEnviroment());
+
+            pstm.setString(5, testcase.getDefectNo());
+            pstm.setString(6, testcase.getIssueNo());
+            pstm.setString(7, testcase.getProjectId());
+            pstm.setString(8, "");
+            pstm.setString(9, testcase.getUserId());
+
+            pstm.setString(10, testcase.getCreateDate());
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("saveSim error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+
+    public int updateTestcase(Testcase testcase) {
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" UPDATE `testcase` SET ");
+            sql.append(" `testcase_title`=?,`testcase_details`=?,`systems`=?,`enviroment`=?,`defect_no`=?,");
+            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`user_id`=?,create_date=?");
+            sql.append(" WHERE `testcase_id`=?");
+
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, testcase.getTestcaseTitle());
+            pstm.setString(2, testcase.getTestcaseDetails());
+            pstm.setString(3, testcase.getSystems());
+            pstm.setString(4, testcase.getEnviroment());
+
+            pstm.setString(5, testcase.getDefectNo());
+            pstm.setString(6, testcase.getIssueNo());
+            pstm.setString(7, testcase.getProjectId());
+            pstm.setString(8, "");
+            pstm.setString(9, testcase.getUserId());
+            pstm.setString(10, testcase.getCreateDate());
+            pstm.setString(11, testcase.getTestcaseId());
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("saveSim error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+     public Testcase getTestcaseAllForm(int id) {
+        logger.debug("getTestcaseAll");
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Testcase testcaseList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
+            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
+            sql.append(" `path_dir`, `user_id`,  ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
+            sql.append(" FROM `testcase` WHERE testcase_id = ?");
+            logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setInt(1, id);
+            rs = pstm.executeQuery();
+            while (rs.next()) {      
+                 testcaseList = getEntityTestcase(rs);
+               
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getTestcaseAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return testcaseList;
+    }
 }
