@@ -124,6 +124,26 @@
         <servlet-name>SendMailServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.mail.SendMailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestcaseFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.testcase.TestcaseFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.user.UserDeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.user.UserFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.user.UserSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.user.UserListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -132,6 +152,18 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>TestcaseListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.testcase.TestcaseListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TestcaseDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.testcase.TestcaseDeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TestcaseAddServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.testcase.TestcaseAddServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.js</url-pattern>
@@ -263,6 +295,38 @@
         <servlet-name>SendMailServlet</servlet-name>
         <url-pattern>/SendMailServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestcaseListServlet</servlet-name>
+        <url-pattern>/TestcaseListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestcaseDeleteServlet</servlet-name>
+        <url-pattern>/TestcaseDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestcaseFormServlet</servlet-name>
+        <url-pattern>/TestcaseFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestcaseAddServlet</servlet-name>
+        <url-pattern>/TestcaseAddServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserDeleteServlet</servlet-name>
+        <url-pattern>/UserDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserFormServlet</servlet-name>
+        <url-pattern>/UserFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserSaveServlet</servlet-name>
+        <url-pattern>/UserSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserListServlet</servlet-name>
+        <url-pattern>/UserListServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -271,7 +335,6 @@
     <welcome-file-list>
         <welcome-file>jsp/dashboard.jsp</welcome-file>
     </welcome-file-list>
-    
     <filter>
         <description>Character Encoding Filter </description>
         <display-name>encodingFilter </display-name>
@@ -281,8 +344,7 @@
             <param-name>encoding </param-name>
             <param-value>UTF-8 </param-value>
         </init-param>
-    </filter> 
- 
+    </filter>
     <filter-mapping>
         <filter-name>encodingFilter </filter-name>
         <url-pattern>/* </url-pattern>

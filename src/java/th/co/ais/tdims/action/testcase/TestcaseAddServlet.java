@@ -11,6 +11,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
+import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.model.Testcase;
+import th.co.ais.tdims.util.CharacterUtil;
+import th.co.ais.tdims.util.FileUploadUtil;
 
 /**
  *
@@ -18,69 +25,62 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TestcaseAddServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TestcaseAddServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TestcaseAddServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    final static Logger logger = Logger.getLogger(TestcaseAddServlet.class);
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    private String DUMMY_USER = "1";
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        logger.info(" save testcase ");
+        try {
+            //String file = CharacterUtil.removeNull(request.getParameter("file"));
+            Part file = request.getPart("file");
+            String filepath = FileUploadUtil.uploadFile(request, (FileItem) file, "uploads");
+            String td = CharacterUtil.removeNull(request.getParameter("td"));
+            String issue = CharacterUtil.removeNull(request.getParameter("issue"));
+            String date = CharacterUtil.removeNull(request.getParameter("date"));
+            String testcase = CharacterUtil.removeNull(request.getParameter("testcase"));            
+            String deteil = CharacterUtil.removeNull(request.getParameter("detail"));                        
+            String project = CharacterUtil.removeNull(request.getParameter("project"));
+            String testcaseId = CharacterUtil.removeNull(request.getParameter("testcaseId"));
+            String system = CharacterUtil.removeNull(request.getParameter("systems"));
+            String owner = CharacterUtil.removeNull(request.getParameter("tester"));
+            String env = CharacterUtil.removeNull(request.getParameter("env"));        
+
+            Testcase data = new Testcase();
+            data.setUserId(owner);
+            data.setDefectNo(td);
+            data.setIssueNo(issue);
+            data.setPathDir(filepath);
+            data.setSystems(system);
+            data.setProjectId(project);
+            data.setTestcaseDetails(deteil);
+            data.setTestcaseTitle(testcase);
+            data.setEnviroment(env);
+            data.setTestcaseId(testcaseId);
+            
+            TestcastDao testcaseDao = new TestcastDao();
+            
+            logger.info("testcaseId ::=="+testcaseId);
+            if(testcaseId.equals("")){
+                logger.info(" create ");
+                testcaseDao.createTestcase(data);
+            }else{
+                logger.info(" update ");
+                data.setTestcaseId(testcaseId);
+                testcaseDao.updateTestcase(data);
+            }
+            request.setAttribute("message", "save sim success");
+            
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("save sim error", e);
+            request.setAttribute("message", "save sim error");
+        }
+        response.sendRedirect(request.getContextPath() + "/TestcaseListServlet");
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    
 }

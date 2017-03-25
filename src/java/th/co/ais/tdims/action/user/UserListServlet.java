@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package th.co.ais.tdims.action.testcase;
+package th.co.ais.tdims.action.user;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,34 +13,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.TestcastDao;
-import th.co.ais.tdims.util.CharacterUtil;
 
 /**
  *
  * @author Worawat
  */
-public class TestcaseDeleteServlet extends HttpServlet {
-    
-  final static Logger logger = Logger.getLogger(TestcaseDeleteServlet.class);
+public class UserListServlet extends HttpServlet {
+
+   final static Logger logger = Logger.getLogger(UserListServlet.class);
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         try {            
-            String testcaseId = CharacterUtil.removeNull(request.getParameter("testcaseId"));
-            TestcastDao testcaseDao = new TestcastDao();
             
-             int exe = testcaseDao.deleteTestcase(Integer.parseInt(testcaseId));
-            request.setAttribute("message", "delete testcase success");
+            ProfileDao profileDao = new ProfileDao();
             
+            request.setAttribute("profileList", profileDao.getAllUser());
             
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("testcase Error", e);
+            logger.error("profileList Error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/TestcaseListServlet");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/user/user-list.jsp");
+        dispatcher.forward(request, response);
     }
 
 }
