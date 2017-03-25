@@ -73,8 +73,11 @@ public class SimDao {
             sql.append(" DATE_FORMAT(s.valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(s.expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(s.create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(s.update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" s.remark, s.create_by, s.update_by, s.sim_status ");
-            sql.append(" FROM sim s, team t, project p, enviroment e ");
-            sql.append(" WHERE s.expire_date < CURDATE() AND s.team_id=t.team_id AND s.env=e.env AND s.project_id=p.proj_id ");
+            sql.append(" FROM sim s ");
+            sql.append(" LEFT JOIN team t ON s.team_id=t.team_id ");
+            sql.append(" LEFT JOIN project p ON s.project_id=p.proj_id");
+            sql.append(" LEFT JOIN enviroment e ON s.env_id=e.env_id ");
+            sql.append(" WHERE s.expire_date < CURDATE() ");
             sql.append(" GROUP BY s.team_id, s.system ");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -126,7 +129,7 @@ public class SimDao {
         sim.setCreateBy(rs.getString("create_by"));
         sim.setCreateDate(rs.getString("create_date"));
         sim.setEmailContact(rs.getString("email_contact"));
-        sim.setEnviroment(rs.getString("env"));
+        sim.setEnviroment(rs.getString("env_code"));
         sim.setExpireDate(rs.getString("expire_date"));
         sim.setImsi(rs.getString("imsi"));
         sim.setMobileNo(rs.getString("mobile_no"));
@@ -136,7 +139,6 @@ public class SimDao {
         sim.setSerialNo(rs.getString("serial_no"));
         sim.setSimId(rs.getString("sim_id"));
         sim.setSimStatus(rs.getString("sim_status"));
-        sim.setSite(rs.getString("site"));
         sim.setUpdateBy(rs.getString("update_by"));
         sim.setUpdateDate(rs.getString("update_date"));
         sim.setUsageType(rs.getString("usage_type"));
