@@ -144,6 +144,22 @@
         <servlet-name>UserListServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.user.UserListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KnowledgeSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.knowledge.KnowledgeSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KnowledgeFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.knowledge.KnowledgeFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KnowledgeListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.knowledge.KnowledgeListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KnowledgeDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.knowledge.KnowledgeDeleteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -326,6 +342,22 @@
     <servlet-mapping>
         <servlet-name>UserListServlet</servlet-name>
         <url-pattern>/UserListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeSaveServlet</servlet-name>
+        <url-pattern>/KnowledgeSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeFormServlet</servlet-name>
+        <url-pattern>/KnowledgeFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeListServlet</servlet-name>
+        <url-pattern>/KnowledgeListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeDeleteServlet</servlet-name>
+        <url-pattern>/KnowledgeDeleteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
