@@ -10,7 +10,7 @@
         <div class="panel-body">
             <a href="${context}/TestcaseListServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
         </div>
-        <form action="${context}/TestcaseAddServlet" method="post" class="form-horizontal">
+        <form action="${context}/TestcaseAddServlet" method="post" class="form-horizontal"   enctype="multipart/form-data">
             <input type="hidden" value="${testcase.testcaseId}" id="testcaseId" name="testcaseId">
             <div class="form-group">
             <div class="col-sm-offset-1 col-sm-5">
