@@ -9,12 +9,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.ExpiredSim;
 import th.co.ais.tdims.model.Sim;
+import th.co.ais.tdims.model.SimHistory;
+import th.co.ais.tdims.util.CharacterUtil;
 
 /**
  *
@@ -117,6 +121,22 @@ public class SimDao {
         sim.setValidDate(rs.getString("valid_date"));
         sim.setOwner(rs.getString("owner"));
         return sim;
+    }
+    
+    private SimHistory getEntityHistorySim(ResultSet rs) throws SQLException {
+        SimHistory simHistory = new SimHistory();
+        simHistory.setLogId(rs.getString("log_id"));
+        simHistory.setTeamId(rs.getString("team_id"));
+        simHistory.setCreateBy(rs.getString("create_by"));
+        simHistory.setCreateDate(rs.getString("create_date"));
+        simHistory.setEnviroment(rs.getString("env"));
+        simHistory.setSystem(rs.getString("system"));
+        simHistory.setMobileNo(rs.getString("mobile_no"));
+        simHistory.setProjectId(rs.getString("project_id"));
+        simHistory.setRemark(rs.getString("remark"));
+        simHistory.setStatus(rs.getString("status"));
+        simHistory.setSite(rs.getString("site"));
+        return simHistory;
     }
 
     private ExpiredSim getEntityExpiredSim(ResultSet rs) throws SQLException {
@@ -295,17 +315,20 @@ public class SimDao {
             sql.append(" FROM `sim` s ");
             sql.append(" WHERE 1=1 ");
 
-            if (!"".equals(searching.getMobileNo())) {
+            if (!"".equals(CharacterUtil.removeNull(searching.getMobileNo()))) {
                 sql.append(" and `mobile_no` ='" + searching.getMobileNo() + "'");
             }
-            if (!"".equals(searching.getEnviroment())) {
+            if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
                 sql.append(" and `env` =" + searching.getEnviroment());
             }
-            if (!"".equals(searching.getSystem())) {
+            if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
                 sql.append(" and `system` ='" + searching.getSystem() + "'");
             }
-            if (!"".equals(searching.getSimStatus())) {
+            if (!"".equals(CharacterUtil.removeNull(searching.getSimStatus()))) {
                 sql.append(" and `sim_status` ='" + searching.getSimStatus() + "'");
+            }
+            if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
+                sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
             }
             logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -323,6 +346,85 @@ public class SimDao {
         return simList;
     }
 
+    public List<Sim> findSimCancel(Sim searching) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Sim> simList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
+            sql.append(" `region_code`, `env`, site, system, `usage_type`, owner, team_id, ");
+            sql.append(" `email_contact`, project_id, ");
+            sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
+            sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
+            sql.append(" FROM `sim` s ");
+            sql.append(" WHERE 1=1 ");
+            
+            if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
+                sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
+            }
+            logger.info("sql ::==" + sql);
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            simList = new ArrayList<Sim>();
+            while (rs.next()) {
+                simList.add(getEntitySim(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("findSimCancel error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return simList;
+    }
+    
+    public List<SimHistory> findSimHistory(String mobile, String dateFrom, String dateTo) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<SimHistory> simHistoryList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `log_id`, `mobile_no`, `system`, `env`, `site`, `status`, ");
+            sql.append(" (select t.team_name from team t  where t.team_id=s.team_id) as `team_id`, `remark`, ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = s.create_by)  as create_by, ");
+            sql.append(" (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
+            sql.append(" FROM `sim_history` s ");
+            sql.append(" WHERE 1=1 ");
+
+            if (!"".equals(CharacterUtil.removeNull(mobile))) {
+                sql.append(" and `mobile_no` ='" + mobile + "'");
+            }
+            if (!"".equals(CharacterUtil.removeNull(dateFrom)) && !"".equals(CharacterUtil.removeNull(dateTo))) {
+                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
+                Date dateF = d1.parse(dateFrom);
+                Date dateT = d1.parse(dateTo);
+                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");            
+                sql.append(" and `create_date` between '" + d2.format(dateF) +"' and '"+d2.format(dateT)+"'");
+            }
+            
+            sql.append(" order by create_date DESC ");
+            
+            logger.info("sql ::==" + sql);
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            simHistoryList = new ArrayList<SimHistory>();
+            while (rs.next()) {
+                simHistoryList.add(getEntityHistorySim(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("find Sim error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return simHistoryList;
+    }
+    
     public int bookSim(Sim sim, String simId) {
         logger.info("Booking Sim");
         int exe = 0;
@@ -351,6 +453,46 @@ public class SimDao {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("booking sim error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+
+        return exe;
+    }
+    
+    public int simSaveLog(Sim sim) {
+        logger.info("simSaveLog");
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" INSERT INTO `sim_history` ");
+            sql.append("  (`mobile_no`, `system`, `env`, `site`, ");
+            sql.append(" `create_by`,`create_date`, ");
+            sql.append(" `status`, `team_id`, `project_id`, `remark`) ");
+            sql.append(" VALUES ");
+            sql.append(" (?,?,?,?,");
+            sql.append(" ?,NOW(),?,?,?,?)");
+            
+            
+            logger.info("sql ::==" + sql.toString());
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, sim.getMobileNo());
+            pstm.setString(2, sim.getSystem());
+            pstm.setString(3, sim.getEnviroment());
+            pstm.setString(4, sim.getSite());
+            pstm.setString(5, sim.getCreateBy());
+            pstm.setString(6, sim.getSimStatus());
+            pstm.setString(7, sim.getTeamId());
+            pstm.setString(8, sim.getProjectId());
+            pstm.setString(9, sim.getRemark());
+            
+            logger.info(" : pstm : " + pstm.toString());
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("simSaveLog error", e);
         } finally {
             this.close(pstm, null);
         }

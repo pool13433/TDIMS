@@ -42,10 +42,10 @@ public class TestcastDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
-            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
-            sql.append(" `path_dir`, `user_id`,  ");
+            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
+            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.user_id)  as `user_id`,  ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
-            sql.append(" FROM `testcase` ");
+            sql.append(" FROM `testcase` t ");
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -69,11 +69,12 @@ public class TestcastDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `testcase_id`, `project_id`, `user_id`, ");
+            sql.append(" SELECT `testcase_id`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = t.user_id)  as  `user_id`, ");
             sql.append(" `systems`, `enviroment`, `issue_no`, `path_dir`, ");
             sql.append(" `testcase_details`, `testcase_title`,`defect_no`,  ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
-            sql.append(" FROM `testcase` ");            
+            sql.append(" FROM `testcase` t ");            
             sql.append(" WHERE 1=1 ");
             
             if(!"".equals(CharacterUtil.removeNull(tc.getProjectId()))){
@@ -102,6 +103,9 @@ public class TestcastDao {
                 Date date = d1.parse(tc.getCreateDate());
                 SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
                 sql.append(" and `create_date` = '"+d2.format(date)+"'");
+            }
+            if(!"".equals(CharacterUtil.removeNull(tc.getUserId()))){
+                sql.append(" and `user_id` = '"+tc.getUserId()+"'");
             }
             System.out.println("SQL : "+sql.toString());
             pstm = conn.prepareStatement(sql.toString());
@@ -256,9 +260,9 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
-            sql.append(" `path_dir`, `user_id`,  ");
+            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.user_id)  as `user_id`,  ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
-            sql.append(" FROM `testcase` WHERE testcase_id = ?");
+            sql.append(" FROM `testcase` t WHERE testcase_id = ?");
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             pstm.setInt(1, id);

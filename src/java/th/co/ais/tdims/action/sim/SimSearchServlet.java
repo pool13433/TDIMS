@@ -6,6 +6,8 @@
 package th.co.ais.tdims.action.sim;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +19,7 @@ import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -26,7 +29,6 @@ import th.co.ais.tdims.util.CharacterUtil;
  */
 public class SimSearchServlet extends HttpServlet {
 final static Logger logger = Logger.getLogger(SimSearchServlet.class);
-    private String DUMMY_USER = "1";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +36,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         logger.debug("doGet SimSearchServlet");
         RequestDispatcher dispatcher = null;
         try {
+            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
             String cancelBooking = CharacterUtil.removeNull(request.getParameter("cancelBooking"));            
             String simStr = ""; 
@@ -81,11 +84,32 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 String searchStatus = CharacterUtil.removeNull(request.getParameter("status"));
                 sim.setSimStatus(searchStatus);
                 request.setAttribute("status", searchStatus);
+                sim.setUpdateBy(profile.getProfileId());
+                sim.setCreateBy(profile.getProfileId());
                 
                 if("searching".equals(menu)){
                     request.setAttribute("simList", simDao.findSim(sim));
                 }else{     
                     if("Y".equals(cancelBooking)){
+                        
+                        sim.setRemark("cancel booking");
+                        sim.setSimId(simStr);
+                        List<Sim> listSim = new ArrayList<Sim>();
+                        listSim = simDao.findSimCancel(sim);
+                        for(Sim s : listSim){
+                            sim = new Sim();
+                            sim.setMobileNo(s.getMobileNo());
+                            sim.setSystem(s.getSystem());
+                            sim.setEnviroment(s.getEnviroment());
+                            sim.setSite(s.getSite());
+                            sim.setCreateBy(profile.getProfileId());
+                            sim.setTeamId(s.getTeamId());
+                            sim.setProjectId(s.getProjectId());
+                            sim.setRemark("CANCEL");          
+                            sim.setSimStatus("Available");
+
+                            simDao.simSaveLog(sim);
+                        }
                         simDao.resetBookingSim(sim, simStr);
                     }
                     request.setAttribute("simList", simDao.getSimAll());
@@ -104,15 +128,14 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         dispatcher.forward(request, response);
         
     }
-
-   
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("doPost SimSearchServlet -> sim booking");
         String simSelected = request.getParameter("simSelected"); 
         try {      
-            
+            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
             String assignTeam = CharacterUtil.removeNull(request.getParameter("team"));
             String email = CharacterUtil.removeNull(request.getParameter("emailContact"));
             String project = CharacterUtil.removeNull(request.getParameter("project"));
@@ -120,20 +143,33 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             String validDate = CharacterUtil.removeNull(request.getParameter("validDate"));
             String expireDate = CharacterUtil.removeNull(request.getParameter("expireDate"));
             String remark = CharacterUtil.removeNull(request.getParameter("remark"));
-
-            Sim sim = new Sim();
-            sim.setTeamId(assignTeam);
-            sim.setEmailContact(email);
-            sim.setValidDate(validDate);
-            sim.setExpireDate(expireDate);
-            sim.setProjectId(project);
-            sim.setRemark(remark);          
-            sim.setSimStatus(status);
-            sim.setUpdateBy(DUMMY_USER);
-            sim.setUpdateDate(expireDate);            
             
-            SimDao simDao = new SimDao();  
+            SimDao simDao = new SimDao(); 
+            Sim sim = new Sim();
+            sim.setSimId(simSelected);
+            List<Sim> listSim = new ArrayList<Sim>();
+            listSim = simDao.findSim(sim);
+            for(Sim s : listSim){
+                sim = new Sim();
+                sim.setMobileNo(s.getMobileNo());
+                sim.setSystem(s.getSystem());
+                sim.setEnviroment(s.getEnviroment());
+                sim.setSite(s.getSite());
+                sim.setCreateBy(profile.getProfileId());
+                sim.setTeamId(assignTeam);
+                sim.setEmailContact(email);
+                sim.setValidDate(validDate);
+                sim.setExpireDate(expireDate);
+                sim.setProjectId(project);
+                sim.setRemark(remark);          
+                sim.setSimStatus(status);
+                sim.setUpdateBy(profile.getProfileId());
+                sim.setUpdateDate(expireDate);
+                
+                simDao.simSaveLog(sim);
+            }
             simDao.bookSim(sim, simSelected);
+            
             
             request.setAttribute("message", "booking sim success");
             

@@ -8,7 +8,6 @@ package th.co.ais.tdims.action.knowledge;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.KnowledgeDao;
 
-/**
- *
- * @author Administrator
- */
+
 public class KnowledgeSearchServlet extends HttpServlet {
 final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
    

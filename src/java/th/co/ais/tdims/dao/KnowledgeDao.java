@@ -28,7 +28,7 @@ public class KnowledgeDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
-            sql.append("FROM `test_knowledge` ");
+            sql.append("FROM `knowledge` ");
             
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -51,7 +51,7 @@ public class KnowledgeDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
-            sql.append("FROM `test_knowledge` ");
+            sql.append("FROM `knowledge` ");
             sql.append(" WHERE 1=1 ");
             
             if(createBy){
