@@ -71,67 +71,69 @@
             <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
                 <input type="hidden" id="menu" name="menu" value="booking"/>
                 <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
-                <table class="table table-bordered table-striped">
-                    <div id="msgBox" class="alert alert-warning" hidden="">
-                        <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
-                    </div>
-                    <thead>                    
-                        <tr>
-                            <th>#</th>
-                            <th>MOBILE</th>   
-                            <th>SYSTEM</th>
-                            <th>IMSI</th>
-                            <th>SERIAL</th>
-                            <th>CHARGE_TYPE</th>
-                            <th>REGION_CODE</th>
-                            <th>ENV</th>
-                            <th>SITE</th>
-                            <th>TYPE</th>
-                            <th>STATUS</th>
-                            <th>ASSIGN_TEAM</th>
-                            <th>EMAIL_CONTACT</th>                    
-                            <th>PROJECT</th>
-                            <th>VALID_DATE</th>
-                            <th>EXPIRE_DATE</th>
-                            <th>REMARK</th>               
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="sim" items="${simList}" >                           
-                            <tr>                    
-                                <td>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-info">
-                                            <input type="checkbox" autocomplete="off" id="simSelected" name="simSelected" value="${sim.simId}">
-                                            <span class="glyphicon glyphicon-ok"></span>                                        
-                                        </label>                                
-                                    </div>
-                                </td>
-                                <td>${sim.mobileNo}</td>
-                                <td>${sim.system}</td>
-                                <td>${sim.imsi}</td>
-                                <td>${sim.serialNo}</td>
-                                <td>${sim.chargeType}</td>                        
-                                <td>${sim.regionCode}</td>
-                                <td>${sim.enviroment}</td>
-                                <td>${sim.site}</td>
-                                <td>${sim.usageType}</td>
-                                <td>${sim.simStatus}</td>
-                                <td>${sim.teamId}</td>
-                                <td>${sim.emailContact}</td>
-                                <td>${sim.projectId}</td>                                                
-                                <td>${sim.validDate}</td>
-                                <td>${sim.expireDate}</td>
-                                <td>${sim.remark}</td>
+                <div style="overflow-y: scroll;">
+                    <table class="table table-bordered table-striped">
+                        <div id="msgBox" class="alert alert-warning" hidden="">
+                            <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
+                        </div>
+                        <thead>                    
+                            <tr>
+                                <th>#</th>
+                                <th>MOBILE</th>   
+                                <th>SYSTEM</th>
+                                <th>IMSI</th>
+                                <th>SERIAL</th>
+                                <th>CHARGE_TYPE</th>
+                                <th>REGION_CODE</th>
+                                <th>ENV</th>
+                                <th>SITE</th>
+                                <th>TYPE</th>
+                                <th>STATUS</th>
+                                <th>ASSIGN_TEAM</th>
+                                <th>EMAIL_CONTACT</th>                    
+                                <th>PROJECT</th>
+                                <th>VALID_DATE</th>
+                                <th>EXPIRE_DATE</th>
+                                <th>REMARK</th>               
                             </tr>
-                        </c:forEach>
-                        <c:if test="${simList.isEmpty()}">
-                            <tr>                    
-                                <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
-                            </tr>
-                        </c:if>
-                    </tbody>
-                </table> 
+                        </thead>
+                        <tbody>
+                            <c:forEach var="sim" items="${simList}" >                           
+                                <tr>                    
+                                    <td>
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-info">
+                                                <input type="checkbox" autocomplete="off" id="simSelected" name="simSelected" value="${sim.simId}">
+                                                <span class="glyphicon glyphicon-ok"></span>                                        
+                                            </label>                                
+                                        </div>
+                                    </td>
+                                    <td>${sim.mobileNo}</td>
+                                    <td>${sim.system}</td>
+                                    <td>${sim.imsi}</td>
+                                    <td>${sim.serialNo}</td>
+                                    <td>${sim.chargeType}</td>                        
+                                    <td>${sim.regionCode}</td>
+                                    <td>${sim.enviroment}</td>
+                                    <td>${sim.site}</td>
+                                    <td>${sim.usageType}</td>
+                                    <td>${sim.simStatus}</td>
+                                    <td>${sim.teamId}</td>
+                                    <td>${sim.emailContact}</td>
+                                    <td>${sim.projectId}</td>                                                
+                                    <td>${sim.validDate}</td>
+                                    <td>${sim.expireDate}</td>
+                                    <td>${sim.remark}</td>
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${simList.isEmpty()}">
+                                <tr>                    
+                                    <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
+                                </tr>
+                            </c:if>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="panel-body">
                     <button id="ok" type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-pencil"></i> booking</button>   
                     <button id="cancel"     class="btn btn-default btn-danger"> cancel booking</button>

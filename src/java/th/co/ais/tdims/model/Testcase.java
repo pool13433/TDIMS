@@ -9,7 +9,6 @@ package th.co.ais.tdims.model;
 public class Testcase {
     private String testcaseId;
     private String projectId;
-    private String userId;
     private String systems;
     private String enviroment;
     private String issueNo;
@@ -18,6 +17,8 @@ public class Testcase {
     private String testcaseTitle;
     private String defectNo;
     private String createDate;
+    private String step;
+    private String createBy;
 
     public String getCreateDate() {
         return createDate;
@@ -42,15 +43,7 @@ public class Testcase {
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
+    
     public String getSystems() {
         return systems;
     }
@@ -105,6 +98,22 @@ public class Testcase {
 
     public void setDefectNo(String defectNo) {
         this.defectNo = defectNo;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
     

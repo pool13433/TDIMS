@@ -6,7 +6,6 @@
 package th.co.ais.tdims.action.testcase;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +48,7 @@ public class TestcaseAddServlet extends HttpServlet {
             String env = CharacterUtil.removeNull(request.getParameter("env"));        
             logger.info(filepath);
             Testcase data = new Testcase();
-            data.setUserId(owner);
+            data.setCreateBy(owner);
             data.setDefectNo(td);
             data.setIssueNo(issue);
             data.setPathDir(filepath);

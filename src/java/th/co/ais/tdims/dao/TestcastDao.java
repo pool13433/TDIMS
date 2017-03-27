@@ -43,8 +43,8 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
-            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.user_id)  as `user_id`,  ");
-            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
+            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, `step` ");
             sql.append(" FROM `testcase` t ");
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -70,9 +70,9 @@ public class TestcastDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
-            sql.append(" (select pf.username from profile pf where pf.profile_id = t.user_id)  as  `user_id`, ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = t.create_by)  as  `create_by`, ");
             sql.append(" `systems`, `enviroment`, `issue_no`, `path_dir`, ");
-            sql.append(" `testcase_details`, `testcase_title`,`defect_no`,  ");
+            sql.append(" `testcase_details`, `testcase_title`,`defect_no`, `step`, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `testcase` t ");            
             sql.append(" WHERE 1=1 ");
@@ -104,9 +104,13 @@ public class TestcastDao {
                 SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
                 sql.append(" and `create_date` = '"+d2.format(date)+"'");
             }
-            if(!"".equals(CharacterUtil.removeNull(tc.getUserId()))){
-                sql.append(" and `user_id` = '"+tc.getUserId()+"'");
+            if(!"".equals(CharacterUtil.removeNull(tc.getCreateBy()))){
+                sql.append(" and `create_by` = '"+tc.getCreateBy()+"'");
             }
+            if(!"".equals(CharacterUtil.removeNull(tc.getStep()))){
+                sql.append(" and `step` = '"+tc.getStep()+"'");
+            }
+            
             System.out.println("SQL : "+sql.toString());
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -135,7 +139,8 @@ public class TestcastDao {
         t.setTestcaseTitle(rs.getString("testcase_title"));
         t.setTestcaseDetails(rs.getString("testcase_details"));
         t.setTestcaseId(rs.getString("testcase_id"));
-        t.setUserId(rs.getString("user_id"));
+        t.setStep(rs.getString("step"));
+        t.setCreateBy(rs.getString("create_by"));
         
         return t;
         
@@ -185,7 +190,7 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `testcase` ");
             sql.append(" (`testcase_title`, `testcase_details`, `systems`, `enviroment`,");
-            sql.append("  `defect_no`, `issue_no`, project_id,`path_dir`, `user_id`, ");
+            sql.append("  `defect_no`, `issue_no`, project_id,`path_dir`, `create_by`, ");
             sql.append("  `create_date`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,");
@@ -203,7 +208,7 @@ public class TestcastDao {
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
             pstm.setString(8, "");
-            pstm.setString(9, testcase.getUserId());
+            pstm.setString(9, testcase.getCreateBy());
 
             pstm.setString(10, testcase.getCreateDate());
             exe = pstm.executeUpdate();
@@ -224,7 +229,7 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `testcase` SET ");
             sql.append(" `testcase_title`=?,`testcase_details`=?,`systems`=?,`enviroment`=?,`defect_no`=?,");
-            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`user_id`=?,create_date=?");
+            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`create_by`=?,create_date=?");
             sql.append(" WHERE `testcase_id`=?");
 
             //logger.info("sql ::=="+sql);
@@ -238,7 +243,7 @@ public class TestcastDao {
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
             pstm.setString(8, "");
-            pstm.setString(9, testcase.getUserId());
+            pstm.setString(9, testcase.getCreateBy());
             pstm.setString(10, testcase.getCreateDate());
             pstm.setString(11, testcase.getTestcaseId());
             exe = pstm.executeUpdate();
@@ -260,8 +265,8 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
-            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.user_id)  as `user_id`,  ");
-            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
+            sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , `step` ");
             sql.append(" FROM `testcase` t WHERE testcase_id = ?");
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
