@@ -97,13 +97,16 @@
                             </li>
                             <li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">
                                 <a href="${context}/SimSearchServlet?menu=sim_search"><i class="glyphicon glyphicon-credit-card"></i> ค้นหา SIM</a>
-                            </li>    
+                            </li>  
+                            <li class="<c:out value="${menu == 'sim_history' ? 'active': ''}"/>">
+                                <a href="${context}/SimHistoryServlet?menu=sim_history"><i class="glyphicon glyphicon-credit-card"></i> SIM History Log</a>
+                            </li> 
                         </ul>
                         <ul class="nav nav-sidebar">
-                            <li class="<c:out value="${menu == 'knowledge_search' ? 'active': ''}"/>">
+                            <li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">                                                            
                                 <a href="${context}/KnowledgeListServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> จัดการ Knowledge</a>
                             </li>
-                            <li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">
+                            <li class="<c:out value="${menu == 'knowledge_search' ? 'active': ''}"/>">
                                 <a href="${context}/KnowledgeSearchServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> ค้นหา Knowledge</a>
                             </li>
                         </ul>

@@ -133,6 +133,14 @@
         <servlet-class>th.co.ais.tdims.action.user.UserDeleteServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SimHistoryServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.sim.SimHistoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KnowledgeSearchServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.knowledge.KnowledgeSearchServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>UserFormServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.user.UserFormServlet</servlet-class>
     </servlet>
@@ -342,6 +350,14 @@
     <servlet-mapping>
         <servlet-name>UserListServlet</servlet-name>
         <url-pattern>/UserListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SimHistoryServlet</servlet-name>
+        <url-pattern>/SimHistoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KnowledgeSearchServlet</servlet-name>
+        <url-pattern>/KnowledgeSearchServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>KnowledgeSaveServlet</servlet-name>

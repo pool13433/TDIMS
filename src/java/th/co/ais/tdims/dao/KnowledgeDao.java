@@ -42,7 +42,6 @@ public class KnowledgeDao {
         }
         return knowledgeList;
     }
-    
      public Knowledge getKnowledge(int id){
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -74,7 +73,7 @@ public class KnowledgeDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
-            sql.append("FROM `test_knowledge` ");
+            sql.append(" FROM `knowledge` ");
             sql.append(" WHERE 1=1 ");
             
             if(createBy){

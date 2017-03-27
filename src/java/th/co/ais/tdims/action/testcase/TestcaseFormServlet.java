@@ -6,8 +6,6 @@
 package th.co.ais.tdims.action.testcase;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.Integer.getInteger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
