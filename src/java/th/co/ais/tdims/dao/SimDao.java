@@ -48,7 +48,7 @@ public class SimDao {
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
             sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.owner) as owner");
             sql.append(" FROM `sim` s ");
-            //logger.info("sql ::=="+sql);
+            logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             simList = new ArrayList<Sim>();
@@ -318,10 +318,10 @@ public class SimDao {
             sql.append(" WHERE 1=1 ");
 
             if (!"".equals(CharacterUtil.removeNull(searching.getMobileNo()))) {
-                sql.append(" and `mobile_no` ='" + searching.getMobileNo() + "'");
+                sql.append(" and `mobile_no` LIKE '%" + searching.getMobileNo() + "%'");
             }
             if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
-                sql.append(" and `env` =" + searching.getEnviroment());
+                sql.append(" and `env` ='" + searching.getEnviroment()+ "'");
             }
             if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
                 sql.append(" and `system` ='" + searching.getSystem() + "'");
@@ -399,7 +399,7 @@ public class SimDao {
             sql.append(" WHERE 1=1 ");
 
             if (!"".equals(CharacterUtil.removeNull(mobile))) {
-                sql.append(" and `mobile_no` ='" + mobile + "'");
+                sql.append(" and `mobile_no` LIKE '%" + mobile + "%'");
             }
             if (!"".equals(CharacterUtil.removeNull(dateFrom)) && !"".equals(CharacterUtil.removeNull(dateTo))) {
                 SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
@@ -420,7 +420,7 @@ public class SimDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("find Sim error", e);
+            logger.error("find SimHistory error", e);
         } finally {
             this.close(pstm, rs);
         }

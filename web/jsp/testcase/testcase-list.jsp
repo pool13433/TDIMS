@@ -26,7 +26,7 @@
                     <th>issue_no</th>
                     <th>project_id</th>
                     <th>path_dir</th>
-                    <th>user_id</th>
+                    <th>create_by</th>
                     <th>createdate</th>               
                 </tr>
             </thead>
@@ -47,7 +47,7 @@
                         <td>${testcase.issueNo}</td>
                         <td>${testcase.projectId}</td>                        
                         <td>${testcase.pathDir}</td>
-                        <td>${testcase.userId}</td>
+                        <td>${testcase.createBy}</td>
                         <td>${testcase.createDate}</td>                    
                     </tr>
                 </c:forEach>

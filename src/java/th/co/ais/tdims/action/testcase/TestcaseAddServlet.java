@@ -90,7 +90,7 @@ public class TestcaseAddServlet extends HttpServlet {
                   
 
             Testcase data = new Testcase();
-            data.setUserId(owner);
+            data.setCreateBy(owner);
             data.setDefectNo(td);
             data.setIssueNo(issue);
             data.setPathDir(file);

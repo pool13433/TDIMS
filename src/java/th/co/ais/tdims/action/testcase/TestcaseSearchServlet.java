@@ -42,21 +42,23 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("projectSelected", projectId);
             ConfigDao configDao = new ConfigDao();
             request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+            request.setAttribute("envList", configDao.getConfigList("ENV"));
             request.setAttribute("ownerList", new ProfileDao().getAllUser());
             
             String system = CharacterUtil.removeNull(request.getParameter("system"));
             request.setAttribute("system", system);
             String createDate = CharacterUtil.removeNull(request.getParameter("createDate"));
             request.setAttribute("createDate", createDate);
-            String userId = CharacterUtil.removeNull(request.getParameter("userId"));
-            request.setAttribute("userId", userId);
+            String createBy = CharacterUtil.removeNull(request.getParameter("createBy"));
+            request.setAttribute("createBy", createBy);
             String issueNo = CharacterUtil.removeNull(request.getParameter("issueNo"));
             request.setAttribute("issueNo", issueNo);
             String defectNo = CharacterUtil.removeNull(request.getParameter("defectNo"));
             request.setAttribute("defectNo", defectNo);
             String env = CharacterUtil.removeNull(request.getParameter("env"));
             request.setAttribute("env", env);
+            String step = CharacterUtil.removeNull(request.getParameter("step"));
+            request.setAttribute("step", step);
             
             TestcastDao testcaseDao= new TestcastDao();
             
@@ -65,15 +67,17 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
                 tc.setProjectId(projectId);
                 tc.setSystems(system);
                 tc.setCreateDate(createDate);
-                tc.setUserId(userId);
+                tc.setCreateBy(createBy);
                 tc.setIssueNo(issueNo);
                 tc.setDefectNo(defectNo);
                 tc.setEnviroment(env);
                 tc.setTestcaseDetails(searching);
                 tc.setTestcaseTitle(searching);
+                tc.setStep(step);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));
             }else{
-                request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
+                //request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
+                request.setAttribute("testcaseList", null);
             }
             
             System.out.println(" path : "+dirFile);
