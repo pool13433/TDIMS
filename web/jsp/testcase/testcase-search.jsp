@@ -56,11 +56,11 @@
                     <div class="form-group">
                     <label for="createBy" class="col-sm-3 control-label">Tester</label>
                     <div class="col-sm-9">
-                        <select class="form-control" class="form-control" id="userId" name="createBy" >
+                        <select class="form-control" class="form-control" id="createBy" name="createBy" >
                             <option value="" selected>    All Tester  </option>
                             <c:forEach items="${ownerList}" var="owner">                            
                                 <c:choose>
-                                    <c:when test="${userId == owner.profileId}">
+                                    <c:when test="${createBy == owner.profileId}">
                                         <option value="${owner.profileId}" selected>${owner.username}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -99,11 +99,11 @@
                             <option value="" selected>   All environment  </option>                                                       
                             <c:forEach items="${envList}" var="e">                            
                             <c:choose>
-                                <c:when test="${env == e.envId}">
-                                    <option value="${e.envId}" selected>${e.envCode}</option>
+                                <c:when test="${env == e.conName}">
+                                    <option value="${e.conName}" selected>${e.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${e.envId}">${e.envCode}</option>
+                                    <option value="${e.conName}">${e.conValue}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
@@ -163,17 +163,42 @@
                             <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
                         </tr>
                     </c:if>
+                    <c:if test="${testcaseList == null}">
+                        <tr>                    
+                            <td colspan="17"><div class="alert"><span style="padding: 40%">กรุณาระบุเงื่อนไขในการค้นหา</span></div> </td>
+                        </tr>
+                    </c:if>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<jsp:include page="../include/inc_footer.jsp"/>
-<script style="javascript">
-    $("#searching").submit(function(){
-        $("#searchFlag").val("searchBy");
+<script type="text/javascript">
+            
+    $(document).ready(function(){
+        $("#searching").submit(function(){
+            var projectSelected = $("#projectSelected");
+            var system = $("#system"); 
+            var createDate = $("#createDate"); 
+            var createBy = $("#createBy");
+            var defectNo = $("#defectNo");
+            var step = $("#step"); 
+            var searchBox = $("#searchBox"); 
+            var env = $("#env"); 
+            var issueNo = $("#issueNo"); 
+
+            if("" === projectSelected.val() && "" === system.val() && "" === createDate.val() && "" === createBy.val()
+                    && "" === defectNo.val() && "" === step.val() && "" === searchBox.val() && "" === env.val() 
+                    && "" === issueNo.val()){
+                alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
+                return false;
+            }else{
+                $("#searchFlag").val("searchBy");
+            }                
+        });
     });
     
+    /*
     $(window).load(function(){
         var e = $("#projectId").val();
         alert("Hello "+e);
@@ -184,6 +209,8 @@
             $("#createBy").attr('checked'));
         }
     });
+    */
         
     
 </script>
+<jsp:include page="../include/inc_footer.jsp"/>

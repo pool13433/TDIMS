@@ -42,7 +42,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("projectSelected", projectId);
             ConfigDao configDao = new ConfigDao();
             request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+            request.setAttribute("envList", configDao.getConfigList("ENV"));
             request.setAttribute("ownerList", new ProfileDao().getAllUser());
             
             String system = CharacterUtil.removeNull(request.getParameter("system"));
@@ -76,7 +76,8 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
                 tc.setStep(step);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));
             }else{
-                request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
+                //request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
+                request.setAttribute("testcaseList", null);
             }
             
             System.out.println(" path : "+dirFile);
