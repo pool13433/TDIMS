@@ -68,7 +68,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 request.setAttribute("projectList", projectDao.getProjectAll());
                 ConfigDao configDao = new ConfigDao();
                 request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-                request.setAttribute("envList", configDao.getConfigList("ENV"));
+                request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
                 request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
                 SimDao simDao = new SimDao();
                 Sim sim = new Sim();
@@ -90,7 +90,8 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 if("searching".equals(menu)){
                     request.setAttribute("simList", simDao.findSim(sim));
                 }else{     
-                    if("Y".equals(cancelBooking)){                        
+                    if("Y".equals(cancelBooking)){
+                        
                         sim.setRemark("cancel booking");
                         sim.setSimId(simStr);
                         List<Sim> listSim = new ArrayList<Sim>();
@@ -111,7 +112,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                         }
                         simDao.resetBookingSim(sim, simStr);
                     }
-                    request.setAttribute("simList", null);
+                    request.setAttribute("simList", simDao.getSimAll());
                 }
                 request.setAttribute("cancelBooking", "");
                 //request.setAttribute("searchBox", searching);
@@ -179,7 +180,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 request.setAttribute("projectList", projectDao.getProjectAll());
                 ConfigDao configDao = new ConfigDao();
                 request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-                request.setAttribute("envList", configDao.getConfigList("ENV"));
+                request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
                 request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,5 +190,11 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/sim/sim-search.jsp");
        dispatcher.forward(request, response);
     }
+
+    
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }

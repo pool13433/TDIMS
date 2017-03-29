@@ -1,11 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
+
 <jsp:include page="../include/inc_header.jsp"/>
-<div id="exam" class="container" style="padding-right: 100px;">    
-    <div id="2" class="panel panel-ais">        
-        <div id="3" class="panel-heading">ค้นหา Sim</div>
-        <div id="4" class="panel-body">
+<div class="container" style="padding-right: 100px;">    
+    <div class="panel panel-ais">        
+        <div class="panel-heading">ค้นหา Sim</div>
+        <div class="panel-body">
             <form id="searchSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">   
                 <input type="hidden" id="menu" name="menu" value="searching"/>
                 <div class="form-group">
@@ -20,11 +21,11 @@
                             <option value="" selected>   All environment  </option>                                                       
                             <c:forEach items="${envList}" var="e">                            
                             <c:choose>
-                                <c:when test="${env == e.conName}">
-                                    <option value="${e.conName}" selected>${e.conValue}</option>
+                                <c:when test="${env == e.envId}">
+                                    <option value="${e.envId}" selected>${e.envCode}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${e.conName}">${e.conValue}</option>
+                                    <option value="${e.envId}">${e.envCode}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
@@ -71,7 +72,7 @@
                 <input type="hidden" id="menu" name="menu" value="booking"/>
                 <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
                 <div style="overflow-y: scroll;">
-                    <table id="sim_search_table" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <div id="msgBox" class="alert alert-warning" hidden="">
                             <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
                         </div>
@@ -127,92 +128,125 @@
                             </c:forEach>
                             <c:if test="${simList.isEmpty()}">
                                 <tr>                    
-                                    <td colspan="17"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
-                                </tr>
-                            </c:if>
-                            <c:if test="${simList == null}">
-                                <tr>                    
-                                    <td colspan="17"><div class="alert"><span style="padding: 40%">กรุณาระบุเงื่อนไขในการค้นหา</span></div> </td>
+                                    <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
                                 </tr>
                             </c:if>
                         </tbody>
                     </table>
                 </div>
-                <c:if test="${simList != null}">
-                    <div class="panel-body">
-                        <button id="ok" type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-pencil"></i> booking</button>   
-                        <button id="cancel"     class="btn btn-default btn-danger"> cancel booking</button>
+                <div class="panel-body">
+                    <button id="ok" type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-pencil"></i> booking</button>   
+                    <button id="cancel"     class="btn btn-default btn-danger"> cancel booking</button>
 
-                        <div id="dialog" title="ยืนยันการคืนซิม?" hidden="">
-                            </br>กด OK เพื่อยืนยันการ reset SIM สู่สถานะ Available</br>                             
+                        <div id="dialog" title="ยืนยันการคืนซิม?">
+                        </br>กด OK เพื่อยืนยันการ reset SIM สู่สถานะ Available</br>                             
                         </div>​
-                    </div>
-                </c:if>
-                
             </form>
                  
         </div>        
     </div>        
 </div>   
   
-        <script type="text/javascript">
-            
-            $(document).ready(function(){
-                $("#searchSim").submit(function(){
-                    var mobileNo = $("#mobileNo");
-                    var env = $("#env");
-                    var system = $("#system");  
-                    var status = $("#status"); 
-
-                    if("" === mobileNo.val() && "" === env.val() && "" === system.val() && "" === status.val()){
-                        alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
-                        return false;
-                    }                    
-                        
-                });
+            <script type="text/javascript">
+                $(document).ready(function(){
                     
-                $("#bookingSim").submit(function(){
-                    var checkBox = $("input#simSelected").is(':checked');
-                    if(!checkBox){
-                        $("#msg").text("กรุณาเลือกอย่างน้อย 1 รายการ");
-                        $("#msgBox").show();
-                        return false;
-                    }                    
-                        
-                });
-                
-                
-                
+                    $("#bookingSim").submit(function(){
+                        var checkBox = $("input#simSelected").is(':checked');
+                        if(!checkBox){
+                            $("#msg").text("กรุณาเลือกอย่างน้อย 1 รายการ");
+                            $("#msgBox").show();
+                            return false;
+                        }
+                    });
                     
-                $( "#dialog" ).dialog({
-                 autoOpen: false,
-                     modal: true,
-                 buttons: [
-                   {
-                     text: "OK",
-                     click: function() {
-                       document.getElementById("cancelBooking").value = "Y";
-                              $(this).dialog("close");
-                              $("#bookingSim").submit();
-                     }                        
-                   },
-                   {
-                       text: "cancel",
-                       btnClass: 'btn-blue',
-                       click: function() {
-                       $( this ).dialog( "close" );
-                     }
-                   }
-                 ]
-               }); 
-                  
-                $("#cancel").on("click", function(e) {
-                    e.preventDefault();
-                    $("#dialog").dialog("open");
+                   $( "#dialog" ).dialog({
+                    autoOpen: false,
+                        modal: true,
+                    buttons: [
+                      {
+                        text: "OK",
+                        click: function() {
+                          document.getElementById("cancelBooking").value = "Y";
+                                 $(this).dialog("close");
+                                 $("#bookingSim").submit();
+                        }                        
+                      },
+                      {
+                          text: "cancel",
+                          btnClass: 'btn-blue',
+                          click: function() {
+                          $( this ).dialog( "close" );
+                        }
+                      }
+                    ]
+                  }); 
+                   $("#dialog9").dialog({
+                        autoOpen: false,
+                        modal: true,
+                        
+                        
+                        /*
+                         buttons : {
+                             "Confirm" :{function() {
+                                 document.getElementById("cancelBooking").value = "Y";
+                                 $(this).dialog("close");
+                                 $("#bookingSim").submit();
+                             },
+                                
+                             "Cancel" : function(){
+                                   $(this).dialog("close");
+                                                         
+                             }
+                           }
+                       } 
+                         * 
+                         */
+                     
+                        
+                    });
+                    
+                     $("#cancel").on("click", function(e) {
+                         e.preventDefault();
+                         $("#dialog").dialog("open");
+                     });
+                    /*
+                    $('#clickme').click(function(){
+                                alert('clickme');
+                        $.confirm({
+                            buttons: {
+                                confirm: function{
+                                    $alert('Confirm!');
+                                },
+                                cancel: function{
+                                    text:'cancel!',
+                                    action: function(){
+                                        $.alert('you click cancel');
+                                    }
+                                }
+                            }
+                        })
+                    });
+                    
+                    
+                     * $(".confirm").confirm({
+                            title:"ยืนยันการคืนซิม",
+                            text:"หากกดปุ่ม ตกลง ระบบจะทำการ reset ข้อมูลซิมสู่สถานะ Available",
+                            confirm:function(button){
+                                return true;
+                            },
+                            cancle:fuction(){
+                                return false;
+                            },
+                            confirmButton:"ตกลง",
+                            cancelButton:"ยกเลิก",
+                            post:true,
+                            confirmButtonClass:"btn-danger",
+                            CANCELButtonClass:"btn-default",
+                            dialogClass:"model-dialog model-lg"
+                        });
+                     */
+                    
                 });
-               
-               
-            });
-        </script>
+            </script>
 
 <jsp:include page="../include/inc_footer.jsp"/>

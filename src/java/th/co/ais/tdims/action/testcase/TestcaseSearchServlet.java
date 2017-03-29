@@ -42,7 +42,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("projectSelected", projectId);
             ConfigDao configDao = new ConfigDao();
             request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-            request.setAttribute("envList", configDao.getConfigList("ENV"));
+            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
             request.setAttribute("ownerList", new ProfileDao().getAllUser());
             
             String system = CharacterUtil.removeNull(request.getParameter("system"));
