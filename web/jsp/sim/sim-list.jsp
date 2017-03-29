@@ -7,12 +7,18 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ Sim ทั้งหมด</div>
         <div class="panel-body">
-            <a href="${context}/SimFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                <c:if test="${!empty message}">
+            <div class="row">
+                <div class="col-md-3"> <a href="${context}/SimFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a></div>
+                <div class="col-md-9">
+                    
+                    <c:import url="../include/inc_pagination.jsp"/>
+                </div>
+            </div>          
+            <c:if test="${!empty message}">
                 <p>Status : ${message}</p>
             </c:if>
         </div>
-        <div style="overflow-y: scroll;">
+        <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
