@@ -17,10 +17,6 @@ import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.model.Project;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProjectFormServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(ProjectFormServlet.class);

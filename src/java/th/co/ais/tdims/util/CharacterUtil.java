@@ -5,10 +5,6 @@
  */
 package th.co.ais.tdims.util;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class CharacterUtil {
 
     public static String removeNull(Object data) {

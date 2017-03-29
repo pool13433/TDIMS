@@ -7,15 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author POOL_LAPTOP
- */
 public class EncodingFilter implements Filter {
 
     FilterConfig filterConfig;

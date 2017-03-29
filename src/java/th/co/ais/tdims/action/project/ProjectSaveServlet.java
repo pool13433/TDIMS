@@ -6,7 +6,6 @@
 package th.co.ais.tdims.action.project;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,15 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.action.sim.SimSaveServlet;
 import th.co.ais.tdims.dao.ProjectDao;
-import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.model.Project;
-import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProjectSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(SimSaveServlet.class);

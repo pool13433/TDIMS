@@ -16,10 +16,6 @@ import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Combo;
 import th.co.ais.tdims.model.Project;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProjectDao {
 
     final static Logger logger = Logger.getLogger(ProjectDao.class);

@@ -20,10 +20,6 @@ import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class SimFormServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(SimFormServlet.class);

@@ -5,10 +5,6 @@
  */
 package th.co.ais.tdims.model;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class Profile {
 
     private String profileId;

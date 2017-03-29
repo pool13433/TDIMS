@@ -12,10 +12,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class DbConnection {
 
     final static Logger logger = Logger.getLogger(DbConnection.class);

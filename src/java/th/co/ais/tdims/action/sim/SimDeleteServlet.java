@@ -14,10 +14,6 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class SimDeleteServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(SimListServlet.class);
