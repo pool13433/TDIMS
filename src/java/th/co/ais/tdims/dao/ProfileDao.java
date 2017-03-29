@@ -15,10 +15,6 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Profile;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProfileDao {
 
     final static Logger logger = Logger.getLogger(ProfileDao.class);

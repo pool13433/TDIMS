@@ -18,10 +18,7 @@ import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
+
 public class RegisterServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(RegisterServlet.class);

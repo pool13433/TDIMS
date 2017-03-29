@@ -14,10 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ProjectDao;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProjectListServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(ProjectListServlet.class);

@@ -18,10 +18,6 @@ import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ChangeProfileServlet extends HttpServlet {
 
     @Override

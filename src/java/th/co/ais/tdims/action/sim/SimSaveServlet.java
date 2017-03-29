@@ -16,10 +16,6 @@ import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class SimSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(SimSaveServlet.class);

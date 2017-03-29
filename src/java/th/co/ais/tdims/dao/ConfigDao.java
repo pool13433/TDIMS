@@ -17,10 +17,6 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Config;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ConfigDao {
 
     final static Logger logger = Logger.getLogger(ConfigDao.class);

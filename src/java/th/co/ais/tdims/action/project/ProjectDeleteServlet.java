@@ -14,10 +14,6 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ProjectDeleteServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(ProjectDeleteServlet.class);

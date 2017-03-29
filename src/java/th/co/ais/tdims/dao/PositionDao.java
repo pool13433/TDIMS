@@ -12,15 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import static th.co.ais.tdims.dao.ProfileDao.logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Position;
-import th.co.ais.tdims.model.Profile;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class PositionDao {
 
     final static Logger logger = Logger.getLogger(PositionDao.class);

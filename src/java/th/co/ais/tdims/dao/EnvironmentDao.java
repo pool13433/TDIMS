@@ -15,10 +15,6 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Environment;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class EnvironmentDao {
 
     final static Logger logger = Logger.getLogger(EnvironmentDao.class);

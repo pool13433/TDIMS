@@ -20,10 +20,6 @@ import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.model.SimHistory;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class SimDao {
 
     final static Logger logger = Logger.getLogger(SimDao.class);

@@ -14,10 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.SimDao;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class SimListServlet extends HttpServlet {
     
     final static Logger logger = Logger.getLogger(SimListServlet.class);
