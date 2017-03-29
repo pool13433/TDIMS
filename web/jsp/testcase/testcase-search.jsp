@@ -99,11 +99,11 @@
                             <option value="" selected>   All environment  </option>                                                       
                             <c:forEach items="${envList}" var="e">                            
                             <c:choose>
-                                <c:when test="${env == e.envId}">
-                                    <option value="${e.envId}" selected>${e.envCode}</option>
+                                <c:when test="${env == e.conName}">
+                                    <option value="${e.conName}" selected>${e.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${e.envId}">${e.envCode}</option>
+                                    <option value="${e.conName}">${e.conValue}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
