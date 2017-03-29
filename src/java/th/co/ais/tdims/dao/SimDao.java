@@ -35,16 +35,8 @@ public class SimDao {
         List<Sim> simList = null;
         try {
             conn = new DbConnection().open();
-            StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, system,`env`, site, `usage_type`, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
-            sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
-            sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
-            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
-            sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
-            sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.owner) as owner");
-            sql.append(" FROM `sim` s ");
-            logger.info("sql ::=="+sql);
+            StringBuilder sql = getQueryBuilder();
+            logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             simList = new ArrayList<Sim>();
@@ -58,6 +50,19 @@ public class SimDao {
             this.close(pstm, rs);
         }
         return simList;
+    }
+
+    private StringBuilder getQueryBuilder() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
+        sql.append(" `region_code`, system,`env`, site, `usage_type`, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
+        sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
+        sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
+        sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
+        sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
+        sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.owner) as owner");
+        sql.append(" FROM `sim` s ");
+        return sql;
     }
 
     public List<ExpiredSim> getExpiredSim() {
@@ -121,7 +126,7 @@ public class SimDao {
         sim.setOwner(rs.getString("owner"));
         return sim;
     }
-    
+
     private SimHistory getEntityHistorySim(ResultSet rs) throws SQLException {
         SimHistory simHistory = new SimHistory();
         simHistory.setLogId(rs.getString("log_id"));
@@ -263,7 +268,7 @@ public class SimDao {
             pstm.setString(8, sim.getSite());
             pstm.setString(9, sim.getUsageType());
             pstm.setString(10, sim.getOwner());
-            
+
             pstm.setString(11, sim.getUpdateBy());
             pstm.setString(12, sim.getSimStatus());
             pstm.setString(13, sim.getSimId());
@@ -317,7 +322,7 @@ public class SimDao {
                 sql.append(" and `mobile_no` LIKE '%" + searching.getMobileNo() + "%'");
             }
             if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
-                sql.append(" and `env` ='" + searching.getEnviroment()+ "'");
+                sql.append(" and `env` ='" + searching.getEnviroment() + "'");
             }
             if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
                 sql.append(" and `system` ='" + searching.getSystem() + "'");
@@ -359,7 +364,7 @@ public class SimDao {
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
             sql.append(" FROM `sim` s ");
             sql.append(" WHERE 1=1 ");
-            
+
             if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
                 sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
             }
@@ -378,7 +383,7 @@ public class SimDao {
         }
         return simList;
     }
-    
+
     public List<SimHistory> findSimHistory(String mobile, String dateFrom, String dateTo) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -401,12 +406,12 @@ public class SimDao {
                 SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
                 Date dateF = d1.parse(dateFrom);
                 Date dateT = d1.parse(dateTo);
-                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");            
-                sql.append(" and `create_date` between '" + d2.format(dateF) +"' and '"+d2.format(dateT)+"'");
+                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
+                sql.append(" and `create_date` between '" + d2.format(dateF) + "' and '" + d2.format(dateT) + "'");
             }
-            
+
             sql.append(" order by create_date DESC ");
-            
+
             logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -422,7 +427,7 @@ public class SimDao {
         }
         return simHistoryList;
     }
-    
+
     public int bookSim(Sim sim, String simId) {
         logger.info("Booking Sim");
         int exe = 0;
@@ -457,7 +462,7 @@ public class SimDao {
 
         return exe;
     }
-    
+
     public int simSaveLog(Sim sim) {
         logger.info("simSaveLog");
         int exe = 0;
@@ -472,8 +477,7 @@ public class SimDao {
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,");
             sql.append(" ?,NOW(),?,?,?,?)");
-            
-            
+
             logger.info("sql ::==" + sql.toString());
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, sim.getMobileNo());
@@ -485,7 +489,7 @@ public class SimDao {
             pstm.setString(7, sim.getTeamId());
             pstm.setString(8, sim.getProjectId());
             pstm.setString(9, sim.getRemark());
-            
+
             logger.info(" : pstm : " + pstm.toString());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
@@ -521,6 +525,50 @@ public class SimDao {
             this.close(pstm, null);
         }
         return exe;
+    }
+
+    public List<Sim> getSimRecordLimit(int limit, int offset) {
+        List<Sim> simList = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = getQueryBuilder();
+            sql.append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
+            pstm = conn.prepareStatement(sql.toString());
+            logger.info("pstm ::==" + pstm.toString());
+            rs = pstm.executeQuery();
+            simList = new ArrayList<Sim>();
+            while (rs.next()) {
+                simList.add(getEntitySim(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getSimRecordLimit error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return simList;
+    }
+
+    public int getCountSimAll() {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        int countSim = 0;
+        try {
+            conn = new DbConnection().open();
+            pstm = conn.prepareStatement("SELECT COUNT(*) as cnt FROM sim");
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                countSim = rs.getInt("cnt");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getCountSimAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return countSim;
     }
 
     private void close(PreparedStatement pstm, ResultSet rs) {
