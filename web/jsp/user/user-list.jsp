@@ -38,8 +38,8 @@
                     <tr>                    
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                <a href="${context}/UserFormServlet?testcaseId=${user.profileId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a href="${context}/UserDeleteServlet?testcaseId=${user.profileId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="${context}/UserFormServlet?profileId=${user.profileId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/UserDeleteServlet?profileId=${user.profileId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
                             </div>
                         </td>
                         <td>${user.username}</td>

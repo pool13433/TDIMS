@@ -190,6 +190,65 @@ public class ProfileDao {
         return user;
     }
     
+    public Profile getUserBYId(int profile_id) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Profile userList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`,");
+            sql.append(" `mobile`, `email`, `position`, DATE_FORMAT(create_date,'%d-%m-%Y') create_date,");
+            sql.append(" `create_by`, DATE_FORMAT(update_date,'%d-%m-%Y') update_date, `update_by`, `status`  FROM profile p WHERE profile_id=?");
+            sql.append(" ORDER BY p.username ");
+            logger.info("sql ::==" + sql.toString());
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setInt(1, profile_id);
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                userList = (this.getEntityProfile(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getUser error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return userList;
+    }
+    
+     public int updateProfileAll(Profile profile) {        
+        PreparedStatement pstm = null;
+        int exe = 0;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" UPDATE `profile` SET ");
+            sql.append(" `fname`=?,`lname`=?,`gender`=?,");
+            sql.append(" `mobile`=?,`email`=?,`position`=?,");
+            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=? ");
+            sql.append(" WHERE profile_id=? ");
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, profile.getFirstName());
+            pstm.setString(2, profile.getLastName());
+            pstm.setString(3, profile.getGender());
+            pstm.setString(4, profile.getMobile());
+            pstm.setString(5, profile.getEmail());
+            pstm.setInt(6, Integer.parseInt(profile.getPosition()));
+            pstm.setInt(7, profile.getUpdateBy());
+            pstm.setString(8, profile.getUsername());
+             pstm.setString(9, profile.getPassword());
+            pstm.setInt(10, Integer.parseInt(profile.getProfileId()));       
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getUser error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
+    }
+    
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {
@@ -204,5 +263,25 @@ public class ProfileDao {
         } catch (SQLException ex) {
             logger.error("getUser error", ex);
         }
+    }
+    
+    public int deleteProfile(int profileId) {
+        int exe = 0;
+        PreparedStatement pstm = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" DELETE FROM `profile` WHERE profile_id=?");
+            
+            pstm = conn.prepareStatement(sql.toString());            
+            pstm.setInt(1, profileId);            
+            exe = pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("deleteTestcase error", e);
+        } finally {
+            this.close(pstm, null);
+        }
+        return exe;
     }
 }

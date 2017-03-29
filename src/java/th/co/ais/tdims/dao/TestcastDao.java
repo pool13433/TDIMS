@@ -207,9 +207,8 @@ public class TestcastDao {
             pstm.setString(5, testcase.getDefectNo());
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
-            pstm.setString(8, "");
-            pstm.setString(9, testcase.getCreateBy());
-
+            pstm.setString(8, testcase.getPathDir());
+            pstm.setString(9, testcase.getUserId());
             pstm.setString(10, testcase.getCreateDate());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
