@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-3"> <a href="${context}/SimFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a></div>
                 <div class="col-md-9">
-                    
+
                     <c:import url="../include/inc_pagination.jsp"/>
                 </div>
             </div>          
@@ -60,6 +60,11 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
+        <div class="row">                
+            <div class="col-md-12">
+                <c:import url="../include/inc_pagination.jsp"/>
+            </div>
         </div>
     </div>
 </div>

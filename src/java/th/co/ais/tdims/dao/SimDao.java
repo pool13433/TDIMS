@@ -302,7 +302,7 @@ public class SimDao {
         return exe;
     }
 
-    public List<Sim> findSim(Sim searching) {
+    public List<Sim> findSim(Sim searching, int limit, int offset) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Sim> simList = null;
@@ -316,23 +316,8 @@ public class SimDao {
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
             sql.append(" FROM `sim` s ");
-            sql.append(" WHERE 1=1 ");
-
-            if (!"".equals(CharacterUtil.removeNull(searching.getMobileNo()))) {
-                sql.append(" and `mobile_no` LIKE '%" + searching.getMobileNo() + "%'");
-            }
-            if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
-                sql.append(" and `env` ='" + searching.getEnviroment() + "'");
-            }
-            if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
-                sql.append(" and `system` ='" + searching.getSystem() + "'");
-            }
-            if (!"".equals(CharacterUtil.removeNull(searching.getSimStatus()))) {
-                sql.append(" and `sim_status` ='" + searching.getSimStatus() + "'");
-            }
-            if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
-                sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
-            }
+            sql.append(getConditionBuilder(searching));
+            sql.append(" limit ").append(limit).append(" offset ").append(offset);
             logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -347,6 +332,26 @@ public class SimDao {
             this.close(pstm, rs);
         }
         return simList;
+    }
+
+    public String getConditionBuilder(Sim searching) {
+        StringBuilder sql = new StringBuilder(" WHERE 1=1 ");
+        if (!"".equals(CharacterUtil.removeNull(searching.getMobileNo()))) {
+            sql.append(" and `mobile_no` LIKE '%" + searching.getMobileNo() + "%'");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
+            sql.append(" and `env` ='" + searching.getEnviroment() + "'");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
+            sql.append(" and `system` ='" + searching.getSystem() + "'");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getSimStatus()))) {
+            sql.append(" and `sim_status` ='" + searching.getSimStatus() + "'");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
+            sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
+        }
+        return sql.toString();
     }
 
     public List<Sim> findSimCancel(Sim searching) {
@@ -551,13 +556,17 @@ public class SimDao {
         return simList;
     }
 
-    public int getCountSimAll() {
+    public int getCountSim(String conditionBuilder) {
         PreparedStatement pstm = null;
         ResultSet rs = null;
         int countSim = 0;
         try {
             conn = new DbConnection().open();
-            pstm = conn.prepareStatement("SELECT COUNT(*) as cnt FROM sim");
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) as cnt FROM sim s");
+            if (conditionBuilder != null) {
+                sql.append(conditionBuilder);
+            }
+            pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             if (rs.next()) {
                 countSim = rs.getInt("cnt");

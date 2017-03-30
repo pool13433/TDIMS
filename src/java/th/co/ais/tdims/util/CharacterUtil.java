@@ -12,10 +12,14 @@ public class CharacterUtil {
     }
 
     public static int removeNullTo(Object data, int to) {
-        if (data == null) {
-            return to;
-        } else {
-            return Integer.parseInt(String.valueOf(data));
+        try {
+            if (data == null || data == "") {
+                return to;
+            } else {
+                return Integer.parseInt(String.valueOf(data));
+            }            
+        } catch (Exception e) {            
+            return 0;
         }
     }
 

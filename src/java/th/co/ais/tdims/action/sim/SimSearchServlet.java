@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
-import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
@@ -36,6 +36,10 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         logger.debug("doGet SimSearchServlet");
         RequestDispatcher dispatcher = null;
         try {
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
+            String pageUrl = request.getContextPath() + "/SimSearchServlet?"+request.getQueryString();
+            
             Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
             String cancelBooking = CharacterUtil.removeNull(request.getParameter("cancelBooking"));            
@@ -88,7 +92,12 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 sim.setCreateBy(profile.getProfileId());
                 
                 if("searching".equals(menu)){
-                    request.setAttribute("simList", simDao.findSim(sim));
+                    String sqlConditionBuilder = simDao.getConditionBuilder(sim);
+                    List<Sim> simList = simDao.findSim(sim,limit,offset);
+                    int countRecordAll = simDao.getCountSim(sqlConditionBuilder);
+                    Pagination pagination = new Pagination(pageUrl,countRecordAll, limit, offset);
+                    request.setAttribute("simList", simList);
+                    request.setAttribute("pagination", pagination);
                 }else{     
                     if("Y".equals(cancelBooking)){                        
                         sim.setRemark("cancel booking");
@@ -134,6 +143,9 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         logger.info("doPost SimSearchServlet -> sim booking");
         String simSelected = request.getParameter("simSelected"); 
         try {      
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
+            
             Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
             String assignTeam = CharacterUtil.removeNull(request.getParameter("team"));
             String email = CharacterUtil.removeNull(request.getParameter("emailContact"));
@@ -147,7 +159,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             Sim sim = new Sim();
             sim.setSimId(simSelected);
             List<Sim> listSim = new ArrayList<Sim>();
-            listSim = simDao.findSim(sim);
+            listSim = simDao.findSim(sim,limit,offset);
             for(Sim s : listSim){
                 sim = new Sim();
                 sim.setMobileNo(s.getMobileNo());
