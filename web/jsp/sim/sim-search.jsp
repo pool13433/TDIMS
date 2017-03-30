@@ -8,6 +8,7 @@
         <div id="4" class="panel-body">
             <form id="searchSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">   
                 <input type="hidden" id="menu" name="menu" value="searching"/>
+                <input type="hidden" name="offset" value="${recordCurrent}"/>
                 <div class="form-group">
                     <label for="mobileNo" class="col-sm-1 control-label">MobileNo</label>
                     <div class="col-sm-3">
@@ -19,15 +20,15 @@
                         <select class="form-control" class="form-control" id="env" name="env" placeholder="env">
                             <option value="" selected>   All environment  </option>                                                       
                             <c:forEach items="${envList}" var="e">                            
-                            <c:choose>
-                                <c:when test="${env == e.conName}">
-                                    <option value="${e.conName}" selected>${e.conValue}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${e.conName}">${e.conValue}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
+                                <c:choose>
+                                    <c:when test="${env == e.conName}">
+                                        <option value="${e.conName}" selected>${e.conValue}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${e.conName}">${e.conValue}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
@@ -67,6 +68,11 @@
                     <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          </div>
                 </div>
             </form>        
+            <div class="row">                
+                <div class="col-md-12">
+                    <c:import url="../include/inc_pagination.jsp"/>
+                </div>
+            </div>
             <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
                 <input type="hidden" id="menu" name="menu" value="booking"/>
                 <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
@@ -148,71 +154,75 @@
                         </div>​
                     </div>
                 </c:if>
-                
+
             </form>
-                 
+            <div class="row">                
+                <div class="col-md-12">
+                    <c:import url="../include/inc_pagination.jsp"/>
+                </div>
+            </div>  
         </div>        
     </div>        
 </div>   
-  
-        <script type="text/javascript">
-            
-            $(document).ready(function(){
-                $("#searchSim").submit(function(){
-                    var mobileNo = $("#mobileNo");
-                    var env = $("#env");
-                    var system = $("#system");  
-                    var status = $("#status"); 
 
-                    if("" === mobileNo.val() && "" === env.val() && "" === system.val() && "" === status.val()){
-                        alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
-                        return false;
-                    }                    
-                        
-                });
-                    
-                $("#bookingSim").submit(function(){
-                    var checkBox = $("input#simSelected").is(':checked');
-                    if(!checkBox){
-                        $("#msg").text("กรุณาเลือกอย่างน้อย 1 รายการ");
-                        $("#msgBox").show();
-                        return false;
-                    }                    
-                        
-                });
-                
-                
-                
-                    
-                $( "#dialog" ).dialog({
-                 autoOpen: false,
-                     modal: true,
-                 buttons: [
-                   {
-                     text: "OK",
-                     click: function() {
-                       document.getElementById("cancelBooking").value = "Y";
-                              $(this).dialog("close");
-                              $("#bookingSim").submit();
-                     }                        
-                   },
-                   {
-                       text: "cancel",
-                       btnClass: 'btn-blue',
-                       click: function() {
-                       $( this ).dialog( "close" );
-                     }
-                   }
-                 ]
-               }); 
-                  
-                $("#cancel").on("click", function(e) {
-                    e.preventDefault();
-                    $("#dialog").dialog("open");
-                });
-               
-               
-            });
-        </script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#searchSim").submit(function () {
+            var mobileNo = $("#mobileNo");
+            var env = $("#env");
+            var system = $("#system");
+            var status = $("#status");
+
+            if ("" === mobileNo.val() && "" === env.val() && "" === system.val() && "" === status.val()) {
+                alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
+                return false;
+            }
+
+        });
+
+        $("#bookingSim").submit(function () {
+            var checkBox = $("input#simSelected").is(':checked');
+            if (!checkBox) {
+                $("#msg").text("กรุณาเลือกอย่างน้อย 1 รายการ");
+                $("#msgBox").show();
+                return false;
+            }
+
+        });
+
+
+
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: "OK",
+                    click: function () {
+                        document.getElementById("cancelBooking").value = "Y";
+                        $(this).dialog("close");
+                        $("#bookingSim").submit();
+                    }
+                },
+                {
+                    text: "cancel",
+                    btnClass: 'btn-blue',
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+
+        $("#cancel").on("click", function (e) {
+            e.preventDefault();
+            $("#dialog").dialog("open");
+        });
+
+
+    });
+</script>
 
 <jsp:include page="../include/inc_footer.jsp"/>
