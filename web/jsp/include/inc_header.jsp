@@ -90,14 +90,15 @@
                         </ul>
                         <ul class="nav nav-sidebar">
                             <li class="<c:out value="${menu == 'sim' ? 'active': ''}"/>">
-                                <a href="${context}/SimListServlet?menu=sim"><i class="glyphicon glyphicon-credit-card"></i> จัดการ SIM</a>
+                                <!--<a href="${context}/SimListServlet?menu=sim"><i class="glyphicon glyphicon-credit-card"></i> Manage SIM</a>-->
+                                <a href="${context}/SimSearchServlet?menu=sim_search"><i class="glyphicon glyphicon-credit-card"></i> Manage SIM</a>
                             </li>
                             <li class="<c:out value="${menu == 'expiredsim' ? 'active': ''}"/>">
                                 <a href="${context}/ExpiredSimServlet?menu=expiredsim"><i class="glyphicon glyphicon-credit-card"></i> Expired SIM</a>
                             </li>
-                            <li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">
+                            <!--<li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">
                                 <a href="${context}/SimSearchServlet?menu=sim_search"><i class="glyphicon glyphicon-credit-card"></i> ค้นหา SIM</a>
-                            </li>  
+                            </li>  -->
                             <li class="<c:out value="${menu == 'sim_history' ? 'active': ''}"/>">
                                 <a href="${context}/SimHistoryServlet?menu=sim_history"><i class="glyphicon glyphicon-credit-card"></i> SIM History Log</a>
                             </li> 

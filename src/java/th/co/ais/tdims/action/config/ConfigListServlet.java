@@ -6,6 +6,7 @@
 package th.co.ais.tdims.action.config;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,15 +14,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.model.Pagination;
+import th.co.ais.tdims.model.Sim;
+import th.co.ais.tdims.util.CharacterUtil;
 
 public class ConfigListServlet extends HttpServlet {
+
     final static Logger logger = Logger.getLogger(ConfigListServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            request.setAttribute("confList", new ConfigDao().getAllConfig());
+
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 10);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
+            ConfigDao configDao = new ConfigDao();
+            
+            int countConfigRecordAll = configDao.getCountConfig();
+            String pageUrl = request.getContextPath() + "/ConfigListServlet?menu=configuration";
+            Pagination pagination = new Pagination(pageUrl, countConfigRecordAll, limit, offset);
+
+            request.setAttribute("pagination", pagination);
+            request.setAttribute("confList", configDao.getAllConfig(limit,offset));
 
         } catch (Exception e) {
             e.printStackTrace();
