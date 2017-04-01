@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : Feb 24, 2017, 9:14:34 PM
-    Author     : POOL_LAPTOP
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

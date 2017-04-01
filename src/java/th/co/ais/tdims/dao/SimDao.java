@@ -209,12 +209,12 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `sim` ");
             sql.append(" (`mobile_no`, `serial_no`, `imsi`, `charge_type`, `region_code`,");
-            sql.append("  `system`, `env`, site,`usage_type`, `owner`, ");
-            sql.append("  `create_date`,`create_by`, `update_date`, `update_by`, `sim_status`) ");
+            sql.append("  `system`, `env`, site,`usage_type`, `create_date`,");
+            sql.append("  `create_by`,`sim_status`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,?,");
-            sql.append(" ?,?,?,?,?,");
-            sql.append(" NOW(),?,NOW(),?,? )");
+            sql.append(" ?,?,?,?,NOW(),");
+            sql.append(" ?,? )");
 
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -228,11 +228,10 @@ public class SimDao {
             pstm.setString(7, sim.getEnviroment());
             pstm.setString(8, sim.getSite());
             pstm.setString(9, sim.getUsageType());
-            pstm.setString(10, sim.getOwner());
+            pstm.setString(10, sim.getCreateBy());
 
-            pstm.setString(11, sim.getCreateBy());
-            pstm.setString(12, sim.getUpdateBy());
-            pstm.setString(13, sim.getSimStatus());
+            pstm.setString(11, sim.getSimStatus());
+
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -339,18 +338,37 @@ public class SimDao {
         if (!"".equals(CharacterUtil.removeNull(searching.getMobileNo()))) {
             sql.append(" and `mobile_no` LIKE '%" + searching.getMobileNo() + "%'");
         }
-        if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
-            sql.append(" and `env` ='" + searching.getEnviroment() + "'");
+        if (!"".equals(CharacterUtil.removeNull(searching.getSerialNo()))) {
+            sql.append(" and `serial_no` LIKE '%" + searching.getSerialNo() + "%'");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getImsi()))) {
+            sql.append(" and `imsi` LIKE '%" + searching.getImsi() + "%'");
+        }
+         if (!"".equals(CharacterUtil.removeNull(searching.getUsageType()))) {
+            sql.append(" and `usage_type` = '" + searching.getUsageType() + "' ");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getChargeType()))) {
+            sql.append(" and `charge_type` = '" + searching.getChargeType() + "' ");
+        }
+        if (!"".equals(CharacterUtil.removeNull(searching.getRegionCode()))) {
+            sql.append(" and `region_code` LIKE '%" + searching.getRegionCode() + "%' ");
         }
         if (!"".equals(CharacterUtil.removeNull(searching.getSystem()))) {
             sql.append(" and `system` ='" + searching.getSystem() + "'");
         }
+        if (!"".equals(CharacterUtil.removeNull(searching.getEnviroment()))) {
+            sql.append(" and `env` ='" + searching.getEnviroment() + "'");
+        }        
+        if (!"".equals(CharacterUtil.removeNull(searching.getSite()))) {
+            sql.append(" and `site` ='" + searching.getSite()+ "'");
+        }  
         if (!"".equals(CharacterUtil.removeNull(searching.getSimStatus()))) {
             sql.append(" and `sim_status` ='" + searching.getSimStatus() + "'");
         }
         if (!"".equals(CharacterUtil.removeNull(searching.getSimId()))) {
             sql.append(" and `sim_id` in(" + searching.getSimId() + ")");
         }
+
         return sql.toString();
     }
 

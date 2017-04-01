@@ -31,6 +31,6 @@ public class SimDeleteServlet extends HttpServlet {
             logger.error("delete sim error", e);
             request.setAttribute("message", "delete sim error");
         }
-        response.sendRedirect(request.getContextPath() + "/SimListServlet");
+        response.sendRedirect(request.getContextPath() + "/SimSearchServlet");
     }
 }

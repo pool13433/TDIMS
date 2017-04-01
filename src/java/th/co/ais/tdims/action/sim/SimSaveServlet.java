@@ -37,7 +37,7 @@ public class SimSaveServlet extends HttpServlet {
             String simId = CharacterUtil.removeNull(request.getParameter("simId"));
             String site = CharacterUtil.removeNull(request.getParameter("site"));
             String system = CharacterUtil.removeNull(request.getParameter("system"));
-            String owner = CharacterUtil.removeNull(request.getParameter("owner"));
+            //String owner = CharacterUtil.removeNull(request.getParameter("owner"));
 
             Sim sim = new Sim();
             sim.setChargeType(chargeType);
@@ -53,7 +53,7 @@ public class SimSaveServlet extends HttpServlet {
             sim.setUpdateBy(profile.getProfileId());
             sim.setUsageType(usageType);
             sim.setSystem(system);
-            sim.setOwner(owner);
+            //sim.setOwner(owner);
             SimDao simDao = new SimDao();
 
             logger.info("simId ::==" + simId);
@@ -72,7 +72,7 @@ public class SimSaveServlet extends HttpServlet {
             logger.error("save sim error", e);
             request.setAttribute("message", "save sim error");
         }
-        response.sendRedirect(request.getContextPath() + "/SimListServlet");
+        response.sendRedirect(request.getContextPath() + "/SimSearchServlet?menu=sim_search");
     }
 
 }
