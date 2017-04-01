@@ -28,7 +28,8 @@ import th.co.ais.tdims.util.CharacterUtil;
  * @author Administrator
  */
 public class SimSearchServlet extends HttpServlet {
-final static Logger logger = Logger.getLogger(SimSearchServlet.class);
+
+    final static Logger logger = Logger.getLogger(SimSearchServlet.class);
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,73 +39,74 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
         try {
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
-            String pageUrl = request.getContextPath() + "/SimSearchServlet?"+request.getQueryString();
+            String pageUrl = request.getContextPath() + "/SimSearchServlet?" + request.getQueryString();
             
-            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
+            Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
             String cancelBooking = CharacterUtil.removeNull(request.getParameter("cancelBooking"));            
-            String simStr = ""; 
+            String simStr = "";            
             String[] simSelected = request.getParameterValues("simSelected");
-            if(simSelected !=null && simSelected.length > 0){
-                for(int i=0 ; i<simSelected.length ; i++){
-                    if(i==0){
-                        simStr = "'"+simSelected[i]+"'";
-                    }else{
-                        simStr = simStr+",'"+simSelected[i]+"'";
-                    }                
+            if (simSelected != null && simSelected.length > 0) {
+                for (int i = 0; i < simSelected.length; i++) {
+                    if (i == 0) {
+                        simStr = "'" + simSelected[i] + "'";
+                    } else {
+                        simStr = simStr + ",'" + simSelected[i] + "'";
+                    }                    
                 }
             }
-            
+            ConfigDao configDao = new ConfigDao();
             request.setAttribute("simSelected", simStr);
+            request.setAttribute("usageTypeList", configDao.getConfigList("USAGE_TYPE"));
+            request.setAttribute("chargeTypeList", configDao.getConfigList("CHARGE_TYPE"));
+            request.setAttribute("siteList",configDao.getConfigList("SITE") );
             
-            if("booking".equals(menu) && !"Y".equals(cancelBooking)){                
-            //projectList
-            ProjectDao projectDao = new ProjectDao();
-            request.setAttribute("projectList", projectDao.getProjectAll());
-            //teamList
-            TeamDao teamDao = new TeamDao();
-            request.setAttribute("teamList", teamDao.getTeamAll());  
-            
-            dispatcher = request.getRequestDispatcher("/jsp/sim/sim-booking.jsp");
-            }else{
-                //Combo List
+            if ("booking".equals(menu) && !"Y".equals(cancelBooking)) {
+                //projectList
                 ProjectDao projectDao = new ProjectDao();
                 request.setAttribute("projectList", projectDao.getProjectAll());
-                ConfigDao configDao = new ConfigDao();
+                //teamList
+                TeamDao teamDao = new TeamDao();
+                request.setAttribute("teamList", teamDao.getTeamAll());                
+                
+                dispatcher = request.getRequestDispatcher("/jsp/sim/sim-booking.jsp");
+            } else {
+                //Combo List
+                ProjectDao projectDao = new ProjectDao();
+                request.setAttribute("projectList", projectDao.getProjectAll());                
                 request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
                 request.setAttribute("envList", configDao.getConfigList("ENV"));
                 request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
                 SimDao simDao = new SimDao();
                 Sim sim = new Sim();
-                String searchMobile = CharacterUtil.removeNull(request.getParameter("mobileNo"));
-                sim.setMobileNo(searchMobile);
-                request.setAttribute("mobileNo", searchMobile);
-                String searchEnv = CharacterUtil.removeNull(request.getParameter("env"));
-                sim.setEnviroment(searchEnv);
-                request.setAttribute("env", searchEnv);
-                String searchSystem = CharacterUtil.removeNull(request.getParameter("system"));
-                sim.setSystem(searchSystem);
-                request.setAttribute("system", searchSystem);
-                String searchStatus = CharacterUtil.removeNull(request.getParameter("status"));
-                sim.setSimStatus(searchStatus);
-                request.setAttribute("status", searchStatus);
+                sim.setMobileNo(CharacterUtil.removeNull(request.getParameter("mobileNo")));   
+                sim.setSerialNo(CharacterUtil.removeNull(request.getParameter("serialNo")));
+                sim.setImsi(CharacterUtil.removeNull(request.getParameter("imsi")));
+                sim.setChargeType(CharacterUtil.removeNull(request.getParameter("chargeType")));
+                sim.setUsageType(CharacterUtil.removeNull(request.getParameter("usageType")));
+                sim.setRegionCode(CharacterUtil.removeNull(request.getParameter("regionCode")));
+                sim.setSystem(CharacterUtil.removeNull(request.getParameter("system")));
+                sim.setEnviroment(CharacterUtil.removeNull(request.getParameter("env")));   
+                sim.setSite(CharacterUtil.removeNull(request.getParameter("site")));
+                sim.setSimStatus(CharacterUtil.removeNull(request.getParameter("status")));                
                 sim.setUpdateBy(profile.getProfileId());
                 sim.setCreateBy(profile.getProfileId());
+                request.setAttribute("criteria", sim);
                 
-                if("searching".equals(menu)){
+                if ("searching".equals(menu)) {
                     String sqlConditionBuilder = simDao.getConditionBuilder(sim);
-                    List<Sim> simList = simDao.findSim(sim,limit,offset);
+                    List<Sim> simList = simDao.findSim(sim, limit, offset);
                     int countRecordAll = simDao.getCountSim(sqlConditionBuilder);
-                    Pagination pagination = new Pagination(pageUrl,countRecordAll, limit, offset);
+                    Pagination pagination = new Pagination(pageUrl, countRecordAll, limit, offset);
                     request.setAttribute("simList", simList);
                     request.setAttribute("pagination", pagination);
-                }else{     
-                    if("Y".equals(cancelBooking)){                        
+                } else {                    
+                    if ("Y".equals(cancelBooking)) {                        
                         sim.setRemark("cancel booking");
                         sim.setSimId(simStr);
                         List<Sim> listSim = new ArrayList<Sim>();
                         listSim = simDao.findSimCancel(sim);
-                        for(Sim s : listSim){
+                        for (Sim s : listSim) {
                             sim = new Sim();
                             sim.setMobileNo(s.getMobileNo());
                             sim.setSystem(s.getSystem());
@@ -113,9 +115,9 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                             sim.setCreateBy(profile.getProfileId());
                             sim.setTeamId(s.getTeamId());
                             sim.setProjectId(s.getProjectId());
-                            sim.setRemark("CANCEL");          
+                            sim.setRemark("CANCEL");                            
                             sim.setSimStatus("Available");
-
+                            
                             simDao.simSaveLog(sim);
                         }
                         simDao.resetBookingSim(sim, simStr);
@@ -141,12 +143,12 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("doPost SimSearchServlet -> sim booking");
-        String simSelected = request.getParameter("simSelected"); 
-        try {      
+        String simSelected = request.getParameter("simSelected");        
+        try {            
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
             
-            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
+            Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
             String assignTeam = CharacterUtil.removeNull(request.getParameter("team"));
             String email = CharacterUtil.removeNull(request.getParameter("emailContact"));
             String project = CharacterUtil.removeNull(request.getParameter("project"));
@@ -155,12 +157,12 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             String expireDate = CharacterUtil.removeNull(request.getParameter("expireDate"));
             String remark = CharacterUtil.removeNull(request.getParameter("remark"));
             
-            SimDao simDao = new SimDao(); 
+            SimDao simDao = new SimDao();            
             Sim sim = new Sim();
             sim.setSimId(simSelected);
             List<Sim> listSim = new ArrayList<Sim>();
-            listSim = simDao.findSim(sim,limit,offset);
-            for(Sim s : listSim){
+            listSim = simDao.findSim(sim, limit, offset);
+            for (Sim s : listSim) {
                 sim = new Sim();
                 sim.setMobileNo(s.getMobileNo());
                 sim.setSystem(s.getSystem());
@@ -172,7 +174,7 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
                 sim.setValidDate(validDate);
                 sim.setExpireDate(expireDate);
                 sim.setProjectId(project);
-                sim.setRemark(remark);          
+                sim.setRemark(remark);                
                 sim.setSimStatus(status);
                 sim.setUpdateBy(profile.getProfileId());
                 sim.setUpdateDate(expireDate);
@@ -181,25 +183,24 @@ final static Logger logger = Logger.getLogger(SimSearchServlet.class);
             }
             simDao.bookSim(sim, simSelected);
             
-            
             request.setAttribute("message", "booking sim success");
             
             simDao = new SimDao();            
             request.setAttribute("simList", simDao.getSimAll());
             //Combo List
-                ProjectDao projectDao = new ProjectDao();
-                request.setAttribute("projectList", projectDao.getProjectAll());
-                ConfigDao configDao = new ConfigDao();
-                request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-                request.setAttribute("envList", configDao.getConfigList("ENV"));
-                request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
+            ProjectDao projectDao = new ProjectDao();
+            request.setAttribute("projectList", projectDao.getProjectAll());
+            ConfigDao configDao = new ConfigDao();
+            request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
+            request.setAttribute("envList", configDao.getConfigList("ENV"));
+            request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("message", "save sim error");
             logger.error("sim booking error");
         }
-       RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/sim/sim-search.jsp");
-       dispatcher.forward(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/sim/sim-search.jsp");
+        dispatcher.forward(request, response);
     }
-
+    
 }

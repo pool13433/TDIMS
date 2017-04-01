@@ -1,8 +1,3 @@
-<%-- 
-    Document   : inc_header
-    Created on : Feb 24, 2017, 10:24:01 PM
-    Author     : POOL_LAPTOP
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
@@ -16,6 +11,7 @@
         <link href="${context}/asset/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css">        
         <link href="${context}/asset/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
         <link href="${context}/asset/bootstrap/css/dashboard.css" rel="stylesheet" type="text/css" />
+        <link href="${context}/asset/css/app-style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="${context}/asset/js/jquery.2.2.4.js"></script>
         <script type="text/javascript" src="${context}/asset/bootstrap/js/bootstrap.js"></script>        
         <script type="text/javascript" src="${context}/asset/jquery-ui/jquery-ui.js"></script>    
