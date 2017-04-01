@@ -6,8 +6,15 @@
 <div class="container" style="padding-right: 100px;">    
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ Configuration ทั้งหมด</div>
-        <div class="panel-body">
-            <a href="${context}/ConfigFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+        <div class="panel-body">            
+            <div class="row">
+                <div class="col-md-3"> 
+                    <a href="${context}/ConfigFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                </div>
+                <div class="col-md-9">
+                    <c:import url="../include/inc_pagination.jsp"/>
+                </div>
+            </div>  
         </div>
         <table class="table table-bordered table-striped">
             <thead>

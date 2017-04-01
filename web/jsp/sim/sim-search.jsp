@@ -68,11 +68,12 @@
                     <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          </div>
                 </div>
             </form>        
-            <div class="row">                
-                <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3"> <a href="${context}/SimFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a></div>
+                <div class="col-md-9">
                     <c:import url="../include/inc_pagination.jsp"/>
                 </div>
-            </div>
+            </div>     
             <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
                 <input type="hidden" id="menu" name="menu" value="booking"/>
                 <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
