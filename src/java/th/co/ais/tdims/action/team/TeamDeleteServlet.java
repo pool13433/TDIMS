@@ -3,32 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package th.co.ais.tdims.action.team;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.util.CharacterUtil;
 
+public class TeamDeleteServlet extends HttpServlet {
 
-public class TeamListServlet extends HttpServlet {
-final static Logger logger = Logger.getLogger(TeamListServlet.class);
+    final static Logger logger = Logger.getLogger(TeamDeleteServlet.class);
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {            
-            request.setAttribute("teamList", new TeamDao().getTeamAll());
-            
+         try {
+            int exe = new TeamDao().deleteTeam(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("teamId"))));
+            request.setAttribute("message", "delete team success");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("team list Error", e);
+            logger.error("delete team error", e);
+            request.setAttribute("message", "delete team error");
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/team/team-list.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/TeamListServlet");
+        
     }
+
+
+
 }
