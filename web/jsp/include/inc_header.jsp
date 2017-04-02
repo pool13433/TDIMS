@@ -129,6 +129,10 @@
                             <li class="<c:out value="${menu == 'position' ? 'active': ''}"/>">
                                 <a href="${context}/PositionListServlet?menu=position"><i class="glyphicon glyphicon-map-marker"></i> จัดการ Position</a>
                             </li>
+                            <li class="<c:out value="${menu == 'team' ? 'active': ''}"/>">
+                                <a href="${context}/TeamListServlet?menu=team"><i class="glyphicon glyphicon-tasks"></i> จัดการ Team</a>
+                            </li>
+                            
                             <li class="<c:out value="${menu == 'configuration' ? 'active': ''}"/>">
                                 <a href="${context}/ConfigListServlet?menu=configuration"><i class="glyphicon glyphicon-cog"></i> จัดการ Configuration</a>
                             </li>
