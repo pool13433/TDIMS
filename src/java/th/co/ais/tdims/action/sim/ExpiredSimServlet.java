@@ -7,6 +7,7 @@ package th.co.ais.tdims.action.sim;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,13 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import static th.co.ais.tdims.action.sim.SimListServlet.logger;
 import th.co.ais.tdims.dao.SimDao;
+import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.model.Config;
 import th.co.ais.tdims.model.ExpiredSim;
+import th.co.ais.tdims.model.Pagination;
+import th.co.ais.tdims.model.Team;
+import th.co.ais.tdims.util.CharacterUtil;
 
 /**
  *
@@ -33,51 +40,30 @@ public class ExpiredSimServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
+            int team = CharacterUtil.removeNullTo(request.getParameter("team"), 0);
+            String system = request.getParameter("system") != null ? (String)request.getParameter("system") : null;
             SimDao simDao = new SimDao();
-            List<ExpiredSim> es = simDao.getExpiredSim();
-            List<Map<String, Object>> fullExpiredSimList = new ArrayList<Map<String, Object>>();
-            if (es != null && es.size() > 0) {
-                String teamTemp = null;
-                String systemTemp = null;
-                Map<String, Object> simMap = new HashMap<String, Object>();
-                List<ExpiredSim> newList = new ArrayList<ExpiredSim>();
-                for (ExpiredSim sim : es) {
-                    if (teamTemp == null) {
-                        teamTemp = sim.getTeamName();
-                        simMap.put("team", teamTemp);
-                    }
-                    if (systemTemp == null) {
-                        systemTemp = sim.getSystem();
-                        simMap.put("system", systemTemp);
-                    }
-                    
-                    if (!sim.getTeamName().equals(teamTemp)) {
-                        simMap.put("subSimList", newList);
-                        fullExpiredSimList.add(simMap);
-                        simMap = new HashMap<String, Object>();
-                        newList = new ArrayList<ExpiredSim>();
-                        teamTemp = sim.getTeamName();
-                        simMap.put("team", teamTemp);
-                        simMap.put("system", systemTemp);
-                    }
-                    if (!sim.getTeamName().equals(teamTemp) && !sim.getSystem().equals(systemTemp)) {
-                        simMap.put("subSimList", newList);
-                        fullExpiredSimList.add(simMap);
-                        simMap = new HashMap<String, Object>();
-                        newList = new ArrayList<ExpiredSim>();
-                        systemTemp = sim.getSystem();
-                        simMap.put("team", teamTemp);
-                        simMap.put("system", systemTemp);
-                    }
-                    
-                    newList.add(sim);
-                }
-                simMap.put("subSimList", newList);
-                fullExpiredSimList.add(simMap);
-            }
-            request.setAttribute("simList", fullExpiredSimList);
-            request.setAttribute("isFromSendMail", "N");
+            TeamDao teamDao = new TeamDao();
+            ConfigDao configDao = new ConfigDao();
+            List<Team> teamList = teamDao.getTeamAll();
+            Team chooseTeam = teamDao.getTeam(team);
+            List<Config> systemList = configDao.getConfigList("SYSTEM");
             
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 300);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
+            List<ExpiredSim> es = simDao.getExpiredSim(team, system, limit, offset);
+            
+            String pageUrl = request.getContextPath() + "/ExpiredSimServlet?"+request.getQueryString();
+            int countRecordAll = simDao.getCountExpiredSim(team, system);
+            Pagination pagination = new Pagination(pageUrl,countRecordAll, limit, offset);
+            request.setAttribute("team", team);
+            request.setAttribute("teamName", chooseTeam.getTeamName());
+            request.setAttribute("system", system);
+            request.setAttribute("simList", es);
+            request.setAttribute("teamList", teamList);
+            request.setAttribute("systemList", systemList);
+            request.setAttribute("pagination", pagination);
+            request.setAttribute("isFromSendMail", "N");  
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("ExpiredSimList Error", e);
