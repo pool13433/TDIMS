@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
-<c:if test="${pagination.pages > 0}">
+<c:if test="${pagination.pages > 1}">
     <c:set var="page" value="${pagination.pages - 1}" />
 </c:if>
 
-<c:if test="${pagination.pages == 0}">
+<c:if test="${pagination.pages == 1}">
     <c:set var="page" value="${pagination.pages}" />
 </c:if>
 <!--pageCurrent :: ${pagination.pageCurrent} <br/>
