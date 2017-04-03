@@ -51,6 +51,33 @@ public class TeamDao {
         return teamList;
     }
     
+    public Team getTeam(int teamId){        
+        logger.info("getTeam==" + teamId);
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Team> teamList = new ArrayList<Team>();
+        try {
+            //SELECT `team_id`, `team_name`, `team_email`, `create_date`, `create_by`, `update_date`, `update_by` FROM `team`
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `team_id`, `team_name`, `team_email`, ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
+            sql.append(" `create_by`, `update_by`");
+            sql.append(" FROM `team` ");
+            sql.append(" WHERE team_id = " + teamId);
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            if (rs.first()) {
+                return getEntityTeam(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getTeam error");
+        }
+        return new Team();
+    }
+    
     private Team getEntityTeam(ResultSet rs) throws SQLException {
         
         Team t = new Team();

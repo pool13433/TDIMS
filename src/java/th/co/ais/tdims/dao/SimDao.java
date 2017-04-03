@@ -65,7 +65,7 @@ public class SimDao {
         return sql;
     }
 
-    public List<ExpiredSim> getExpiredSim() {
+    public List<ExpiredSim> getExpiredSim(int teamId, String system, int limit, int offset) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<ExpiredSim> simList = null;
@@ -73,7 +73,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT s.sim_id, s.mobile_no, s.serial_no, s.imsi, s.charge_type, ");
-            sql.append(" s.region_code, s.system,e.env_code, e.env_site, s.usage_type, s.owner, t.team_name, ");
+            sql.append(" s.region_code, s.system, s.env, s.site, s.usage_type, s.owner, t.team_name, ");
             sql.append(" s.email_contact, p.proj_name, ");
             sql.append(" DATE_FORMAT(s.valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(s.expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(s.create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(s.update_date,").append(DATE_TO_STR).append(") update_date, ");
@@ -81,11 +81,12 @@ public class SimDao {
             sql.append(" FROM sim s ");
             sql.append(" LEFT JOIN team t ON s.team_id=t.team_id ");
             sql.append(" LEFT JOIN project p ON s.project_id=p.proj_id");
-            sql.append(" LEFT JOIN enviroment e ON s.env_id=e.env_id ");
-            sql.append(" WHERE s.expire_date < CURDATE() ");
-            sql.append(" GROUP BY s.team_id, s.system ");
+            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ?");
+            sql.append(" limit ").append(limit).append(" offset ").append(offset);
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
+            pstm.setInt(1, teamId);
+            pstm.setString(2, system);
             rs = pstm.executeQuery();
             simList = new ArrayList<ExpiredSim>();
             while (rs.next()) {
@@ -100,6 +101,35 @@ public class SimDao {
         return simList;
     }
 
+    public int getCountExpiredSim(int teamId, String system) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        int countSim = 0;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT COUNT(*) as cnt");
+            sql.append(" FROM sim s ");
+            sql.append(" LEFT JOIN team t ON s.team_id=t.team_id ");
+            sql.append(" LEFT JOIN project p ON s.project_id=p.proj_id");
+            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ?");
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setInt(1, teamId);
+            pstm.setString(2, system);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                countSim = rs.getInt("cnt");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getExpiredSimAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return countSim;
+    }
+    
     private Sim getEntitySim(ResultSet rs) throws SQLException {
         Sim sim = new Sim();
         sim.setTeamId(rs.getString("team_id"));
@@ -150,7 +180,7 @@ public class SimDao {
         sim.setCreateBy(rs.getString("create_by"));
         sim.setCreateDate(rs.getString("create_date"));
         sim.setEmailContact(rs.getString("email_contact"));
-        sim.setEnviroment(rs.getString("env_code"));
+        sim.setEnviroment(rs.getString("env"));
         sim.setExpireDate(rs.getString("expire_date"));
         sim.setImsi(rs.getString("imsi"));
         sim.setMobileNo(rs.getString("mobile_no"));
@@ -166,7 +196,7 @@ public class SimDao {
         sim.setValidDate(rs.getString("valid_date"));
         sim.setSystem(rs.getString("system"));
         sim.setOwner(rs.getString("owner"));
-        sim.setSite(rs.getString("env_site"));
+        sim.setSite(rs.getString("site"));
         return sim;
     }
 
