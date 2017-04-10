@@ -104,7 +104,7 @@
                                 <a href="${context}/KnowledgeListServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> จัดการ Knowledge</a>
                             </li>
                             <li class="<c:out value="${menu == 'knowledge_search' ? 'active': ''}"/>">
-                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> ค้นหา Knowledge</a>
+                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge-search"><i class="glyphicon glyphicon-education"></i> ค้นหา Knowledge</a>
                             </li>
                         </ul>
                         <ul class="nav nav-sidebar">
