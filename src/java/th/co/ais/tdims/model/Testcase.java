@@ -15,10 +15,11 @@ public class Testcase {
     private String pathDir;   
     private String testcaseDetails;
     private String testcaseTitle;
-    private String defectNo;
+    private String defectNo;    
     private String createDate;
     private String step;
     private String createBy;
+    private String type;
 
     public String getCreateDate() {
         return createDate;
@@ -115,7 +116,14 @@ public class Testcase {
     public void setCreateBy(String createBy) {
         this.createBy = createBy;
     }
+    
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
     
     
     
