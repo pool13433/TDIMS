@@ -34,7 +34,7 @@
                     <div class="form-group">
                     <label for="type" class="col-sm-3 control-label">Type</label>
                     <div class="col-sm-9">
-                        <select class="form-control" class="form-control" id="system" name="type" >
+                        <select class="form-control" class="form-control" id="type" name="type" >
                             <option value="" selected>    All Type  </option>
                             <c:forEach items="${typeList}" var="t">                            
                                 <c:choose>
