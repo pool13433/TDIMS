@@ -37,7 +37,7 @@ public class TeamDao {
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" `create_by`, `update_by`");
             sql.append(" FROM `team` ");
-            //logger.info("sql ::=="+sql);
+            logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             while (rs.next()) {

@@ -92,11 +92,17 @@ public class TestcastDao {
             if(!"".equals(CharacterUtil.removeNull(tc.getEnviroment()))){
                 sql.append(" and `enviroment` = '"+tc.getEnviroment()+"'");
             }
-            if(!"".equals(CharacterUtil.removeNull(tc.getCreateDate()))){
-                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
-                Date date = d1.parse(tc.getCreateDate());
-                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
-                sql.append(" and `create_date` = '"+d2.format(date)+"'");
+            if(!"|".equals(CharacterUtil.removeNull(tc.getCreateDate()))){
+                String[] d = tc.getCreateDate().split("\\|");
+                if(d != null && d.length > 0){
+                    SimpleDateFormat sd1 = new SimpleDateFormat("dd-mm-yyyy");
+                    Date sdate = sd1.parse(d[0]);
+                    SimpleDateFormat sd2 = new SimpleDateFormat("yyyy-mm-dd");
+                    SimpleDateFormat td1 = new SimpleDateFormat("dd-mm-yyyy");
+                    Date tdate = td1.parse(d[1]);
+                    SimpleDateFormat td2 = new SimpleDateFormat("yyyy-mm-dd");
+                    sql.append(" and `create_date` between '"+sd2.format(sdate)+"' and '"+td2.format(tdate)+"'");
+                }
             }
             if(!"".equals(CharacterUtil.removeNull(tc.getCreateBy()))){
                 sql.append(" and `create_by` = '"+tc.getCreateBy()+"'");

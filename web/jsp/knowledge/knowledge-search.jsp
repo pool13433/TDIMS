@@ -7,7 +7,7 @@
         <div id="3" class="panel-heading">Manage Knowledge</div>
         <div id="4" class="panel-body">
 
-            <form id="searching" method="get" action="${context}/TestcaseSearchServlet" class="form-horizontal">          
+            <form id="searching" method="get" action="${context}/KnowledgeSearchServlet" class="form-horizontal">          
                 <input type="hidden" id="menu" name="menu" value="searching"/>
                 <input type="hidden" name="offset" value="${recordCurrent}"/>
                 <div class="container">
@@ -26,11 +26,36 @@
                             <div class="form-group">
                                 <label for="team" class="col-sm-2 control-label">Team</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control" type="text" name="team" id="team" value="${team}" placeholder="dropdown...">
+                                    <input type="hidden" id="changed" name="changed" >
+                                    <select class="form-control" class="form-control" id="team" name="team" >
+                                        <option value="" selected>    All Team  </option>
+                                        <c:forEach items="${teamList}" var="tm">                            
+                                            <c:choose>
+                                                <c:when test="${team == tm.teamId}">
+                                                    <option value="${tm.teamId}" selected>${tm.teamName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${tm.teamId}">${tm.teamName}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>    
+                                    </select>
                                 </div>                            
                                 <label for="type" class="col-sm-2 control-label">Type</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control" type="text" name="type" id="type" value="${type}" placeholder="dropdown...">
+                                    <select class="form-control" class="form-control" id="type" name="type" >
+                                        <option value="" selected>    All Type  </option>
+                                        <c:forEach items="${typeList}" var="t">                            
+                                            <c:choose>
+                                                <c:when test="${type == t.id}">                                                    
+                                                    <option value="${t.id}" selected>${t.moduleName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${t.id}">${t.moduleName}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>    
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +174,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $("#changed").val("");
         $("#searching").submit(function () {
             var criteria = {};
             $.each($(this).serializeArray(), function (_, kv) {
@@ -158,18 +184,21 @@
             });
         });
         
-        $('a[id="gotofile"]').click(function (event){            
+       
+        
+        $('select[id="team"]').change(function (event){            
             event.preventDefault();
-            var name = $(this).attr('href');
-            $.post({
-                url:"TestcaseSearchServlet?pathDir="+name
-                        ,success:function(){
-                            return true;
-                        }
+            var teamId = $(this).val();
+            $("#searching").submit();
+            $.get({
+                url:"KnowledgeSearchServlet?teamId="+teamId
+                ,success:function(response){
+                    $("#changed").val("changed");
+                    $("#searching").submit();
+                }
             })
             return false;
         });
-        
 
 
     });

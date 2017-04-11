@@ -47,6 +47,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("ownerList", new ProfileDao().getAllUser());            
             String system = CharacterUtil.removeNull(request.getParameter("system"));
             request.setAttribute("system", system);
+            request.setAttribute("typeList", configDao.getConfigList("TC_TYPE"));
             String startDate = CharacterUtil.removeNull(request.getParameter("startDate"));
             request.setAttribute("startDate", startDate);
             String toDate = CharacterUtil.removeNull(request.getParameter("toDate"));
@@ -63,7 +64,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             if("searching".equals(menu)){
                 tc.setProjectId(projectId);
                 tc.setSystems(system);
-                tc.setCreateDate(startDate+"-"+toDate);
+                tc.setCreateDate(startDate+"|"+toDate);
                 tc.setCreateBy(createBy);
                 tc.setEnviroment(env);
                 tc.setTestcaseDetails(details);

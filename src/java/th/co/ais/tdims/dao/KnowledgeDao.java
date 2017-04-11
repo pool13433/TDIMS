@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Knowledge;
+import th.co.ais.tdims.util.CharacterUtil;
 
 public class KnowledgeDao {
     final static Logger logger = Logger.getLogger(KnowledgeDao.class);
@@ -27,8 +28,9 @@ public class KnowledgeDao {
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
-            sql.append("FROM `knowledge` ");
+            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
+            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
+            sql.append(" FROM `knowledge` ");
             
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -49,7 +51,8 @@ public class KnowledgeDao {
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
+            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
+            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
             sql.append("FROM `knowledge` WHERE id = ?");
             
             pstm = conn.prepareStatement(sql.toString());
@@ -65,22 +68,29 @@ public class KnowledgeDao {
         }
         return knowledgeList;
     }
-    public List<Knowledge> findKnowledge(boolean createBy, boolean projectID, String searchValue){
+    public List<Knowledge> findKnowledge(Knowledge knowledge){
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Knowledge> knowledgeList = new ArrayList<Knowledge>();
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `project_id`, `server_name`, `path_folder`, `create_by`");
+            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
+            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
             sql.append(" FROM `knowledge` ");
             sql.append(" WHERE 1=1 ");
             
-            if(createBy){
-               sql.append(" and create_by="+searchValue); 
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getFileName()))){
+               sql.append(" and file_name="+knowledge.getFileName()); 
             }
-            if(projectID){
-               sql.append(" and project_id="+searchValue); 
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getTeamId()))){
+               sql.append(" and team_id="+knowledge.getTeamId()); 
+            }
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getType()))){
+               sql.append(" and type="+knowledge.getType()); 
+            }
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getDetails()))){
+               sql.append(" and details="+knowledge.getDetails()); 
             }
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -98,11 +108,17 @@ public class KnowledgeDao {
     
     private Knowledge getEntityKnowledge(ResultSet rs) throws SQLException {
         Knowledge knowledge = new Knowledge();
-        knowledge.setId(rs.getInt("id"));
-        knowledge.setProjectId(rs.getString("project_id"));
-        knowledge.setServerName(rs.getString("server_name"));
-        knowledge.setPathFolder(rs.getString("path_folder"));
-        knowledge.setCreateBy(rs.getInt("create_by"));
+        
+        knowledge.setId(rs.getString("id"));
+        knowledge.setFileName(rs.getString("file_name"));
+        knowledge.setTeamId(rs.getString("team_id"));
+        knowledge.setType(rs.getString("type"));
+        knowledge.setDetails(rs.getString("details"));
+        knowledge.setPath(rs.getString("path"));
+        knowledge.setCreateDate(rs.getString("create_date"));
+        knowledge.setCreateBy(rs.getString("create_by"));
+        knowledge.setUpdateDate(rs.getString("update_date"));
+        knowledge.setUpdateBy(rs.getString("update_by"));
         
         return knowledge;
     }
@@ -134,14 +150,19 @@ public class KnowledgeDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO knowledge ");
-            sql.append(" (`project_id`, `server_name`, `path_folder`, `create_by`) ");
-            sql.append(" VALUES (?,?,?,?)");
+            sql.append(" (`id`, `file_name`, `team_id`, `type`, `details`, `path`, `create_date`, `create_by`, `update_date`, `update_by`) ");
+            sql.append(" VALUES ('',?,?,?,?,?,?,?,?,?)");
             
             pstm = conn.prepareStatement(sql.toString());     
-            pstm.setString(1, knowledge.getProjectId());
-            pstm.setString(2, knowledge.getServerName());
-            pstm.setString(3, knowledge.getPathFolder());
-            pstm.setInt(4, knowledge.getCreateBy());
+            pstm.setString(1, knowledge.getFileName());
+            pstm.setString(2, knowledge.getTeamId());
+            pstm.setString(3, knowledge.getType());
+            pstm.setString(4, knowledge.getDetails());
+            pstm.setString(5, knowledge.getPath());
+            pstm.setString(6, knowledge.getCreateDate());
+            pstm.setString(7, knowledge.getCreateBy());
+            pstm.setString(8, knowledge.getUpdateDate());
+            pstm.setString(9, knowledge.getUpdateBy());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,21 +179,23 @@ public class KnowledgeDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" UPDATE `knowledge` SET ");
-            sql.append(" `project_id`=?,`server_name`=?,`path_folder`=?,`create_by`=? ");
+            sql.append(" UPDATE `knowledge` SET ");            
+            sql.append(" `file_name`=?,`team_id`=?,`type`=?, ");
+            sql.append(" `details`=?,`path`=?,`update_by`=?, ");
+            sql.append(" `update_date`=NOW() ");
             sql.append(" WHERE `id`=?");
             
             pstm = conn.prepareStatement(sql.toString());     
-             pstm.setString(1, knowledge.getProjectId());
-            pstm.setString(2, knowledge.getServerName());
-            pstm.setString(3, knowledge.getPathFolder());
-            pstm.setInt(4, knowledge.getCreateBy());
-             pstm.setInt(5, knowledge.getId());
-           
+            pstm.setString(1, knowledge.getFileName());
+            pstm.setString(2, knowledge.getTeamId());
+            pstm.setString(3, knowledge.getType());
+            pstm.setString(4, knowledge.getDetails());
+            pstm.setString(5, knowledge.getPath());
+            pstm.setString(6, knowledge.getUpdateBy());       
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("saveknowledge error", e);
+            logger.error("updateKnowledge error", e);
         }finally {
             this.close(pstm, null);
         }
