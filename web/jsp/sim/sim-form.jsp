@@ -14,15 +14,15 @@
                 <label for="mobileNo" class="col-sm-1 control-label">MOBILE </label>
                 <div class="col-sm-3">
                     <input type="hidden" value="${sim.simId}" id="simId" name="simId">
-                    <input type="text" class="form-control" value="${sim.mobileNo}" id="mobileNo" name="mobileNo" placeholder="mobileNo" required>
+                    <input type="number" class="form-control" value="${sim.mobileNo}" id="mobileNo" name="mobileNo" placeholder="mobileNo" required>
                 </div>
                 <label for="serialNo" class="col-sm-1 control-label">SERIAL</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="${sim.serialNo}" id="serialNo" name="serialNo" placeholder="serialNo">
+                    <input type="number" class="form-control" value="${sim.serialNo}" id="serialNo" name="serialNo" placeholder="serialNo">
                 </div>
                 <label for="imsi" class="col-sm-1 control-label">IMSI </label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="${sim.imsi}"  id="imsi" name="imsi" placeholder="imsi">
+                    <input type="number" class="form-control" value="${sim.imsi}"  id="imsi" name="imsi" placeholder="imsi">
                 </div>
             </div>
             <div class="form-group">
