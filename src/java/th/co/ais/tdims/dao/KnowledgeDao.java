@@ -28,9 +28,9 @@ public class KnowledgeDao {
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
-            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
-            sql.append(" FROM `knowledge` ");
+            sql.append(" SELECT `id`, `file_name`, (select t.team_name from team t  where t.team_id=k.team_id) as team_id , (select m.module_name from module m  where m.id=k.type) as type, `details`, `path`, ");
+            sql.append("  `create_date`, (select pf.username from profile pf where pf.profile_id = k.create_by)  as  `create_by`, `update_date`, `update_by` ");
+            sql.append(" FROM `knowledge` k ");
             
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -51,9 +51,9 @@ public class KnowledgeDao {
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
-            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
-            sql.append("FROM `knowledge` WHERE id = ?");
+            sql.append(" SELECT `id`, `file_name`, (select t.team_name from team t  where t.team_id=k.team_id) as team_id , (select m.module_name from module m  where m.id=k.type) as type, `details`, `path`, ");
+            sql.append("  `create_date`, (select pf.username from profile pf where pf.profile_id = k.create_by)  as  `create_by`, `update_date`, `update_by` ");
+            sql.append("FROM `knowledge` k WHERE id = ?");
             
             pstm = conn.prepareStatement(sql.toString());
             pstm.setInt(1, id);
@@ -75,24 +75,24 @@ public class KnowledgeDao {
         try{
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `id`, `file_name`, `team_id`, `type`, `details`, `path`, ");
-            sql.append("  `create_date`, `create_by`, `update_date`, `update_by` ");
-            sql.append(" FROM `knowledge` ");
+            sql.append(" SELECT `id`, `file_name`, (select t.team_name from team t  where t.team_id=k.team_id) as team_id, (select m.module_name from module m  where m.id=k.type) as type, `details`, `path`, ");
+            sql.append("  `create_date`, (select pf.username from profile pf where pf.profile_id = k.create_by)  as  `create_by`, `update_date`, `update_by` ");
+            sql.append(" FROM `knowledge` k ");
             sql.append(" WHERE 1=1 ");
             
             if(!"".equals(CharacterUtil.removeNull(knowledge.getFileName()))){
-               sql.append(" and file_name="+knowledge.getFileName()); 
+               sql.append(" and file_name LIKE '%"+knowledge.getFileName()+"%'"); 
             }
             if(!"".equals(CharacterUtil.removeNull(knowledge.getTeamId()))){
-               sql.append(" and team_id="+knowledge.getTeamId()); 
+               sql.append(" and team_id='"+knowledge.getTeamId()+"'"); 
             }
             if(!"".equals(CharacterUtil.removeNull(knowledge.getType()))){
-               sql.append(" and type="+knowledge.getType()); 
+               sql.append(" and type='"+knowledge.getType()+"'"); 
             }
             if(!"".equals(CharacterUtil.removeNull(knowledge.getDetails()))){
-               sql.append(" and details="+knowledge.getDetails()); 
+               sql.append(" and details LIKE '%"+knowledge.getDetails()+"%'"); 
             }
-            //logger.info("sql ::=="+sql);
+            logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
             
