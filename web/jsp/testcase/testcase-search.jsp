@@ -1,15 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
-
 <jsp:include page="../include/inc_header.jsp"/>
-<div class="container" style="padding-right: 100px;">
-    <div class="panel panel-ais">        
-        <div class="panel-heading">แสดงรายการ Search Testcase ทั้งหมด</div>
-        <div class="panel-body">
-        <form id="searching" method="get" action="${context}/TestcaseSearchServlet" class="form-horizontal">   
-            <input type="hidden" id="menu" name="menu" value="searching"/>
-            <div class="form-group">
+<div id="exam" class="container" style="padding-right: 100px;">    
+    <div id="2" class="panel panel-ais">        
+        <div id="3" class="panel-heading">Manage Testcase</div>
+        <div id="4" class="panel-body">
+
+            <form id="searching" method="get" action="${context}/TestcaseSearchServlet" class="form-horizontal">          
+                <input type="hidden" id="menu" name="menu" value="searching"/>
+                <input type="hidden" name="offset" value="${recordCurrent}"/>
+                
+                <div class="form-group">
                 <div class="col-sm-5">
                     <div class="form-group">
                     <label for="projectSelected" class="col-sm-3 control-label">Project</label>
@@ -26,6 +28,24 @@
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label for="type" class="col-sm-3 control-label">Type</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" class="form-control" id="type" name="type" >
+                            <option value="" selected>    All Type  </option>
+                            <c:forEach items="${typeList}" var="t">                            
+                                <c:choose>
+                                    <c:when test="${type == t.conName}">
+                                        <option value="${t.conName}" selected>${t.conValue}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${t.conName}">${t.conValue}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>    
                         </select>
                     </div>
                     </div>
@@ -48,11 +68,49 @@
                     </div>
                     </div>
                     <div class="form-group">
-                    <label for="createDate" class="col-sm-3 control-label">Date </label>
+                    <label for="env" class="col-sm-3 control-label">Environment </label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control datepicker"  value="${createDate}"  id="createDate" name="createDate" placeholder="createDate" readonly >
+                        <select class="form-control" class="form-control" id="env" name="env" placeholder="env">
+                            <option value="" selected>   All environment  </option>                                                       
+                            <c:forEach items="${envList}" var="e">                            
+                            <c:choose>
+                                <c:when test="${env == e.conName}">
+                                    <option value="${e.conName}" selected>${e.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${e.conName}">${e.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        </select>
+                    </div>                    
+                    </div>
+                    <div class="form-group">
+                    <label for="startDate" class="col-sm-3 control-label">Start Date </label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control datepicker"  value="${startDate}"  id="startDate" name="startDate" placeholder="startDate" readonly >
+                    </div>
+                    <label for="toDate" class="col-sm-1 control-label">To</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control datepicker"  value="${toDate}"  id="toDate" name="toDate" placeholder="toDate" readonly >
                     </div>
                     </div>
+                </div>
+
+                <div class="col-md-offset-1 col-sm-5">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-3 control-label">TestCase</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="title" id="title" value="${title}" placeholder="testcase...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="details" class="control-label col-sm-3">Details </label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="7" id="details" name="details" value="${details}">${testcase.testcaseDetails}</textarea>
+                        </div>
+                    </div>
+                     
                     <div class="form-group">
                     <label for="createBy" class="col-sm-3 control-label">Tester</label>
                     <div class="col-sm-9">
@@ -72,63 +130,41 @@
                     </div>
                     </div>
                     <div class="form-group">
-                        <label for="defectNo" class="col-sm-3 control-label">Ticket/Defect No.</label>
                         <div class="col-sm-9">
-                            <input class="form-control" type="text" name="defectNo" id="defectNo" value="${defectNo}" placeholder="Defect No...">
+                            <button type="submit" class="btn btn-success">
+                                <i class="glyphicon glyphicon-search"></i> Search
+                            </button>
+                            <button type="reset" class="btn btn-warning">
+                                <i class="glyphicon glyphicon-erase"></i> Reset
+                            </button>
+                            <a href="${context}/TestcaseFormServlet" class="btn btn-default btn-primary">
+                                <i class="glyphicon glyphicon-plus"></i> Add
+                            </a>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="step" class="col-sm-3 control-label">Step</label>
-                        <div class="col-sm-9">
-                            <input class="form-control" type="text" name="step" id="step" value="${step}" placeholder="Step number...">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-offset-1 col-sm-5">
-                    <div class="form-group">
-                        <label for="searchBox" class="control-label col-sm-3">Details </label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" rows="7" id="searchBox" name="searchBox" value="${searchBox}">${testcase.testcaseDetails}</textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                    <label for="env" class="col-sm-3 control-label">Environment </label>
-                    <div class="col-sm-9">
-                        <select class="form-control" class="form-control" id="env" name="env" placeholder="env">
-                            <option value="" selected>   All environment  </option>                                                       
-                            <c:forEach items="${envList}" var="e">                            
-                            <c:choose>
-                                <c:when test="${env == e.conName}">
-                                    <option value="${e.conName}" selected>${e.conValue}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${e.conName}">${e.conValue}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                        </select>
-                    </div>                    
-                    </div>
-                    <div class="form-group">
-                        <label for="issueNo" class="col-sm-3 control-label ">Issue No. </label>
-                        <div class="col-sm-9">
-                            <input class="form-control" type="text" name="issueNo" id="issueNo" value="${issueNo}" placeholder="Issue No...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class=" control-label col-sm-3"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button></div>
-                    </div>
+                    
                 </div>
                 
             </div>
+                
+                
         </form>
-        
-        </div>
-        <div style="overflow-y: scroll;">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <c:import url="../include/inc_pagination.jsp"/>
+                </div>
+            </div>     
+            <div id="msgBox" class="alert alert-warning" hidden="">
+                <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
+            </div>
+            <form id="bookingSim" action="${context}/SimSearchServlet"   method="get" class="form-horizontal">
+                <input type="hidden" id="menu" name="menu" value="booking"/>
+                <input type="hidden" id="cancelBooking" name="cancelBooking" value=""/>
+                <div style="overflow-y: scroll;max-height: 400px;">                    
+                    <table id="sim_search_table" class="table table-bordered table-striped">                        
+                        <tr>
+                        <th>#</th>
                         <th>ProjectId</th>
                         <th>Create By</th>
                         <th>System</th>
@@ -145,12 +181,16 @@
                 <tbody>
                     <c:forEach var="tc" items="${testcaseList}">
                         <tr>
+                            <td  nowrap>        
+                                <a href="${context}/TestcaseFormServlet?testcaseId=${testcase.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/TestcaseDeleteServlet?testcaseId=${testcase.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                            </td>
                             <td>${tc.projectId}</td>
                             <td>${tc.createBy}</td> 
                             <td>${tc.systems}</td>
                             <td>${tc.enviroment}</td>
                             <td>${tc.issueNo}</td>
-                            <td><a href="TestcaseSearchServlet?pathDir=${tc.pathDir}">${tc.pathDir}</a></td>
+                            <td><a id="gotofile" href="${tc.pathDir}">${tc.pathDir}</a></td>
                             <td>${tc.testcaseDetails}</td>
                             <td>${tc.testcaseTitle}</td>
                             <td>${tc.defectNo}</td>
@@ -169,48 +209,42 @@
                         </tr>
                     </c:if>
                 </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<script type="text/javascript">
-            
-    $(document).ready(function(){
-        $("#searching").submit(function(){
-            var projectSelected = $("#projectSelected");
-            var system = $("#system"); 
-            var createDate = $("#createDate"); 
-            var createBy = $("#createBy");
-            var defectNo = $("#defectNo");
-            var step = $("#step"); 
-            var searchBox = $("#searchBox"); 
-            var env = $("#env"); 
-            var issueNo = $("#issueNo"); 
+                    </table>
+                </div>                
+                    
+            </form>
 
-            if("" === projectSelected.val() && "" === system.val() && "" === createDate.val() && "" === createBy.val()
-                    && "" === defectNo.val() && "" === step.val() && "" === searchBox.val() && "" === env.val() 
-                    && "" === issueNo.val()){
-                alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
-                return false;
-            }else{
-                $("#searchFlag").val("searchBy");
-            }                
+        </div>        
+    </div>        
+</div>   
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#searching").submit(function () {
+            var criteria = {};
+            $.each($(this).serializeArray(), function (_, kv) {
+                if (kv.value !== "") {
+                    criteria[kv.name] = kv.value;
+                }
+            });
         });
-    });
-    
-    /*
-    $(window).load(function(){
-        var e = $("#projectId").val();
-        alert("Hello "+e);
-        if($("#projectId").val() === true){
-            $("#projectId").attr('checked'));
-        }
-        if($("#createBy").val() === true){
-            $("#createBy").attr('checked'));
-        }
-    });
-    */
         
-    
+        $('a[id="gotofile"]').click(function (event){            
+            event.preventDefault();
+            var name = $(this).attr('href');
+            $.post({
+                url:"TestcaseSearchServlet?pathDir="+name
+                        ,success:function(){
+                            return true;
+                        }
+            })
+            return false;
+        });
+        
+
+
+    });
 </script>
+
 <jsp:include page="../include/inc_footer.jsp"/>
