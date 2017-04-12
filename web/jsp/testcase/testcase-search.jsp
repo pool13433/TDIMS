@@ -211,7 +211,11 @@
                 </tbody>
                     </table>
                 </div>                
-                    
+                <div class="row">
+                    <div class="col-md-12">
+                        <c:import url="../include/inc_pagination.jsp"/>
+                    </div>
+                </div>     
             </form>
 
         </div>        

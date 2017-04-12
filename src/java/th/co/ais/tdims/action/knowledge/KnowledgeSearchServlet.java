@@ -18,6 +18,7 @@ import th.co.ais.tdims.dao.KnowledgeDao;
 import th.co.ais.tdims.dao.ModuleDao;
 import th.co.ais.tdims.dao.TeamDao;
 import th.co.ais.tdims.model.Knowledge;
+import th.co.ais.tdims.util.CharacterUtil;
 
 
 public class KnowledgeSearchServlet extends HttpServlet {
@@ -27,22 +28,29 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.debug("KnowledgeSearchServlet");
-        String changed = request.getParameter("changed");        
+        String menu = CharacterUtil.removeNull(request.getParameter("menu"));
+        //String changed = request.getParameter("changed");        
         String path = request.getParameter("path");
         request.setAttribute("path",path); 
         String fileName = request.getParameter("file_name");
         request.setAttribute("file_name",fileName); 
         String teamId = request.getParameter("team");
         request.setAttribute("team",teamId); 
-        String module = request.getParameter("module");
-        request.setAttribute("module",module); 
+        String type = request.getParameter("type");
+        request.setAttribute("type",type); 
         String details = request.getParameter("details");
         request.setAttribute("details",details); 
         try {
-            KnowledgeDao knowledgeDao = new KnowledgeDao();            
-            request.setAttribute("knowledgeList",knowledgeDao.getKnowledgeAll()); 
+            KnowledgeDao knowledgeDao = new KnowledgeDao();   
+            if("searching".equals(menu)){
+                Knowledge knowledge = new Knowledge();
+                knowledge.setFileName(fileName);
+                knowledge.setTeamId(teamId);
+                knowledge.setType(type);
+                knowledge.setDetails(details);
+                request.setAttribute("knowledgeList",knowledgeDao.findKnowledge(knowledge));
+            }
             
-       
         if(path!= null){
             Desktop desktop = Desktop.getDesktop();
             File dirToOpen = null;
@@ -54,39 +62,19 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
                 logger.error("KnowledgeOpenDir Error", e);
             }
         }
-        /**
-         *
-         if(!"changed".equals(changed)){
-            if(!projectId  && !createBy){
-                //ListAll
-                request.setAttribute("knowledgeList",knowledgeDao.getKnowledgeAll());
-            }else{  
-                Knowledge knowledge = new Knowledge();
-                request.setAttribute("knowledgeList",knowledgeDao.findKnowledge(knowledge));
-            }
-            if(createBy){
-                request.setAttribute("createBy",createBy); 
-            }
-            if(projectId){
-                request.setAttribute("projectId",request.getParameter("projectId")); 
-            }
-            request.setAttribute("searchBox",searchBox); 
-            request.setAttribute("searchFlag",null); 
-            
-        }
-         * /
-         */
 
             TeamDao teamDao = new TeamDao();
             request.setAttribute("teamList", teamDao.getTeamAll());
             ModuleDao moduleDao = new ModuleDao();
             request.setAttribute("typeList", moduleDao.getModuleAll());
             
+            /*
             System.out.println(" team id: "+teamId);
             if(!"".equals(teamId)){
                 ModuleDao m = new ModuleDao();
                 request.setAttribute("typeList", m.getModuleByTeam(teamId));
             }
+            */
            
             
         } catch (Exception e) {

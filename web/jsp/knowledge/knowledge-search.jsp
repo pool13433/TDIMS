@@ -2,12 +2,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 <jsp:include page="../include/inc_header.jsp"/>
-<div id="exam" class="container" style="padding-right: 100px;">    
-    <div id="2" class="panel panel-ais">        
-        <div id="3" class="panel-heading">Manage Knowledge</div>
-        <div id="4" class="panel-body">
+<div class="container" style="padding-right: 100px;">    
+    <div class="panel panel-ais">        
+        <div class="panel-heading">Manage Knowledge</div>
+        <div class="panel-body">
 
-            <form id="searching" method="get" action="${context}/KnowledgeSearchServlet" class="form-horizontal">          
+            <form id="searchKnl" method="get" action="${context}/KnowledgeSearchServlet" class="form-horizontal">          
                 <input type="hidden" id="menu" name="menu" value="searching"/>
                 <input type="hidden" name="offset" value="${recordCurrent}"/>
                 <div class="container">
@@ -26,8 +26,7 @@
                             <div class="form-group">
                                 <label for="team" class="col-sm-2 control-label">Team</label>
                                 <div class="col-sm-3">
-                                    <input type="hidden" id="changed" name="changed" >
-                                    <select class="form-control" class="form-control" id="team" name="team" >
+                                    <select class="form-control" id="team" name="team" >
                                         <option value="" selected>    All Team  </option>
                                         <c:forEach items="${teamList}" var="tm">                            
                                             <c:choose>
@@ -43,7 +42,7 @@
                                 </div>                            
                                 <label for="type" class="col-sm-2 control-label">Type</label>
                                 <div class="col-sm-3">
-                                    <select class="form-control" class="form-control" id="type" name="type" >
+                                    <select class="form-control" id="type" name="type" >
                                         <option value="" selected>    All Type  </option>
                                         <c:forEach items="${typeList}" var="t">                            
                                             <c:choose>
@@ -70,39 +69,24 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
-                
-                
-                
-                <!-- 
-                TO BE CONTINUED
-                -->
-                
-                
-                
-                
+                <div class="row">
                     <div class="form-group">
-                        <div class="col-sm-9">
+                        <div class="col-sm-offset-6">
                             <button type="submit" class="btn btn-success">
                                 <i class="glyphicon glyphicon-search"></i> Search
                             </button>
                             <button type="reset" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
                             </button>
-                            <a href="${context}/TestcaseFormServlet" class="btn btn-default btn-primary">
+                            <a href="${context}/KnowledgeFormServlet" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
                         </div>
                     </div>
-                    
                 </div>
                 
-            </div>
-                
-                
-        </form>
-
+            </form>
             <div class="row">
                 <div class="col-md-12">
                     <c:import url="../include/inc_pagination.jsp"/>
@@ -118,45 +102,37 @@
                     <table id="sim_search_table" class="table table-bordered table-striped">                        
                         <tr>
                         <th>#</th>
-                        <th>ProjectId</th>
-                        <th>Create By</th>
-                        <th>System</th>
-                        <th>Enviroment</th>  
-                        <th>IssurNO</th>
-                        <th>Path Dir</th>
-                        <th>Testcase Details</th>
-                        <th>Testcase Title</th>
-                        <th>Defect No</th>
-                        <th>Step</th>                        
-                        <th>Create Date</th>
+                        <th>FileName</th> 
+                        <th>Team</th>
+                        <th>Type</th>
+                        <th>Details</th>
+                        <th>Path</th>  
+                        <th>CreateBy</th>
+                        <th>CreateDate</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="tc" items="${testcaseList}">
+                    <c:forEach var="k" items="${knowledgeList}">
                         <tr>
                             <td  nowrap>        
-                                <a href="${context}/TestcaseFormServlet?testcaseId=${testcase.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a href="${context}/TestcaseDeleteServlet?testcaseId=${testcase.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="${context}/KnowledgeFormServlet?knlId=${k.id}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/KnowledgeDeleteServlet?knlId=${k.id}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
                             </td>
-                            <td>${tc.projectId}</td>
-                            <td>${tc.createBy}</td> 
-                            <td>${tc.systems}</td>
-                            <td>${tc.enviroment}</td>
-                            <td>${tc.issueNo}</td>
-                            <td><a id="gotofile" href="${tc.pathDir}">${tc.pathDir}</a></td>
-                            <td>${tc.testcaseDetails}</td>
-                            <td>${tc.testcaseTitle}</td>
-                            <td>${tc.defectNo}</td>
-                            <td>${tc.step}</td>
-                            <td>${tc.createDate}</td>
+                            <td>${k.fileName}</td>
+                            <td>${k.teamId}</td> 
+                            <td>${k.type}</td>
+                            <td>${k.details}</td>
+                            <td><a id="gotofile" href="${k.path}">${k.path}</a></td>
+                            <td>${k.createBy}</td>
+                            <td>${k.createDate}</td>
                         </tr>
                     </c:forEach>
-                    <c:if test="${testcaseList.isEmpty()}">
+                    <c:if test="${knowledgeList.isEmpty()}">
                         <tr>                    
                             <td colspan="15"><div class="alert"><span style="padding: 40%">ไม่พบข้อมูลที่ค้นหา</span></div> </td>
                         </tr>
                     </c:if>
-                    <c:if test="${testcaseList == null}">
+                    <c:if test="${knowledgeList == null}">
                         <tr>                    
                             <td colspan="17"><div class="alert"><span style="padding: 40%">กรุณาระบุเงื่อนไขในการค้นหา</span></div> </td>
                         </tr>
@@ -164,7 +140,11 @@
                 </tbody>
                     </table>
                 </div>                
-                    
+                <div class="row">
+                    <div class="col-md-12">
+                        <c:import url="../include/inc_pagination.jsp"/>
+                    </div>
+                </div>     
             </form>
 
         </div>        
@@ -175,7 +155,7 @@
 
     $(document).ready(function () {
         $("#changed").val("");
-        $("#searching").submit(function () {
+        $("#searchKnl").submit(function () {
             var criteria = {};
             $.each($(this).serializeArray(), function (_, kv) {
                 if (kv.value !== "") {
@@ -184,21 +164,31 @@
             });
         });
         
-       
-        
-        $('select[id="team"]').change(function (event){            
+        $('a[id="gotofile"]').click(function (event){            
+            event.preventDefault();
+            var name = $(this).attr('href');
+            $.get({
+                url:"KnowledgeSearchServlet?path="+name
+                        ,success:function(){
+                            return true;
+                        }
+            })
+            return false;
+        });
+        /*
+         $('select[id="team"]').change(function (event){            
             event.preventDefault();
             var teamId = $(this).val();
-            $("#searching").submit();
             $.get({
                 url:"KnowledgeSearchServlet?teamId="+teamId
                 ,success:function(response){
                     $("#changed").val("changed");
-                    $("#searching").submit();
+                    $("#searchKnl").submit();
                 }
             })
             return false;
         });
+         */
 
 
     });
