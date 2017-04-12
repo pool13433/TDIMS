@@ -39,6 +39,7 @@ public class SimSearchServlet extends HttpServlet {
         try {
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
+            //request.setAttribute("recordCurrent", offset);
             String pageUrl = request.getContextPath() + "/SimSearchServlet?" + request.getQueryString();
             
             Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
@@ -147,7 +148,7 @@ public class SimSearchServlet extends HttpServlet {
         try {            
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 50);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
-            
+            //request.setAttribute("recordCurrent", offset);
             Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
             String assignTeam = CharacterUtil.removeNull(request.getParameter("team"));
             String email = CharacterUtil.removeNull(request.getParameter("emailContact"));
@@ -185,8 +186,14 @@ public class SimSearchServlet extends HttpServlet {
             
             request.setAttribute("message", "booking sim success");
             
-            simDao = new SimDao();            
-            request.setAttribute("simList", simDao.getSimAll());
+            simDao = new SimDao();  
+            String pageUrl = request.getContextPath() + "/SimSearchServlet?" + request.getQueryString();
+            String sqlConditionBuilder = simDao.getConditionBuilder(new Sim());
+            List<Sim> simList = simDao.findSim(new Sim(), limit, offset);
+            request.setAttribute("simList", simList);
+            int countRecordAll = simDao.getCountSim(sqlConditionBuilder);
+            Pagination pagination = new Pagination(pageUrl, countRecordAll, limit, offset);
+            request.setAttribute("pagination", pagination);
             //Combo List
             ProjectDao projectDao = new ProjectDao();
             request.setAttribute("projectList", projectDao.getProjectAll());
