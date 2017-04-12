@@ -42,14 +42,7 @@
             <div class="form-group">                
                 <label for="status" class="col-sm-2 control-label">Status</label>
                 <div class="col-sm-3">
-                    <select class="form-control" class="form-control" id="status" name="status" placeholder="status" required>
-                        <option value="" selected>   Please select status   </option>      
-                            <option value="Avaliable" >Avaliable</option>
-                            <option value="Unavaliable" >Unavaliable</option>
-                            <option value="Inused" >Inused</option>
-                            <option value="Pending" >Pending</option>
-                            <option value="Lost" >Lost</option>
-                    </select>
+                    <input  class="form-control"  id="status" name="status" type="text" value="Inused" placeholder="Inused" readonly>
                 </div>
             </div>
             <div class="form-group">
