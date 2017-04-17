@@ -15,7 +15,9 @@
         <script type="text/javascript" src="${context}/asset/js/jquery.2.2.4.js"></script>
         <script type="text/javascript" src="${context}/asset/bootstrap/js/bootstrap.js"></script>        
         <script type="text/javascript" src="${context}/asset/jquery-ui/jquery-ui.js"></script>    
-        <script type="text/javascript" src="${context}/asset/js/app-core.js"></script>           
+        <script type="text/javascript" src="${context}/asset/js/app-core.js"></script>
+        <script type="text/javascript" src="${context}/asset/js/Chart.bundle.min.js"></script>
+        <script type="text/javascript" src="${context}/asset/js/Chart.bundle.js"></script>
         <style type="text/css">
             body *{font-family: 'Marmelad', sans-serif;}
             a{color: #0B0F00;font-weight: bold}
@@ -139,7 +141,7 @@
                         </ul>
                         <ul class="nav nav-sidebar">                       
                             <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
-                                <a href="${context}/jsp/report/report-list.jsp?menu=report"><i class="glyphicon glyphicon-file"></i> รายงาน</a>
+                                <a href="${context}/ReportServlet?menu=report"><i class="glyphicon glyphicon-file"></i> รายงาน</a>
                             </li>
                         </ul>
                     </c:if>

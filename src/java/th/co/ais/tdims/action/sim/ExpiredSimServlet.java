@@ -6,19 +6,13 @@
 package th.co.ais.tdims.action.sim;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-import static th.co.ais.tdims.action.sim.SimListServlet.logger;
 import th.co.ais.tdims.dao.SimDao;
 import th.co.ais.tdims.dao.TeamDao;
 import th.co.ais.tdims.dao.ConfigDao;
@@ -28,10 +22,6 @@ import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.model.Team;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author Parinya
- */
 public class ExpiredSimServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ExpiredSimServlet.class);
     
