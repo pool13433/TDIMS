@@ -40,7 +40,8 @@ public class TestcaseDeleteServlet extends HttpServlet {
             e.printStackTrace();
             logger.error("testcase Error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/TestcaseListServlet");
+                response.sendRedirect(request.getContextPath() + "/TestcaseSearchServlet?menu=searching&offset=&projectSelected=&type=&system=&env=&startDate=&toDate=&title=&details=&createBy=");
+
     }
 
 }

@@ -49,8 +49,8 @@ public class TestcaseFormServlet extends HttpServlet {
             request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
             request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
             request.setAttribute("ownerList", new ProfileDao().getAllUser());
-            //request.setAttribute("envList",configDao.getConfigList("ENV") );
-            request.setAttribute("envList", new EnvironmentDao().getAllEnvirenment());
+             request.setAttribute("typeList", configDao.getConfigList("TC_TYPE"));
+            request.setAttribute("envList", configDao.getConfigList("ENV"));
             request.setAttribute("projectList", projecDao.getProjectAll());
             request.setAttribute("testcase", testcase);
         } catch (Exception e) {

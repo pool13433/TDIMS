@@ -47,14 +47,16 @@ public class TestcaseAddServlet extends HttpServlet {
             String issue = "";
             String date = "";
             String testcase = "";  
-            String tester = ""; 
+            String tester = "";
+            String step = "";  
+            String type = ""; 
             String detail = "";                        
             String project = "";
             String testcaseId = "";
             String systems = "";
             String owner = "";
             String env = "";
-            String file = "";
+            String path = "";
             
            List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
@@ -80,12 +82,17 @@ public class TestcaseAddServlet extends HttpServlet {
 					detail = item.getString("UTF-8");
 				}else if("testcase".equals(fieldname)){
 					testcase = item.getString("UTF-8");
-				}
-			}else{
+				}else if("manual".equals(fieldname)){
+					step = item.getString("UTF-8");
+				}else if("type".equals(fieldname)){
+					type = item.getString("UTF-8");
 				
-					file = FileUploadUtil.uploadFile(request, item, "uploads");
+                                }else if("path".equals(fieldname)){
+				
+					path = item.getString("UTF-8");
 	
 			}
+                        }
 		}
                   
 
@@ -93,12 +100,14 @@ public class TestcaseAddServlet extends HttpServlet {
             data.setCreateBy(owner);
             data.setDefectNo(td);
             data.setIssueNo(issue);
-            data.setPathDir(file);
+            data.setPathDir(path);
             data.setSystems(systems);
             data.setProjectId(project);
             data.setTestcaseDetails(detail);
             data.setTestcaseTitle(testcase);
             data.setEnviroment(env);
+            data.setStep(step);
+            data.setType(type);
             data.setTestcaseId(testcaseId);
             
             TestcastDao testcaseDao = new TestcastDao();
@@ -121,7 +130,7 @@ public class TestcaseAddServlet extends HttpServlet {
             logger.error("save testacse error", e);
             request.setAttribute("message", "save testacse error");
         }
-        response.sendRedirect(request.getContextPath() + "/TestcaseListServlet");
+        response.sendRedirect(request.getContextPath() + "/TestcaseSearchServlet?menu=searching&offset=&projectSelected=&type=&system=&env=&startDate=&toDate=&title=&details=&createBy=");
     }
     
 }
