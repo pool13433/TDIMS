@@ -2,19 +2,24 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:set var="context" value="${pageContext.request.contextPath}" />
 <c:if test="${pagination.pages > 1}">
-    <c:set var="page" value="${pagination.pages - 1}" />
+    <c:if test="${pagination.paginLimit - pagination.pages == 1}">
+        <c:set var="page" value="${pagination.pages - 1}" />
+    </c:if>
+    <c:if test="${pagination.paginLimit - pagination.pages != 1}">
+        <c:set var="page" value="${pagination.pages}" />
+    </c:if>
 </c:if>
 
 <c:if test="${pagination.pages == 1}">
     <c:set var="page" value="${pagination.pages}" />
 </c:if>
+
 <!--pageCurrent :: ${pagination.pageCurrent} <br/>
 paginLimit :: ${pagination.paginLimit} <br/>
 recordCurrent :: ${pagination.recordCurrent} <br/>
 recordLimit :: ${pagination.recordLimit} <br/>
 pages :: ${page} <br/>
 pageUrl :: ${pagination.pageUrl} <br/>-->
-
 <nav aria-label="Page navigation pull-right">
     <ul class="pagination pagination-sm pull-right">
         <li><a href="${pagination.pageUrl}"> First</a></li>
