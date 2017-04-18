@@ -72,11 +72,11 @@ public class TestcastDao {
             sql.append(" SELECT `testcase_id`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
             sql.append(" (select pf.username from profile pf where pf.profile_id = t.create_by)  as  `create_by`, ");
             sql.append(" `systems`, `enviroment`, `issue_no`, `path_dir`, ");
-            sql.append(" `testcase_details`, `testcase_title`,`defect_no`, `step`, ");
+            sql.append(" `testcase_details`, `testcase_title`,`defect_no`, `step`, `type`, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `testcase` t ");            
             sql.append(" WHERE 1=1 ");
-            
+                
             if(!"".equals(CharacterUtil.removeNull(tc.getProjectId()))){
                 sql.append(" and `project_id` = '"+tc.getProjectId()+"'");
             }
@@ -92,23 +92,23 @@ public class TestcastDao {
             if(!"".equals(CharacterUtil.removeNull(tc.getEnviroment()))){
                 sql.append(" and `enviroment` = '"+tc.getEnviroment()+"'");
             }
-            if(!"".equals(CharacterUtil.removeNull(tc.getIssueNo()))){
-                sql.append(" and `issue_no` = '"+tc.getIssueNo()+"'");
-            }
-            if(!"".equals(CharacterUtil.removeNull(tc.getDefectNo()))){
-                sql.append(" and `defect_no` = '"+tc.getDefectNo()+"'");
-            }
-            if(!"".equals(CharacterUtil.removeNull(tc.getCreateDate()))){
-                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
-                Date date = d1.parse(tc.getCreateDate());
-                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
-                sql.append(" and `create_date` = '"+d2.format(date)+"'");
+            if(!"|".equals(CharacterUtil.removeNull(tc.getCreateDate()))){
+                String[] d = tc.getCreateDate().split("\\|");
+                if(d != null && d.length > 0){
+                    SimpleDateFormat sd1 = new SimpleDateFormat("dd-mm-yyyy");
+                    Date sdate = sd1.parse(d[0]);
+                    SimpleDateFormat sd2 = new SimpleDateFormat("yyyy-mm-dd");
+                    SimpleDateFormat td1 = new SimpleDateFormat("dd-mm-yyyy");
+                    Date tdate = td1.parse(d[1]);
+                    SimpleDateFormat td2 = new SimpleDateFormat("yyyy-mm-dd");
+                    sql.append(" and `create_date` between '"+sd2.format(sdate)+"' and '"+td2.format(tdate)+"'");
+                }
             }
             if(!"".equals(CharacterUtil.removeNull(tc.getCreateBy()))){
                 sql.append(" and `create_by` = '"+tc.getCreateBy()+"'");
             }
-            if(!"".equals(CharacterUtil.removeNull(tc.getStep()))){
-                sql.append(" and `step` = '"+tc.getStep()+"'");
+            if(!"".equals(CharacterUtil.removeNull(tc.getType()))){
+                sql.append(" and `type` = '"+tc.getType()+"'");
             }
             
             System.out.println("SQL : "+sql.toString());

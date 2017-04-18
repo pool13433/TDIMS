@@ -29,77 +29,63 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Testcase tc = new Testcase();
-        logger.debug("TestcaseSearchServlet");
-        String dirFile = request.getParameter("pathDir");
+        logger.debug("doGet TestcaseSearchServlet");
         ProjectDao projectCombo = new ProjectDao();
         try {
             //DropdownList
             request.setAttribute("projectCombo", projectCombo.getProjectComboList());
             String menu = CharacterUtil.removeNull(request.getParameter("menu"));
-            String searching = CharacterUtil.removeNull(request.getParameter("searchBox"));
-            request.setAttribute("searchBox", searching);
+            String details = CharacterUtil.removeNull(request.getParameter("details"));
+            request.setAttribute("details", details);
+            String title = CharacterUtil.removeNull(request.getParameter("title"));
+            request.setAttribute("title", title);
             String projectId = CharacterUtil.removeNull(request.getParameter("projectSelected"));
             request.setAttribute("projectSelected", projectId);
             ConfigDao configDao = new ConfigDao();
             request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
             request.setAttribute("envList", configDao.getConfigList("ENV"));
-            request.setAttribute("ownerList", new ProfileDao().getAllUser());
-            
+            request.setAttribute("ownerList", new ProfileDao().getAllUser());            
             String system = CharacterUtil.removeNull(request.getParameter("system"));
             request.setAttribute("system", system);
-            String createDate = CharacterUtil.removeNull(request.getParameter("createDate"));
-            request.setAttribute("createDate", createDate);
+            request.setAttribute("typeList", configDao.getConfigList("TC_TYPE"));
+            String startDate = CharacterUtil.removeNull(request.getParameter("startDate"));
+            request.setAttribute("startDate", startDate);
+            String toDate = CharacterUtil.removeNull(request.getParameter("toDate"));
+            request.setAttribute("toDate", toDate);
             String createBy = CharacterUtil.removeNull(request.getParameter("createBy"));
             request.setAttribute("createBy", createBy);
-            String issueNo = CharacterUtil.removeNull(request.getParameter("issueNo"));
-            request.setAttribute("issueNo", issueNo);
-            String defectNo = CharacterUtil.removeNull(request.getParameter("defectNo"));
-            request.setAttribute("defectNo", defectNo);
             String env = CharacterUtil.removeNull(request.getParameter("env"));
             request.setAttribute("env", env);
-            String step = CharacterUtil.removeNull(request.getParameter("step"));
-            request.setAttribute("step", step);
+            String type = CharacterUtil.removeNull(request.getParameter("type"));
+            request.setAttribute("type", type);
             
             TestcastDao testcaseDao= new TestcastDao();
             
             if("searching".equals(menu)){
-                System.out.println("menu ="+menu);
                 tc.setProjectId(projectId);
                 tc.setSystems(system);
-                tc.setCreateDate(createDate);
+                tc.setCreateDate(startDate+"|"+toDate);
                 tc.setCreateBy(createBy);
-                tc.setIssueNo(issueNo);
-                tc.setDefectNo(defectNo);
                 tc.setEnviroment(env);
-                tc.setTestcaseDetails(searching);
-                tc.setTestcaseTitle(searching);
-                tc.setStep(step);
+                tc.setTestcaseDetails(details);
+                tc.setTestcaseTitle(title);
+                tc.setType(type);
                 request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));
             }else{
                 //request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
                 request.setAttribute("testcaseList", null);
             }
+        
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/testcase/testcase-search.jsp");
+            dispatcher.forward(request, response);
             
-            System.out.println(" path : "+dirFile);
-            if(dirFile!= null){
-                Desktop desktop = Desktop.getDesktop();
-                File dirToOpen = null;
-                try {
-                    dirToOpen = new File(dirFile);
-                    desktop.open(dirToOpen);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    logger.error("KnowledgeOpenDir Error", e);
-                }
-            }
             
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("TestcaseSearch Error", e);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/testcase/testcase-search.jsp");
-        dispatcher.forward(request, response);
+        
         
     }
 
@@ -107,6 +93,24 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+    
+        logger.info("doPost TestcaseSearchServlet");
+        try {
+            String dirFile = request.getParameter("pathDir");
+            //System.out.println("open path :"+dirFile);
+            if(dirFile!= null){
+                Desktop desktop = Desktop.getDesktop();
+                File dirToOpen = null;
+                try {
+                    dirToOpen = new File(dirFile);
+                    desktop.open(dirToOpen);
+                } catch (Exception e) {                   
+                    logger.error("TestcaseSearchServlet Error"+ e.getMessage());
+                }
+               
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,7 +7,6 @@ package th.co.ais.tdims.action.knowledge;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -19,10 +18,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.KnowledgeDao;
-import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.model.Knowledge;
 import th.co.ais.tdims.model.Profile;
-import th.co.ais.tdims.util.CharacterUtil;
 import th.co.ais.tdims.util.FileUploadUtil;
 
 /**
@@ -43,15 +40,15 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
             String projectId = "";
             String file = "";
            // Create a factory for disk-based file items
-DiskFileItemFactory factory = new DiskFileItemFactory();
+            DiskFileItemFactory factory = new DiskFileItemFactory();
 
 
-ServletContext servletContext = this.getServletConfig().getServletContext();
-File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-factory.setRepository(repository);
-ServletFileUpload upload = new ServletFileUpload(factory);
-List<FileItem> items = upload.parseRequest(request);
- for (FileItem item : items) {
+            ServletContext servletContext = this.getServletConfig().getServletContext();
+            File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+            factory.setRepository(repository);
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(request);
+             for (FileItem item : items) {
 			if (item.isFormField()) {
 				String fieldname = item.getFieldName();
 				if("knlId".equals(fieldname)){
@@ -71,11 +68,15 @@ List<FileItem> items = upload.parseRequest(request);
             KnowledgeDao knowledgeDao = new KnowledgeDao();
 
             Knowledge knowledge = new Knowledge();
+            /*
+            
             knowledge.setCreateBy(profileNow);
             
             knowledge.setServerName(serverName);
             knowledge.setProjectId(projectId);
             knowledge.setPathFolder(file);
+            
+            */
             
             
              logger.info("knlId ::=="+knlId);
@@ -84,7 +85,7 @@ List<FileItem> items = upload.parseRequest(request);
                 knowledgeDao.createKnowledge(knowledge);
             }else{
                 logger.info(" update ");
-                knowledge.setId(knlId);
+                //knowledge.setId(knlId);
                 knowledgeDao.updateKnowledge(knowledge);
             }
            

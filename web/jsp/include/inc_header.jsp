@@ -48,8 +48,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <c:if test="${empty USER_PROFILE}">
-                            <li><a href="${context}/jsp/login.jsp?menu=login" style="color: #0B0F00;">Login</a></li>
-                            <li><a href="${context}/RegisterServlet" style="color: #0B0F00;">Register</a></li>
+                            <li><a href="${context}/jsp/login.jsp?menu=login" style="color: #0B0F00;">Login</a></li>                            
                             </c:if>
                             <c:if test="${!empty USER_PROFILE}">
                             <li class="dropdown">
@@ -102,46 +101,55 @@
                             </li> 
                         </ul>
                         <ul class="nav nav-sidebar">
-                            <li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">                                                            
+                            <!--<li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">                                                            
                                 <a href="${context}/KnowledgeListServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> จัดการ Knowledge</a>
-                            </li>
+                            </li>-->
                             <li class="<c:out value="${menu == 'knowledge_search' ? 'active': ''}"/>">
-                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> ค้นหา Knowledge</a>
+                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge-search"><i class="glyphicon glyphicon-education"></i> Manage Knowledge</a>
                             </li>
                         </ul>
                         <ul class="nav nav-sidebar">
-                            <li class="<c:out value="${menu == 'testcase' ? 'active': ''}"/>">
+                            <!--<li class="<c:out value="${menu == 'testcase' ? 'active': ''}"/>">
                                 <a href="${context}/TestcaseListServlet?menu=testcase"><i class="glyphicon glyphicon-folder-open"></i> จัดการ Testcase</a>
-                            </li>
+                            </li>-->
                             <li class="<c:out value="${menu == 'testcase_search' ? 'active': ''}"/>">
-                                <a href="${context}/TestcaseSearchServlet?menu=testcase_search"><i class="glyphicon glyphicon-folder-open"></i> ค้นหา Testcase</a>
+                                <a href="${context}/TestcaseSearchServlet?menu=testcase_search"><i class="glyphicon glyphicon-folder-open"></i> Manage Testcase</a>
                             </li>
                         </ul>
                         <ul class="nav nav-sidebar">
-                            <li class="<c:out value="${menu == 'user' ? 'active': ''}"/>">
-                                <a href="${context}/UserListServlet?menu=user"><i class="glyphicon glyphicon-user"></i> จัดการ User</a>
-                            </li>                      
+                            <c:if test="${USER_PROFILE.status != 'TESTER'}">
+                                <li class="<c:out value="${menu == 'user' ? 'active': ''}"/>">
+                                    <a href="${context}/UserListServlet?menu=user"><i class="glyphicon glyphicon-user"></i> Manage User</a>
+                                </li>                      
+                            </c:if>
                             <li class="<c:out value="${menu == 'project' ? 'active': ''}"/>">
-                                <a href="${context}/ProjectListServlet?menu=project"><i class="glyphicon glyphicon-ban-circle"></i> จัดการ Project</a>
+                                <a href="${context}/ProjectListServlet?menu=project"><i class="glyphicon glyphicon-ban-circle"></i> Manage Project</a>
                             </li>
-
-                            <li class="<c:out value="${menu == 'department' ? 'active': ''}"/>">
-                                <a href="${context}/DepertmentListServlet?menu=department"><i class="glyphicon glyphicon-list-alt"></i> จัดการ Department</a>
-                            </li>
-                            <li class="<c:out value="${menu == 'position' ? 'active': ''}"/>">
-                                <a href="${context}/PositionListServlet?menu=position"><i class="glyphicon glyphicon-map-marker"></i> จัดการ Position</a>
-                            </li>
+                            <c:if test="${USER_PROFILE.status != 'TESTER'}">
+                                <li class="<c:out value="${menu == 'department' ? 'active': ''}"/>">
+                                    <a href="${context}/DepertmentListServlet?menu=department"><i class="glyphicon glyphicon-list-alt"></i> Manage Department</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${USER_PROFILE.status != 'TESTER'}">
+                                <li class="<c:out value="${menu == 'position' ? 'active': ''}"/>">
+                                    <a href="${context}/PositionListServlet?menu=position"><i class="glyphicon glyphicon-map-marker"></i> Manage Position</a>
+                                </li>
+                            </c:if>
                             <li class="<c:out value="${menu == 'team' ? 'active': ''}"/>">
-                                <a href="${context}/TeamListServlet?menu=team"><i class="glyphicon glyphicon-tasks"></i> จัดการ Team</a>
+                                <a href="${context}/TeamListServlet?menu=team"><i class="glyphicon glyphicon-tasks"></i> Manage Team</a>
                             </li>
-                            
-                            <li class="<c:out value="${menu == 'configuration' ? 'active': ''}"/>">
-                                <a href="${context}/ConfigListServlet?menu=configuration"><i class="glyphicon glyphicon-cog"></i> จัดการ Configuration</a>
-                            </li>
+                            <c:if test="${USER_PROFILE.status != 'TESTER'}">
+                                <li class="<c:out value="${menu == 'configuration' ? 'active': ''}"/>">
+                                    <a href="${context}/ConfigListServlet?menu=configuration"><i class="glyphicon glyphicon-cog"></i> Manage Configuration</a>
+                                </li>
+                            </c:if>
+                            <li class="<c:out value="${menu == 'module' ? 'active': ''}"/>">
+                               <a href="#"><i class="glyphicon glyphicon-cog"></i> Manage Module</a>
+                           </li>
                         </ul>
                         <ul class="nav nav-sidebar">                       
                             <li class="<c:out value="${menu == 'report' ? 'active': ''}"/>">
-                                <a href="${context}/ReportServlet?menu=report"><i class="glyphicon glyphicon-file"></i> รายงาน</a>
+                                <a href="${context}/ReportServlet?menu=report"><i class="glyphicon glyphicon-file"></i> Report</a>                                
                             </li>
                         </ul>
                     </c:if>
