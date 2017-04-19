@@ -222,7 +222,7 @@ public class ProfileDao {
             sql.append(" UPDATE `profile` SET ");
             sql.append(" `fname`=?,`lname`=?,`gender`=?,");
             sql.append(" `mobile`=?,`email`=?,`position`=?,");
-            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=? ");
+            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=md5(?) ");
             sql.append(" WHERE profile_id=? ");
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, profile.getFirstName());

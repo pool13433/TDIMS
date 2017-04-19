@@ -9,6 +9,7 @@ package th.co.ais.tdims.model;
 public class Testcase {
     private String testcaseId;
     private String projectId;
+     private String userId;
     private String systems;
     private String enviroment;
     private String issueNo;
@@ -44,7 +45,13 @@ public class Testcase {
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
-    
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public String getSystems() {
         return systems;
     }

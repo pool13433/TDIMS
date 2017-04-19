@@ -44,7 +44,7 @@ public class TestcastDao {
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
             sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
-            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, `step` ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, `step`,`type` ");
             sql.append(" FROM `testcase` t ");
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -140,6 +140,7 @@ public class TestcastDao {
         t.setTestcaseDetails(rs.getString("testcase_details"));
         t.setTestcaseId(rs.getString("testcase_id"));
         t.setStep(rs.getString("step"));
+        t.setType(rs.getString("type"));
         t.setCreateBy(rs.getString("create_by"));
         
         return t;
@@ -191,11 +192,11 @@ public class TestcastDao {
             sql.append(" INSERT INTO `testcase` ");
             sql.append(" (`testcase_title`, `testcase_details`, `systems`, `enviroment`,");
             sql.append("  `defect_no`, `issue_no`, project_id,`path_dir`, `create_by`, ");
-            sql.append("  `create_date`) ");
+            sql.append("  `create_date`,`step`, `type`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,");
             sql.append(" ?,?,?,?,?,");
-            sql.append(" ? )");
+            sql.append(" ?,?,? )");
 
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -210,10 +211,12 @@ public class TestcastDao {
             pstm.setString(8, testcase.getPathDir());
             pstm.setString(9, testcase.getCreateBy());
             pstm.setString(10, testcase.getCreateDate());
+            pstm.setString(11, testcase.getStep());
+            pstm.setString(12, testcase.getType());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("saveSim error", e);
+            logger.error("saveTestcase error", e);
         } finally {
             this.close(pstm, null);
         }
@@ -228,7 +231,7 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `testcase` SET ");
             sql.append(" `testcase_title`=?,`testcase_details`=?,`systems`=?,`enviroment`=?,`defect_no`=?,");
-            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`create_by`=?,create_date=?");
+            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`create_by`=?,create_date=?,`step`=?,type=?");
             sql.append(" WHERE `testcase_id`=?");
 
             //logger.info("sql ::=="+sql);
@@ -241,14 +244,16 @@ public class TestcastDao {
             pstm.setString(5, testcase.getDefectNo());
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
-            pstm.setString(8, "");
+            pstm.setString(8, testcase.getPathDir());
             pstm.setString(9, testcase.getCreateBy());
             pstm.setString(10, testcase.getCreateDate());
-            pstm.setString(11, testcase.getTestcaseId());
+            pstm.setString(11, testcase.getStep());
+             pstm.setString(12, testcase.getType());
+            pstm.setString(13, testcase.getTestcaseId());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("saveSim error", e);
+            logger.error("saveTestcase error", e);
         } finally {
             this.close(pstm, null);
         }
@@ -263,7 +268,7 @@ public class TestcastDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
-            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`,  ");
+            sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`, `type`,  ");
             sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , `step` ");
             sql.append(" FROM `testcase` t WHERE testcase_id = ?");

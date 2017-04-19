@@ -137,7 +137,7 @@
                             <button type="reset" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
                             </button>
-                            <a href="${context}/TestcaseFormServlet" class="btn btn-default btn-primary">
+                            <a href="${context}/TestcaseFormServlet?menu=testcase_form" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
                         </div>
@@ -174,7 +174,8 @@
                         <th>Testcase Details</th>
                         <th>Testcase Title</th>
                         <th>Defect No</th>
-                        <th>Step</th>                        
+                        <th>Step</th> 
+                        <th>type</th>
                         <th>Create Date</th>
                     </tr>
                 </thead>
@@ -182,8 +183,8 @@
                     <c:forEach var="tc" items="${testcaseList}">
                         <tr>
                             <td  nowrap>        
-                                <a href="${context}/TestcaseFormServlet?testcaseId=${testcase.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a href="${context}/TestcaseDeleteServlet?testcaseId=${testcase.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="${context}/TestcaseFormServlet?testcaseId=${tc.testcaseId}" class="btn btn-default btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                <a href="${context}/TestcaseDeleteServlet?testcaseId=${tc.testcaseId}" onclick="return confirm('ยืนยันการลบข้อมูลนี้')" class="btn btn-default btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
                             </td>
                             <td>${tc.projectId}</td>
                             <td>${tc.createBy}</td> 
@@ -195,6 +196,7 @@
                             <td>${tc.testcaseTitle}</td>
                             <td>${tc.defectNo}</td>
                             <td>${tc.step}</td>
+                            <td>${tc.type}</td>
                             <td>${tc.createDate}</td>
                         </tr>
                     </c:forEach>
