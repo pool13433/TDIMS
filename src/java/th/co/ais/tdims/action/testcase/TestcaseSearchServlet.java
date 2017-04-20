@@ -19,6 +19,7 @@ import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -58,7 +59,8 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("env", env);
             String type = CharacterUtil.removeNull(request.getParameter("type"));
             request.setAttribute("type", type);
-            
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 5);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
             TestcastDao testcaseDao= new TestcastDao();
             
             if("searching".equals(menu)){
@@ -70,7 +72,12 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
                 tc.setTestcaseDetails(details);
                 tc.setTestcaseTitle(title);
                 tc.setType(type);
-                request.setAttribute("testcaseList", testcaseDao.findTestcase(tc));
+                String pageUrl = request.getContextPath() + "/TestcaseSearchServlet?" + request.getQueryString();
+                String sqlConditionBuilder = testcaseDao.getConditionBuilder(tc);
+                int countRecordAll = testcaseDao.getCountTestcase(sqlConditionBuilder);
+                request.setAttribute("testcaseList", testcaseDao.findTestcase(tc, limit, offset));
+                Pagination pagination = new Pagination(pageUrl, countRecordAll, limit, offset);
+                request.setAttribute("pagination", pagination);
             }else{
                 //request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
                 request.setAttribute("testcaseList", null);

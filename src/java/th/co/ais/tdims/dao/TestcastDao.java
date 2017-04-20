@@ -61,7 +61,7 @@ public class TestcastDao {
         }
         return testcaseList;
     }
-    public List<Testcase> findTestcase(Testcase tc) {
+    public List<Testcase> findTestcase(Testcase tc, int limit, int offset) {
         logger.debug("findTestcase");
         ResultSet rs = null;
         PreparedStatement pstm = null;
@@ -75,8 +75,27 @@ public class TestcastDao {
             sql.append(" `testcase_details`, `testcase_title`,`defect_no`, `step`, `type`, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `testcase` t ");            
-            sql.append(" WHERE 1=1 ");
-                
+            sql.append(getConditionBuilder(tc));            
+            sql.append(" limit ").append(limit).append(" offset ").append(offset);            
+            System.out.println("SQL : "+sql.toString());
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            testcaseList = new ArrayList<Testcase>();
+            while (rs.next()) {                
+                testcaseList.add(getEntityTestcase(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("findTestcase error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return testcaseList;
+    }
+    
+    public String getConditionBuilder(Testcase tc){
+        StringBuilder sql = new StringBuilder(" WHERE 1=1 ");
+        try {
             if(!"".equals(CharacterUtil.removeNull(tc.getProjectId()))){
                 sql.append(" and `project_id` = '"+tc.getProjectId()+"'");
             }
@@ -110,21 +129,34 @@ public class TestcastDao {
             if(!"".equals(CharacterUtil.removeNull(tc.getType()))){
                 sql.append(" and `type` = '"+tc.getType()+"'");
             }
-            
-            System.out.println("SQL : "+sql.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sql.toString();
+    }
+    
+    public int getCountTestcase(String conditionBuilder) {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        int countTestcase = 0;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) as cnt FROM testcase t");
+            if (conditionBuilder != null) {
+                sql.append(conditionBuilder);
+            }
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
-            testcaseList = new ArrayList<Testcase>();
-            while (rs.next()) {                
-                testcaseList.add(getEntityTestcase(rs));
+            if (rs.next()) {
+                countTestcase = rs.getInt("cnt");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("findTestcase error", e);
+            logger.error("getCountTestcase All error", e);
         } finally {
             this.close(pstm, rs);
         }
-        return testcaseList;
+        return countTestcase;
     }
     
     public Testcase getEntityTestcase(ResultSet rs) throws SQLException {

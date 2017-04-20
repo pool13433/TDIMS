@@ -437,7 +437,7 @@ public class SimDao {
         return simList;
     }
 
-    public List<SimHistory> findSimHistory(String mobile, String dateFrom, String dateTo) {
+    public List<SimHistory> findSimHistory(String mobile, String dateFrom, String dateTo, int limit, int offset){
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<SimHistory> simHistoryList = null;
@@ -450,20 +450,10 @@ public class SimDao {
             sql.append(" (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `sim_history` s ");
-            sql.append(" WHERE 1=1 ");
-
-            if (!"".equals(CharacterUtil.removeNull(mobile))) {
-                sql.append(" and `mobile_no` LIKE '%" + mobile + "%'");
-            }
-            if (!"".equals(CharacterUtil.removeNull(dateFrom)) && !"".equals(CharacterUtil.removeNull(dateTo))) {
-                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
-                Date dateF = d1.parse(dateFrom);
-                Date dateT = d1.parse(dateTo);
-                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
-                sql.append(" and `create_date` between '" + d2.format(dateF) + "' and '" + d2.format(dateT) + "'");
-            }
-
-            sql.append(" order by create_date DESC ");
+            sql.append(getConditionBuilderSimHis(mobile,dateFrom,dateTo));
+            sql.append(" order by create_date DESC ");            
+            sql.append(" limit ").append(limit).append(" offset ").append(offset);      
+            
 
             logger.info("sql ::==" + sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -481,6 +471,25 @@ public class SimDao {
         return simHistoryList;
     }
 
+    public String getConditionBuilderSimHis(String mobile, String dateFrom, String dateTo){
+        StringBuilder sql = new StringBuilder(" WHERE 1=1 ");
+        try {
+
+            if (!"".equals(CharacterUtil.removeNull(mobile))) {
+                sql.append(" and `mobile_no` LIKE '%" + mobile + "%'");
+            }
+            if (!"".equals(CharacterUtil.removeNull(dateFrom)) && !"".equals(CharacterUtil.removeNull(dateTo))) {
+                SimpleDateFormat d1 = new SimpleDateFormat("dd-mm-yyyy");
+                Date dateF = d1.parse(dateFrom);
+                Date dateT = d1.parse(dateTo);
+                SimpleDateFormat d2 = new SimpleDateFormat("yyyy-mm-dd");
+                sql.append(" and `create_date` between '" + d2.format(dateF) + "' and '" + d2.format(dateT) + "'");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sql.toString();
+    }
     public int bookSim(Sim sim, String simId) {
         logger.info("Booking Sim");
         int exe = 0;
@@ -628,6 +637,30 @@ public class SimDao {
         return countSim;
     }
 
+    public int getCountSimHis(String conditionBuilder) {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        int countSimHis = 0;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) as cnt FROM sim_history sh");
+            if (conditionBuilder != null) {
+                sql.append(conditionBuilder);
+            }
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                countSimHis = rs.getInt("cnt");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getCountSimHistoryAll error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return countSimHis;
+    }
+    
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {
