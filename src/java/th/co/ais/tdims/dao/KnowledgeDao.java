@@ -68,7 +68,7 @@ public class KnowledgeDao {
         }
         return knowledgeList;
     }
-    public List<Knowledge> findKnowledge(Knowledge knowledge){
+    public List<Knowledge> findKnowledge(Knowledge knowledge, int limit, int offset) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<Knowledge> knowledgeList = new ArrayList<Knowledge>();
@@ -78,20 +78,8 @@ public class KnowledgeDao {
             sql.append(" SELECT `id`, `file_name`, (select t.team_name from team t  where t.team_id=k.team_id) as team_id, (select m.module_name from module m  where m.id=k.type) as type, `details`, `path`, ");
             sql.append("  `create_date`, (select pf.username from profile pf where pf.profile_id = k.create_by)  as  `create_by`, `update_date`, `update_by` ");
             sql.append(" FROM `knowledge` k ");
-            sql.append(" WHERE 1=1 ");
-            
-            if(!"".equals(CharacterUtil.removeNull(knowledge.getFileName()))){
-               sql.append(" and file_name LIKE '%"+knowledge.getFileName()+"%'"); 
-            }
-            if(!"".equals(CharacterUtil.removeNull(knowledge.getTeamId()))){
-               sql.append(" and team_id='"+knowledge.getTeamId()+"'"); 
-            }
-            if(!"".equals(CharacterUtil.removeNull(knowledge.getType()))){
-               sql.append(" and type='"+knowledge.getType()+"'"); 
-            }
-            if(!"".equals(CharacterUtil.removeNull(knowledge.getDetails()))){
-               sql.append(" and details LIKE '%"+knowledge.getDetails()+"%'"); 
-            }
+            sql.append(getConditionBuilder(knowledge));            
+            sql.append(" limit ").append(limit).append(" offset ").append(offset);
             logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -106,6 +94,27 @@ public class KnowledgeDao {
         return knowledgeList;
     }
     
+    public String getConditionBuilder(Knowledge knowledge){
+        StringBuilder sql = new StringBuilder(" WHERE 1=1 ");
+        try {
+            
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getFileName()))){
+               sql.append(" and file_name LIKE '%"+knowledge.getFileName()+"%'"); 
+            }
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getTeamId()))){
+               sql.append(" and team_id='"+knowledge.getTeamId()+"'"); 
+            }
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getType()))){
+               sql.append(" and type='"+knowledge.getType()+"'"); 
+            }
+            if(!"".equals(CharacterUtil.removeNull(knowledge.getDetails()))){
+               sql.append(" and details LIKE '%"+knowledge.getDetails()+"%'"); 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sql.toString();
+    }
     private Knowledge getEntityKnowledge(ResultSet rs) throws SQLException {
         Knowledge knowledge = new Knowledge();
         
@@ -202,7 +211,29 @@ public class KnowledgeDao {
         return exe;
     }
     
-    
+    public int getCountKnowledge(String conditionBuilder) {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        int countKnowledge = 0;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) as cnt FROM knowledge k");
+            if (conditionBuilder != null) {
+                sql.append(conditionBuilder);
+            }
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                countKnowledge = rs.getInt("cnt");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getCountKnowledge All error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return countKnowledge;
+    }
      private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {

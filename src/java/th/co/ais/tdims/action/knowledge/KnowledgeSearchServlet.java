@@ -18,6 +18,7 @@ import th.co.ais.tdims.dao.KnowledgeDao;
 import th.co.ais.tdims.dao.ModuleDao;
 import th.co.ais.tdims.dao.TeamDao;
 import th.co.ais.tdims.model.Knowledge;
+import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.util.CharacterUtil;
 
 
@@ -40,6 +41,8 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
         request.setAttribute("type",type); 
         String details = request.getParameter("details");
         request.setAttribute("details",details); 
+        int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 5);
+        int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
         try {
             KnowledgeDao knowledgeDao = new KnowledgeDao();   
             if("searching".equals(menu)){
@@ -48,7 +51,12 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
                 knowledge.setTeamId(teamId);
                 knowledge.setType(type);
                 knowledge.setDetails(details);
-                request.setAttribute("knowledgeList",knowledgeDao.findKnowledge(knowledge));
+                String pageUrl = request.getContextPath() + "/KnowledgeSearchServlet?" + request.getQueryString();
+                String sqlConditionBuilder = knowledgeDao.getConditionBuilder(knowledge);
+                int countRecordAll = knowledgeDao.getCountKnowledge(sqlConditionBuilder);
+                request.setAttribute("knowledgeList",knowledgeDao.findKnowledge(knowledge, limit, offset));
+                Pagination pagination = new Pagination(pageUrl, countRecordAll, limit, offset);
+                request.setAttribute("pagination", pagination);
             }
             
         if(path!= null){

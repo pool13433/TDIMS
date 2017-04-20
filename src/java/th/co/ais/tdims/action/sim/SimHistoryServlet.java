@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.SimDao;
+import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.model.SimHistory;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -28,10 +29,16 @@ final static Logger logger = Logger.getLogger(SimHistoryServlet.class);
             String mobile = CharacterUtil.removeNull(request.getParameter("mobileNo"));
             String dateFrom = CharacterUtil.removeNull(request.getParameter("date_from"));
             String dateTo = CharacterUtil.removeNull(request.getParameter("date_to"));
-            
+            int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 5);
+            int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
             if("searching".equals(menu)){
                 SimDao simDao = new SimDao();
-                List<SimHistory> simHistoryList = simDao.findSimHistory(mobile, dateFrom, dateTo);
+                String pageUrl = request.getContextPath() + "/SimHistoryServlet?" + request.getQueryString();
+                String sqlConditionBuilder = simDao.getConditionBuilderSimHis(mobile, dateFrom, dateTo);
+                int countRecordAll = simDao.getCountSimHis(sqlConditionBuilder);
+                List<SimHistory> simHistoryList = simDao.findSimHistory(mobile, dateFrom, dateTo, limit, offset);
+                Pagination pagination = new Pagination(pageUrl, countRecordAll, limit, offset);
+                request.setAttribute("pagination", pagination);
                 request.setAttribute("simHistoryList", simHistoryList);
                 request.setAttribute("mobileNo", mobile);
                 request.setAttribute("date_from", dateFrom);

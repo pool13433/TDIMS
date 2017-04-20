@@ -26,7 +26,11 @@
                     </div>
                     <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          </div>
                 </div>
-                    
+                <div class="row">
+                    <div class="col-md-12">
+                        <c:import url="../include/inc_pagination.jsp"/>
+                    </div>
+                </div>     
                 <table class="table table-bordered table-striped">
                     <div id="msgBox" class="alert alert-warning" hidden="">
                         <strong>Warning! </strong><text id="msg" name="msg" value=""></text>
@@ -72,6 +76,11 @@
                         </c:if>
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <c:import url="../include/inc_pagination.jsp"/>
+                    </div>
+                </div> 
             </form>
         </div>
     </div>        
@@ -81,15 +90,10 @@
                 $(document).ready(function(){
                     
                     $("#searchHistorySim").submit(function(){
-                        var mobileNo = $("#mobileNo");
+                        //var mobileNo = $("#mobileNo");
                         var dateFrom = $("#date_from");
                         var dateTo = $("#date_to");                        
-                        
-                        if("" === mobileNo.val() && "" === dateFrom.val() && "" === dateTo.val()){
-                            alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
-                            return false;
-                        }
-                        
+                                                
                         if("" !== dateFrom.val() && "" === dateTo.val()){
                             alert('กรุณาระบุ Date-To');
                             return false;
@@ -99,9 +103,6 @@
                             alert('กรุณาระบุ Date-From');
                             return false;
                         }
-                        
-                        
-                        
                     });
                   
                     
