@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <label for="position" class="col-sm-2 control-label">Position</label>
                     <div class="col-sm-4">
-                        <div class="col-sm-5">
+                        <div class="col-sm-4">
                             <select class="form-control" id="chargeType" name="position" placeholder="position" required>
                                 <c:forEach items="${positionList}" var="position">
                                     <c:choose>
@@ -62,13 +62,29 @@
                                 </c:forEach>
                             </select>
                         </div>
+                        <label for="role" class="col-sm-2 control-label">Role</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="gender" name="role" required>
+                            <c:forEach items="${roleList}" var="role">
+                                <c:choose>
+                                <c:when test="${profile.status == role.conValue}">
+                                   <option value="${role.conName}" selected>${role.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${role.conName}">${role.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                            </c:forEach>
+                        </select>
                     </div>
+                    </div>
+                    
                     <label for="gender" class="col-sm-2 control-label">Gender</label>
                     <div class="col-sm-2">
                         <select class="form-control" id="gender" name="gender" required>
                             <c:forEach items="${genderList}" var="gender">
                                 <c:choose>
-                                <c:when test="${profile.gender == gender.conValue}">
+                                <c:when test="${profile.gender == gender.conName}">
                                    <option value="${gender.conName}" selected>${gender.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
@@ -78,6 +94,7 @@
                             </c:forEach>
                         </select>
                     </div>
+                    
                 </div>
 
                 <div class="form-group">

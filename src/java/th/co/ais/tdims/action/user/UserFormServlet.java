@@ -49,6 +49,7 @@ public class UserFormServlet extends HttpServlet {
                PositionDao positionDao = new PositionDao();
             request.setAttribute("positionList", positionDao.getPositionAll());
             request.setAttribute("genderList", new ConfigDao().getConfigList("PROFILE_GENDER"));
+            request.setAttribute("roleList", new ConfigDao().getConfigList("ROLE"));
             request.setAttribute("profile", profile);
         } catch (Exception e) {
             e.printStackTrace();

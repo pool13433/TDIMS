@@ -16,8 +16,10 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
 import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.KnowledgeDao;
+import th.co.ais.tdims.dao.ModuleDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
+import th.co.ais.tdims.dao.TeamDao;
 import th.co.ais.tdims.dao.TestcastDao;
 import th.co.ais.tdims.model.Knowledge;
 import th.co.ais.tdims.model.Testcase;
@@ -48,6 +50,10 @@ public class KnowledgeFormServlet extends HttpServlet {
             }
             request.setAttribute("projectList", projectDao.getProjectAll());
             request.setAttribute("knowledge", knowledge);
+             TeamDao teamDao = new TeamDao();
+            request.setAttribute("teamList", teamDao.getTeamAll());
+            ModuleDao moduleDao = new ModuleDao();
+            request.setAttribute("typeList", moduleDao.getModuleAll());
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("testcase form error", e);

@@ -12,6 +12,7 @@ package th.co.ais.tdims.model;
 public class Knowledge {
     
     private String id;
+    private int knId;
     private String fileName;
     private String teamId;
     private String type;
@@ -28,6 +29,14 @@ public class Knowledge {
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public int getKnId() {
+        return knId;
+    }
+
+    public void setKnId(int knId) {
+        this.knId = knId;
     }
 
     public String getFileName() {
