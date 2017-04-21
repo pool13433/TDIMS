@@ -16,10 +16,6 @@ import th.co.ais.tdims.model.Module;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ModuleSaveServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ModuleDeleteServlet.class);
 

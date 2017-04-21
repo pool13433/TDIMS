@@ -17,10 +17,6 @@ import th.co.ais.tdims.dao.TeamDao;
 import th.co.ais.tdims.model.Module;
 import th.co.ais.tdims.util.CharacterUtil;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ModuleFormServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(ModuleFormServlet.class);

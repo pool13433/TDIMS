@@ -14,10 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ModuleDao;
 
-/**
- *
- * @author POOL_LAPTOP
- */
 public class ModuleListServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(ModuleListServlet.class);
