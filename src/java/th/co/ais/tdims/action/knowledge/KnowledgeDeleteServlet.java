@@ -37,7 +37,7 @@ final static Logger logger = Logger.getLogger(KnowledgeDeleteServlet.class);
             e.printStackTrace();
             logger.error("knowledge Error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/KnowledgeListServlet");
+        response.sendRedirect(request.getContextPath() + "/KnowledgeSearchServlet");
     }
    
 }

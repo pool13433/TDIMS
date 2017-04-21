@@ -34,11 +34,14 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
         try {
             
             Profile profile2 = (Profile)request.getSession().getAttribute("USER_PROFILE");
-            int profileNow = Integer.parseInt(profile2.getProfileId());
+            String profileNow = profile2.getProfileId();
             int knlId = 0;
-            String serverName = "";
-            String projectId = "";
-            String file = "";
+            String fileName = "";
+            String id = "";
+            String path = "";
+            String type = "";
+            String team = "";
+            String detail = "";
            // Create a factory for disk-based file items
             DiskFileItemFactory factory = new DiskFileItemFactory();
 
@@ -52,40 +55,46 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
 			if (item.isFormField()) {
 				String fieldname = item.getFieldName();
 				if("knlId".equals(fieldname)){
-					knlId = item.getString("UTF-8")==null?0:Integer.parseInt(item.getString("UTF-8"));
-				}else if("serverName".equals(fieldname)){
-					serverName = item.getString("UTF-8");
-				}else if("projectId".equals(fieldname)){
-					projectId = item.getString("UTF-8");
+					id = item.getString("UTF-8");
+				}else if("fileName".equals(fieldname)){
+					fileName = item.getString("UTF-8");
+				}else if("id".equals(fieldname)){
+					id = item.getString("UTF-8");
+				}else if("type".equals(fieldname)){
+					type = item.getString("UTF-8");
+				}else if("detail".equals(fieldname)){
+					detail = item.getString("UTF-8");
+				}else if("team".equals(fieldname)){
+					team = item.getString("UTF-8");
+				}else if("path".equals(fieldname)){
+					path = item.getString("UTF-8");
 				}
-			}else{
-				
-					file = FileUploadUtil.uploadFile(request, item, "uploads");
-	
-			}
 		}
+             }
 
             KnowledgeDao knowledgeDao = new KnowledgeDao();
 
             Knowledge knowledge = new Knowledge();
-            /*
+            
             
             knowledge.setCreateBy(profileNow);
             
-            knowledge.setServerName(serverName);
-            knowledge.setProjectId(projectId);
-            knowledge.setPathFolder(file);
+            knowledge.setFileName(fileName);
+            knowledge.setPath(path);
+            knowledge.setTeamId(team);
+            knowledge.setType(type);
+            knowledge.setDetails(detail);
             
-            */
             
             
-             logger.info("knlId ::=="+knlId);
-            if(knlId==0){
+            
+             logger.info("knlId ::=="+id);
+            if(id.equals("")){
                 logger.info(" create ");
                 knowledgeDao.createKnowledge(knowledge);
             }else{
                 logger.info(" update ");
-                //knowledge.setId(knlId);
+                knowledge.setId(id);
                 knowledgeDao.updateKnowledge(knowledge);
             }
            
@@ -93,7 +102,7 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
             e.printStackTrace();
             logger.error("save register error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/KnowledgeListServlet");
+        response.sendRedirect(request.getContextPath() + "/KnowledgeSearchServlet");
     }
 
 }

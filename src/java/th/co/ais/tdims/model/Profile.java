@@ -16,6 +16,7 @@ public class Profile {
     private String email;
     private String position;
     private String gender;
+    private String role;
     private String status;
     private String createDate;
     private int createBy;
@@ -68,6 +69,14 @@ public class Profile {
 
     public String getLastName() {
         return lastName;
+    }
+    
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public void setLastName(String lastName) {

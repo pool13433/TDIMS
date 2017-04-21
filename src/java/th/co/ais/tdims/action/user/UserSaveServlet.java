@@ -37,6 +37,7 @@ public class UserSaveServlet extends HttpServlet {
             String firstName = CharacterUtil.removeNull(request.getParameter("firstName"));
             String lastName = CharacterUtil.removeNull(request.getParameter("lastName"));
             String mobile = CharacterUtil.removeNull(request.getParameter("mobile"));
+            String role = CharacterUtil.removeNull(request.getParameter("role"));
             String email = CharacterUtil.removeNull(request.getParameter("email"));
             String position = CharacterUtil.removeNull(request.getParameter("position"));
             String gender = CharacterUtil.removeNull(request.getParameter("gender"));
@@ -51,7 +52,7 @@ public class UserSaveServlet extends HttpServlet {
             profile.setMobile(mobile);
             profile.setPassword(password);
             profile.setPosition(position);
-            profile.setStatus("MEMBER");
+            profile.setStatus(role);
             profile.setUsername(username);
             profile.setCreateBy(profileNow);
             profile.setUpdateBy(profileNow);

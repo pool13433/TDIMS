@@ -74,7 +74,7 @@ public class ProfileDao {
             pstm.setInt(8, Integer.parseInt(profile.getPosition()));
             pstm.setString(9, profile.getStatus());            
             pstm.setInt(10, profile.getCreateBy());        
-            pstm.setInt(11, profile.getUpdateBy());                
+            pstm.setInt(11, profile.getUpdateBy());    
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class ProfileDao {
             sql.append(" UPDATE `profile` SET ");
             sql.append(" `fname`=?,`lname`=?,`gender`=?,");
             sql.append(" `mobile`=?,`email`=?,`position`=?,");
-            sql.append(" update_date=NOW(),update_by=? ");
+            sql.append(" update_date=NOW(),update_by=?");
             sql.append(" WHERE profile_id=? ");
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, profile.getFirstName());
@@ -103,7 +103,7 @@ public class ProfileDao {
             pstm.setString(4, profile.getMobile());
             pstm.setString(5, profile.getEmail());
             pstm.setInt(6, Integer.parseInt(profile.getPosition()));
-            pstm.setInt(7, profile.getUpdateBy());         
+            pstm.setInt(7, profile.getUpdateBy()); 
             pstm.setString(8, profile.getProfileId());       
             exe = pstm.executeUpdate();
         } catch (Exception e) {
@@ -222,7 +222,7 @@ public class ProfileDao {
             sql.append(" UPDATE `profile` SET ");
             sql.append(" `fname`=?,`lname`=?,`gender`=?,");
             sql.append(" `mobile`=?,`email`=?,`position`=?,");
-            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=md5(?) ");
+            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=md5(?), `status`=?  ");
             sql.append(" WHERE profile_id=? ");
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, profile.getFirstName());
@@ -234,7 +234,8 @@ public class ProfileDao {
             pstm.setInt(7, profile.getUpdateBy());
             pstm.setString(8, profile.getUsername());
              pstm.setString(9, profile.getPassword());
-            pstm.setInt(10, Integer.parseInt(profile.getProfileId()));       
+              pstm.setString(10, profile.getStatus());
+            pstm.setInt(11, Integer.parseInt(profile.getProfileId()));       
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

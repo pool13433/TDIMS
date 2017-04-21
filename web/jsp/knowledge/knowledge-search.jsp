@@ -79,7 +79,7 @@
                             <button type="reset" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
                             </button>
-                            <a href="${context}/KnowledgeFormServlet" class="btn btn-default btn-primary">
+                            <a href="${context}/KnowledgeFormServlet?menu=knowledge_form" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
                         </div>

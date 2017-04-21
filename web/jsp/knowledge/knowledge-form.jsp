@@ -11,34 +11,62 @@
         </div>
         <form action="${context}/KnowledgeSaveServlet" method="post" class="form-horizontal" style="padding-right: 100px;" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="serverName" class="col-sm-2 control-label">serverName</label>
-                <div class="col-sm-4">
+                <label for="fileName" class="col-sm-2 control-label">fileName</label>
+                <div class="col-sm-10">
                     <input type="hidden" value="${knowledge.id}" id="knlId" name="knlId">
-                    <input type="text" class="form-control" value="${knowledge.serverName}" id="serverName" name="serverName" placeholder="serverName" required>
+                    <input type="text" class="form-control" value="${knowledge.fileName}" id="fileName" name="fileName" placeholder="fileName" required>
                 </div>
+            </div>
+             <div class="row">
+                        <div class="col-sm-12" >
+                            <div class="form-group">
+                                <label for="team" class="col-sm-2 control-label">Team</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" id="team" name="team" >
+                                        <option value="" selected>    All Team  </option>
+                                        <c:forEach items="${teamList}" var="tm">                            
+                                            <c:choose>
+                                                <c:when test="${knowledge.teamId == tm.teamName}">
+                                                    <option value="${tm.teamId}" selected>${tm.teamName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${tm.teamId}">${tm.teamName}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>    
+                                    </select>
+                                </div>                            
+                                <label for="type" class="col-sm-2 control-label">Type</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" id="type" name="type" >
+                                        <option value="" selected>    All Type  </option>
+                                        <c:forEach items="${typeList}" var="t">                            
+                                            <c:choose>
+                                                <c:when test="${knowledge.type == t.moduleName}">                                                    
+                                                    <option value="${t.id}" selected>${t.moduleName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${t.id}">${t.moduleName}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>    
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="form-group">
+                <label for="detail" class="col-sm-2 control-label">Detail</label>
+                <div class="col-sm-10">
+                                      <textarea class="form-control" rows="7" id="detail" name="detail" value="${knowledge.details}">${knowledge.details}</textarea>
+
+                </div>      
             </div>
             <div class="form-group">
                 <label for="pathFolder" class="col-sm-2 control-label">pathFolder</label>
                 <div class="col-sm-10">
-                    <input type="file"  id="pathFolder" name="pathFolder">
+                    <input type="text" class="form-control"  id="path" name="path" value="${knowledge.path}">
                 </div>      
-            </div>
-            <div class="form-group">
-                <label for="projStatus" class="col-sm-2 control-label">project</label>
-                <div class="col-sm-2">
-                    <select class="form-control" id="projectId" name="projectId" placeholder="projectId" required>
-                        <c:forEach items="${projectList}" var="project">                            
-                            <c:choose>
-                                <c:when test="${knowledge.projectId == project.projId}">
-                                    <option value="${project.projId}" selected>${project.projName}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${project.projId}">${project.projName}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </select>
-                </div>                
             </div>
 
             <div class="form-group">
