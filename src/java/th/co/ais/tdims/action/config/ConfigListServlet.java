@@ -6,7 +6,6 @@
 package th.co.ais.tdims.action.config;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
 import th.co.ais.tdims.model.Pagination;
-import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class ConfigListServlet extends HttpServlet {

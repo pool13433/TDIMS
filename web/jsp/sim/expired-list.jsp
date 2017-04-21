@@ -4,7 +4,7 @@
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="../include/inc_header.jsp"/>
-<c:if test="${isFromSendMail == 'Y'}">
+<c:if test="${isFromSendMail == 'N'}">
     <div style="background-color: #6ef442; height: 30px;">
         <b> Email(s) has/have Sent!! </b>
     </div>
