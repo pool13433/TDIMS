@@ -82,7 +82,7 @@
                     <c:if test="${!empty USER_PROFILE}">
                         <ul class="nav nav-sidebar">
                             <li class="<c:out value="${menu == 'dashboard' ? 'active': ''}"/>">
-                                <a href="${context}/jsp/dashboard.jsp?menu=dashboard"><i class="glyphicon glyphicon-dashboard"></i> Dashboard <span class="sr-only">(current)</span></a>                            
+                                <a href="${context}/DashboardServlet?menu=dashboard"><i class="glyphicon glyphicon-dashboard"></i> Dashboard <span class="sr-only">(current)</span></a>                            
                             </li>
                         </ul>
                         <ul class="nav nav-sidebar">
@@ -144,7 +144,7 @@
                                 </li>
                             </c:if>
                             <li class="<c:out value="${menu == 'module' ? 'active': ''}"/>">
-                               <a href="#"><i class="glyphicon glyphicon-cog"></i> Manage Module</a>
+                               <a href="${context}/ModuleListServlet?menu=module"><i class="glyphicon glyphicon-cog"></i> Manage Module</a>
                            </li>
                         </ul>
                         <ul class="nav nav-sidebar">                       

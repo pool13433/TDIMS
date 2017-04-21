@@ -180,6 +180,30 @@
         <servlet-name>TeamDeleteServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.team.TeamDeleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ModuleListServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.module.ModuleListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleDeleteServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.module.ModuleDeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleSaveServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.module.ModuleSaveServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModuleFormServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.module.ModuleFormServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.dashboard.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DashboardDataServlet</servlet-name>
+        <servlet-class>th.co.ais.tdims.action.dashboard.DashboardDataServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -406,6 +430,30 @@
     <servlet-mapping>
         <servlet-name>ReportServlet</servlet-name>
         <url-pattern>/ReportServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleListServlet</servlet-name>
+        <url-pattern>/ModuleListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleDeleteServlet</servlet-name>
+        <url-pattern>/ModuleDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleSaveServlet</servlet-name>
+        <url-pattern>/ModuleSaveServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModuleFormServlet</servlet-name>
+        <url-pattern>/ModuleFormServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/DashboardServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardDataServlet</servlet-name>
+        <url-pattern>/DashboardDataServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

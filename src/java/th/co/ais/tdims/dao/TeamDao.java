@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
-import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.model.Team;
 
 public class TeamDao {
