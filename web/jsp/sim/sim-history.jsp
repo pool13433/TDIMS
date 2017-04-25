@@ -24,7 +24,12 @@
                     <div class="col-sm-3">
                         <input type="text" class="form-control datepicker"  value="${date_to}"  id="date_to" name="date_to" placeholder="date_to" >
                     </div>
-                    <div class="col-sm-2"><button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          </div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-search"></i> Search</button>          
+                        <a href="${context}/SimHistoryServlet?menu=sim_history" class="btn btn-warning">
+                            <i class="glyphicon glyphicon-erase"></i> Reset
+                        </a>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
