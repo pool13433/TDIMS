@@ -53,6 +53,37 @@ public class EnvironmentDao {
         return envList;
     }
 
+    public Environment getEnvirenment(String envId) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Environment env = null;
+        try {
+            conn = new DbConnection().open();
+            String sql = "SELECT * FROM enviroment where env_id = ? ORDER BY env_code";
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, envId);
+            rs = pstm.executeQuery();
+            env = new Environment();
+            while (rs.next()) {
+                env.setCreateBy(rs.getString("create_by"));
+                env.setCreateDate(rs.getString("create_date"));
+                env.setEnvCode(rs.getString("env_code"));
+                env.setEnvDesc(rs.getString("env_desc"));
+                env.setEnvId(rs.getString("env_id"));
+                env.setEnvSite(rs.getString("env_site"));
+                env.setUpdateBy(rs.getString("update_by"));
+                env.setUpdateDate(rs.getString("update_date"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getAllEnvirenment error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return env;
+    }
+    
     private void close(PreparedStatement pstm, ResultSet rs) {
         try {
             if (this.conn != null) {

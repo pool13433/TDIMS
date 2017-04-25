@@ -12,7 +12,8 @@ import org.apache.log4j.Logger;
 import th.co.ais.tdims.db.DbConnection;
 import th.co.ais.tdims.model.Combo;
 import th.co.ais.tdims.model.MonthObject;
-import th.co.ais.tdims.model.Report;
+import th.co.ais.tdims.model.ReportSim;
+import th.co.ais.tdims.model.ReportTestCase;
 
 public class ReportDao {
 
@@ -20,18 +21,18 @@ public class ReportDao {
 
     private Connection conn = null;
 
-    public Report getSummaryReport(String env, String site, String chargeType, String usageType) {
+    public ReportSim getSummaryReport(String env, String site, String chargeType, String usageType) {
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        Report report = new Report();
+        ReportSim report = new ReportSim();
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder("SELECT "
-                    + "COUNT(case s.sim_status when 'available' then 1 else null end) as available, "
-                    + "COUNT(case s.sim_status when 'inUsed' then 1 else null end) as inUsed, "
-                    + "COUNT(case s.sim_status when 'lost' then 1 else null end) as lost, "
-                    + "COUNT(case s.sim_status when 'pending' then 1 else null end) as pending,"
-                    + "COUNT(case s.sim_status when 'unavailable' then 1 else null end) as unavailable,"
+                    + "COUNT(case s.sim_status when 'Available' then 1 else null end) as available, "
+                    + "COUNT(case s.sim_status when 'Inused' then 1 else null end) as inUsed, "
+                    + "COUNT(case s.sim_status when 'Lost' then 1 else null end) as lost, "
+                    + "COUNT(case s.sim_status when 'Pending' then 1 else null end) as pending,"
+                    + "COUNT(case s.sim_status when 'Unavailable' then 1 else null end) as unavailable,"
                     + "COUNT(*) as total FROM sim s");
             sql.append(" WHERE s.env = ? AND s.site = ? AND s.charge_type = ? AND s.usage_type = ? ");
             pstm = conn.prepareStatement(sql.toString());
@@ -61,6 +62,42 @@ public class ReportDao {
         return report;
     }
 
+    public ReportTestCase getTestCaseReport(String year, String type) {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        ReportTestCase report = new ReportTestCase();
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder("SELECT "
+                    + "COUNT(*) as all, "
+                    + "SUM(defect_no) as defect,"
+                    + "SUM(issue_no) as issue,"
+                    + "SUM(manual_step) as manualstep,"
+                    + "SUM(auto_step) as autoStep FROM testcase t");
+            sql.append(" WHERE t.create_date >= TO_DATE('" + year + "0101000000', 'yyyymmddhh24miss') AND t.create_date <= TO_DATE('" + year + "0101000000', 'yyyymmddhh24miss') "
+                    + "AND t.type = ?");
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, type);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                report.setType(type);
+                report.setYear(year);
+                report.setTestcase(rs.getInt("all"));
+                report.setDefect(rs.getInt("defect"));
+                report.setIssue(rs.getInt("issue"));
+                report.setManualStep(rs.getInt("manualstep"));
+                report.setAutoStep(rs.getInt("autoStep"));
+                report.setAllStep(rs.getInt("manualstep") + rs.getInt("autoStep"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getSummaryReport error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return report;
+    }
+    
     public MonthObject getCountSimTransaction(String simStatus) {
         PreparedStatement pstm = null;
         ResultSet rs = null;
