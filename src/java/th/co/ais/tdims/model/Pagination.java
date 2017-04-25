@@ -85,5 +85,5 @@ public class Pagination {
     public String getPageUrl() {
         return getQueryString(pageUrl);
     }
-
+    
 }
