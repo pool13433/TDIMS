@@ -48,8 +48,14 @@ pageUrl :: ${pagination.pageUrl} <br/>-->
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-        </c:if>        
-        <li><a href="${pagination.pageUrl}&offset=${offsetLast}"> Last</a></li>
+        </c:if>                
+        <li>
+            <c:set var="paginLastUrl" value="${pagination.pageUrl}&offset=${offsetLast}"/>
+            <c:if test="${empty pagination.pageUrl}">
+                <c:set var="paginLastUrl" value="#"/>
+            </c:if>
+            <a href="${paginLastUrl}"> Last</a>
+        </li>
         <li>
             <a href="#" aria-label="Next">
                 <span aria-hidden="true">${pagination.countRecordAll} Record ,${page +1} Pages</span>

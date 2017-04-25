@@ -137,9 +137,9 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="glyphicon glyphicon-search"></i> Search
                             </button>
-                            <button type="reset" class="btn btn-warning">
+                            <a href="${context}/SimSearchServlet?menu=sim_search" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
-                            </button>
+                            </a>
                             <a href="${context}/SimFormServlet" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
@@ -259,9 +259,9 @@
             });
             var len = Object.keys(criteria).length;
             /*if (len == 1) {
-                alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
-                return false;
-            }*/
+             alert('กรุณาระบุข้อมูลที่ต้องการค้นหา อย่างน้อย 1 รายการ');
+             return false;
+             }*/
         });
         $("#bookingSim").submit(function () {
             var checkBox = $("input#simSelected").is(':checked');
