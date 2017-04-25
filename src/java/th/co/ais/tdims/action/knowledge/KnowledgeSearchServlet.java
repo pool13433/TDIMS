@@ -5,9 +5,11 @@
  */
 package th.co.ais.tdims.action.knowledge;
 
+import com.google.gson.Gson;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -98,14 +100,17 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-           
             String id = request.getParameter("teamId");
             ModuleDao m = new ModuleDao();
-            request.setAttribute("typeList", m.getModuleByTeam(id));
+            String json = new Gson().toJson(m.getModuleByTeam(id));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+            System.out.println(" JSON :"+json);
+            
         } catch (Exception e) {
             logger.error("doPost KnowledgeSearchServlet "+e.getMessage());
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/knowledge/knowledge-search.jsp");
-        dispatcher.forward(request, response);
+        
     }
 }

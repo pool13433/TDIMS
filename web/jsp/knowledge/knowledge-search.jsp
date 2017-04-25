@@ -76,9 +76,9 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="glyphicon glyphicon-search"></i> Search
                             </button>
-                            <button type="reset" class="btn btn-warning">
+                            <a href="${context}/KnowledgeSearchServlet?menu=knowledge-search" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
-                            </button>
+                            </a>
                             <a href="${context}/KnowledgeFormServlet?menu=knowledge_form" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
@@ -175,20 +175,31 @@
             })
             return false;
         });
-        /*
+        
          $('select[id="team"]').change(function (event){            
             event.preventDefault();
             var teamId = $(this).val();
-            $.get({
-                url:"KnowledgeSearchServlet?teamId="+teamId
-                ,success:function(response){
-                    $("#changed").val("changed");
-                    $("#searchKnl").submit();
+            $.post({
+                url:"KnowledgeSearchServlet?teamId="+teamId,
+                datatype: 'json',
+                success:function(response){                    
+                    if(response != null){
+                        var select = $("#type");
+                        select.find("option").remove();
+                        $.each(response, function(index, value){
+                            $("#type").append($('<option>').text(value.moduleName).attr('value',value.id));
+                        });
+                        
+                        
+                    }
+                    
+                    //$("#changed").val("changed");
+                   //$("#searchKnl").submit();
                 }
             })
             return false;
         });
-         */
+         
 
 
     });

@@ -134,9 +134,9 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="glyphicon glyphicon-search"></i> Search
                             </button>
-                            <button type="reset" class="btn btn-warning">
+                            <a href="${context}/TestcaseSearchServlet?menu=testcase_search" class="btn btn-warning">
                                 <i class="glyphicon glyphicon-erase"></i> Reset
-                            </button>
+                            </a>
                             <a href="${context}/TestcaseFormServlet?menu=testcase_form" class="btn btn-default btn-primary">
                                 <i class="glyphicon glyphicon-plus"></i> Add
                             </a>
