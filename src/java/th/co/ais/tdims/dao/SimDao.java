@@ -65,7 +65,7 @@ public class SimDao {
         return sql;
     }
 
-    public List<ExpiredSim> getExpiredSim(int teamId, String system, int limit, int offset) {
+    public List<ExpiredSim> getExpiredSim(int teamId, String system, String mobile, int limit, int offset) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         List<ExpiredSim> simList = null;
@@ -81,12 +81,13 @@ public class SimDao {
             sql.append(" FROM sim s ");
             sql.append(" LEFT JOIN team t ON s.team_id=t.team_id ");
             sql.append(" LEFT JOIN project p ON s.project_id=p.proj_id");
-            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ?");
+            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ? AND s.mobile_no = ?");
             sql.append(" limit ").append(limit).append(" offset ").append(offset);
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             pstm.setInt(1, teamId);
             pstm.setString(2, system);
+            pstm.setString(3, mobile);
             rs = pstm.executeQuery();
             simList = new ArrayList<ExpiredSim>();
             while (rs.next()) {
@@ -101,7 +102,7 @@ public class SimDao {
         return simList;
     }
 
-    public int getCountExpiredSim(int teamId, String system) {
+    public int getCountExpiredSim(int teamId, String system, String mobile) {
         ResultSet rs = null;
         PreparedStatement pstm = null;
         int countSim = 0;
@@ -112,11 +113,12 @@ public class SimDao {
             sql.append(" FROM sim s ");
             sql.append(" LEFT JOIN team t ON s.team_id=t.team_id ");
             sql.append(" LEFT JOIN project p ON s.project_id=p.proj_id");
-            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ?");
+            sql.append(" WHERE s.expire_date < CURDATE() AND t.team_id = ? AND s.system = ? AND s.mobile_no = ?");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             pstm.setInt(1, teamId);
             pstm.setString(2, system);
+            pstm.setString(3, mobile);
             rs = pstm.executeQuery();
             if (rs.next()) {
                 countSim = rs.getInt("cnt");

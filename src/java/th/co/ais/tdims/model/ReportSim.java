@@ -1,6 +1,6 @@
 package th.co.ais.tdims.model;
 
-public class Report {
+public class ReportSim {
     private String site;
     private String usageType;
     private String chargeType;
