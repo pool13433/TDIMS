@@ -19,6 +19,7 @@ public class Testcase {
     private String defectNo;    
     private String createDate;
     private String step;
+     private String automate;
     private String createBy;
     private String type;
 
@@ -114,6 +115,14 @@ public class Testcase {
 
     public void setStep(String step) {
         this.step = step;
+    }
+    
+    public String getAutomate() {
+        return automate;
+    }
+
+    public void setAutomate(String automate) {
+        this.automate = automate;
     }
 
     public String getCreateBy() {

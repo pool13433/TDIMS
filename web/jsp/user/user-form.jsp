@@ -7,7 +7,7 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">ฟอร์มกรอกข้อมูล User</div>
         <div class="panel-body">
-            <form action="${context}/UserSaveServlet" method="post" class="form-horizontal" style="padding-right: 100px;">
+            <form action="${context}/UserSaveServlet" method="post" id="userFrom" class="form-horizontal" style="padding-right: 100px;">
                 <div class="form-group">
                     <label for="username" class="col-sm-2 control-label">username</label>
                     <div class="col-sm-4">     
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="mobile" class="col-sm-2 control-label">Mobile No</label>
                     <div class="col-sm-4">                   
-                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="mobile" value="${profile.mobile}" required>
+                        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="mobile" value="${profile.mobile}" required>
                     </div>
                     <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-4">                   
@@ -107,4 +107,15 @@
         </div>        
     </div>
 </div>
+                        <script>
+
+$( "#userFrom" ).validate({
+  rules: {
+    password: "required",
+    passwordComfirm: {
+      equalTo: "#password"
+    }
+  }
+});
+</script>
 <jsp:include page="../include/inc_footer.jsp"/>

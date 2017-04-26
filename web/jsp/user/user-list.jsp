@@ -46,14 +46,14 @@
                        <td>${user.password}</td>
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
+                        <td>${user.gender}</td>
                         <td>${user.mobile}</td>
                         <td>${user.email}</td>
                         <td>${user.position}</td>                        
-                        <td>${user.gender}</td>
                         <td>${user.createDate}</td>
-                        <td>${user.createBy}</td>   
+                        <td>${user.createByUsername}</td>   
                          <td>${user.updateDate}</td>  
-                          <td>${user.updateBy}</td>  
+                          <td>${user.updateByUsername}</td>  
                            <td>${user.status}</td>  
                       
                 </c:forEach>

@@ -6,6 +6,8 @@
 package th.co.ais.tdims.action.testcase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,6 +54,12 @@ public class TestcaseFormServlet extends HttpServlet {
              request.setAttribute("typeList", configDao.getConfigList("TC_TYPE"));
             request.setAttribute("envList", configDao.getConfigList("ENV"));
             request.setAttribute("projectList", projecDao.getProjectAll());
+            request.setAttribute("totalStep", (Integer.parseInt(testcase.getStep())+Integer.parseInt(testcase.getAutomate())));
+            System.out.println("++++++++++++++++++++++++++++++"+testcase.getCreateDate());
+            Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(testcase.getCreateDate());
+            SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
+            String date2 = format.format(date1);
+            testcase.setCreateDate(date2);
             request.setAttribute("testcase", testcase);
         } catch (Exception e) {
             e.printStackTrace();
