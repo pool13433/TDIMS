@@ -18,7 +18,6 @@ public class Sim {
     private String site;
     private String usageType;
     private String simStatus;
-    private String owner;
     private String teamId;
     private String emailContact;
     private String projectId;
@@ -88,8 +87,6 @@ public class Sim {
         this.system = system;
     }
     
-    
-
     public String getEnviroment() {
         return enviroment;
     }
@@ -121,16 +118,6 @@ public class Sim {
     public void setSimStatus(String simStatus) {
         this.simStatus = simStatus;
     }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-    
-    
 
     public String getTeamId() {
         return teamId;

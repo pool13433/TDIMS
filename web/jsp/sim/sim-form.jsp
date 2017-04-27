@@ -132,21 +132,6 @@
                         <button type="reset" class="btn btn-warning">Reset</button>
                     </div>
                 </div>
-                <!--<label for="owner" class="col-sm-1 control-label">OWNER</label>
-                <div class="col-sm-3">
-                    <select class="form-control" class="form-control" id="owner" name="owner" required>
-                <c:forEach items="${ownerList}" var="owner">                            
-                    <c:choose>
-                        <c:when test="${sim.owner == owner.profileId}">
-                            <option value="${owner.profileId}" selected>${owner.username}</option>
-                        </c:when>
-                        <c:otherwise>
-                            <option value="${owner.profileId}">${owner.username}</option>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </select>
-        </div>-->
             </div>
         </form>
     </div>

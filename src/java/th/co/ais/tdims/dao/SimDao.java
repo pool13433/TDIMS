@@ -60,7 +60,7 @@ public class SimDao {
         sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
         sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
         sql.append(" `remark`,`create_by`, `update_by`, `sim_status` ");
-        sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.owner) as owner");
+        sql.append(" ,(SELECT CONCAT(fname,' ',lname) FROM profile p WHERE p.profile_id = s.create_by) as create_by");
         sql.append(" FROM `sim` s ");
         return sql;
     }
@@ -73,7 +73,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT s.sim_id, s.mobile_no, s.serial_no, s.imsi, s.charge_type, ");
-            sql.append(" s.region_code, s.system, s.env, s.site, s.usage_type, s.owner, t.team_name, ");
+            sql.append(" s.region_code, s.system, s.env, s.site, s.usage_type, t.team_name, ");
             sql.append(" s.email_contact, p.proj_name, ");
             sql.append(" DATE_FORMAT(s.valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(s.expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(s.create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(s.update_date,").append(DATE_TO_STR).append(") update_date, ");
@@ -155,7 +155,6 @@ public class SimDao {
         sim.setUpdateDate(rs.getString("update_date"));
         sim.setUsageType(rs.getString("usage_type"));
         sim.setValidDate(rs.getString("valid_date"));
-        sim.setOwner(rs.getString("owner"));
         return sim;
     }
 
@@ -197,7 +196,6 @@ public class SimDao {
         sim.setUsageType(rs.getString("usage_type"));
         sim.setValidDate(rs.getString("valid_date"));
         sim.setSystem(rs.getString("system"));
-        sim.setOwner(rs.getString("owner"));
         sim.setSite(rs.getString("site"));
         return sim;
     }
@@ -210,7 +208,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, system, `env`, site, `usage_type`, owner, `team_id`, ");
+            sql.append(" `region_code`, system, `env`, site, `usage_type`, `team_id`, ");
             sql.append(" `email_contact`, `project_id`, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
@@ -282,7 +280,7 @@ public class SimDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `sim` SET ");
             sql.append(" `mobile_no`=?,`serial_no`=?,`imsi`=?,`charge_type`=?,`region_code`=?,");
-            sql.append(" system=?,`env`=?,site=?,`usage_type`=?,owner=?,");
+            sql.append(" system=?,`env`=?,site=?,`usage_type`=?,");
             sql.append(" `update_date`=NOW(),`update_by`=?,`sim_status`=? ");
             sql.append(" WHERE `sim_id`=?");
 
@@ -298,7 +296,6 @@ public class SimDao {
             pstm.setString(7, sim.getEnviroment());
             pstm.setString(8, sim.getSite());
             pstm.setString(9, sim.getUsageType());
-            pstm.setString(10, sim.getOwner());
 
             pstm.setString(11, sim.getUpdateBy());
             pstm.setString(12, sim.getSimStatus());
@@ -341,7 +338,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, `env`, site, system, `usage_type`, owner, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
+            sql.append(" `region_code`, `env`, site, system, `usage_type`, (select t.team_name from team t  where t.team_id=s.team_id) as team_id, ");
             sql.append(" `email_contact`, (select p.proj_name from project p where p.proj_id = s.project_id)  as project_id, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
@@ -412,7 +409,7 @@ public class SimDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `sim_id`, `mobile_no`, `serial_no`, `imsi`, `charge_type`, ");
-            sql.append(" `region_code`, `env`, site, system, `usage_type`, owner, team_id, ");
+            sql.append(" `region_code`, `env`, site, system, `usage_type`, team_id, ");
             sql.append(" `email_contact`, project_id, ");
             sql.append(" DATE_FORMAT(valid_date,").append(DATE_TO_STR).append(") valid_date, DATE_FORMAT(expire_date,").append(DATE_TO_STR).append(") expire_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");

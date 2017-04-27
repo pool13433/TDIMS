@@ -55,7 +55,7 @@
                             <td>${sim.site}</td>                  
                             <td>${sim.usageType}</td>    
                             <td>${sim.simStatus}</td>                    
-                            <td>${sim.owner}</td>     
+                            <td>${sim.createBy}</td>     
                         </tr>
                     </c:forEach>
                 </tbody>
