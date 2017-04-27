@@ -13,23 +13,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.PositionDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class PositionDeleteServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(PositionDeleteServlet.class);
-    private String message;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             int exe = new PositionDao().deletePosition(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("posId"))));
-            message =  "delete position success";
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete position error", e);
-            message =  "delete position error";
         }
-        response.sendRedirect(request.getContextPath() + "/PositionListServlet?message=".concat(message));
+        response.sendRedirect(request.getContextPath() + "/PositionListServlet");
     }
 }
