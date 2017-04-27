@@ -7,7 +7,16 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ Position ทั้งหมด</div>
         <div class="panel-body">
-            <a href="${context}/PositionFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+            <div class="row">
+                <div class="col-md-3"> 
+                    <a href="${context}/PositionFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                </div>
+            </div>
+            <div class="">
+                <c:if test="${!empty message}">
+                    <p>Status : ${message}</p>
+                </c:if>
+            </div>
         </div>
         <table class="table table-bordered table-striped">
             <thead>

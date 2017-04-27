@@ -13,8 +13,13 @@
                 </div>
                 <div class="col-md-9">
                     <c:import url="../include/inc_pagination.jsp"/>
-                </div>
+                </div>                
             </div>  
+            <div class="">
+                <c:if test="${!empty message}">
+                    <p>Status : ${message}</p>
+                </c:if>
+            </div>
         </div>
         <table class="table table-bordered table-striped">
             <thead>
