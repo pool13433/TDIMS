@@ -87,8 +87,7 @@
                             </li>
                         </ul>
                         <ul class="nav nav-sidebar">
-                            <li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">
-                                <!--<a href="${context}/SimListServlet?menu=sim"><i class="glyphicon glyphicon-credit-card"></i> Manage SIM</a>-->
+                            <li class="<c:out value="${menu == 'sim_search' ? 'active': ''}"/>">                                
                                 <a href="${context}/SimSearchServlet?menu=sim_search"><i class="glyphicon glyphicon-credit-card"></i> Manage SIM</a>
                             </li>
                             <li class="<c:out value="${menu == 'expiredsim' ? 'active': ''}"/>">
