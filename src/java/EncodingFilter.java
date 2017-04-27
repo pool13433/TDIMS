@@ -6,6 +6,8 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class EncodingFilter implements Filter {
 
@@ -27,6 +29,14 @@ public class EncodingFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
+        /*HttpServletRequest req = (HttpServletRequest) request;
+        HttpSession session = req.getSession();
+        if (session.getAttribute("MessageInit") != null) {
+            session.setAttribute("MessageInit", null);
+            session.setAttribute("MessageUI", null);
+        } else {
+            session.setAttribute("MessageInit", true);
+        }*/
         if (chain != null) {
             chain.doFilter(request, response);
         }

@@ -13,10 +13,6 @@
         <servlet-class>th.co.ais.tdims.action.user.UserServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SimListServlet</servlet-name>
-        <servlet-class>th.co.ais.tdims.action.sim.SimListServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ExpiredSimServlet</servlet-name>
         <servlet-class>th.co.ais.tdims.action.sim.ExpiredSimServlet</servlet-class>
     </servlet>
@@ -246,10 +242,6 @@
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/UserServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SimListServlet</servlet-name>
-        <url-pattern>/SimListServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SimFormServlet</servlet-name>

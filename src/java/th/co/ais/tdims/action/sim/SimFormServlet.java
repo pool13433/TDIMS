@@ -41,8 +41,7 @@ public class SimFormServlet extends HttpServlet {
             request.setAttribute("chargeTypeList", configDao.getConfigList("CHARGE_TYPE"));
             request.setAttribute("usageTypeList", configDao.getConfigList("USAGE_TYPE"));
             request.setAttribute("simStatusList", configDao.getConfigList("SIM_STATUS"));
-            request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));
-            request.setAttribute("ownerList", new ProfileDao().getAllUser());
+            request.setAttribute("systemList", configDao.getConfigList("SYSTEM"));            
             request.setAttribute("envList",configDao.getConfigList("ENV") );
             request.setAttribute("siteList",configDao.getConfigList("SITE") );
             request.setAttribute("projectList", projecDao.getProjectAll());

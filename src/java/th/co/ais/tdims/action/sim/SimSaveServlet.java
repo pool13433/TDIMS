@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.SimDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.util.CharacterUtil;
@@ -25,7 +26,7 @@ public class SimSaveServlet extends HttpServlet {
             throws ServletException, IOException {
         logger.info(" save sim ");
         try {
-            Profile profile = (Profile)request.getSession().getAttribute("USER_PROFILE");
+            Profile profile = (Profile) request.getSession().getAttribute("USER_PROFILE");
             String mobileNo = CharacterUtil.removeNull(request.getParameter("mobileNo"));
             String serialNo = CharacterUtil.removeNull(request.getParameter("serialNo"));
             String imsi = CharacterUtil.removeNull(request.getParameter("imsi"));
@@ -37,7 +38,6 @@ public class SimSaveServlet extends HttpServlet {
             String simId = CharacterUtil.removeNull(request.getParameter("simId"));
             String site = CharacterUtil.removeNull(request.getParameter("site"));
             String system = CharacterUtil.removeNull(request.getParameter("system"));
-            //String owner = CharacterUtil.removeNull(request.getParameter("owner"));
 
             Sim sim = new Sim();
             sim.setChargeType(chargeType);
@@ -53,24 +53,28 @@ public class SimSaveServlet extends HttpServlet {
             sim.setUpdateBy(profile.getProfileId());
             sim.setUsageType(usageType);
             sim.setSystem(system);
-            //sim.setOwner(owner);
             SimDao simDao = new SimDao();
 
             logger.info("simId ::==" + simId);
+            int exec = 0;
             if (simId.equals("")) {
                 logger.info(" create ");
-                simDao.createSim(sim);
+                exec = simDao.createSim(sim);
             } else {
                 logger.info(" update ");
                 sim.setSimId(simId);
-                simDao.updateSim(sim);
+                exec = simDao.updateSim(sim);
             }
-            request.setAttribute("message", "save sim success");
-
+            MessageUI message = null;
+            if (exec == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save sim error", e);
-            request.setAttribute("message", "save sim error");
         }
         response.sendRedirect(request.getContextPath() + "/SimSearchServlet?menu=sim_search");
     }

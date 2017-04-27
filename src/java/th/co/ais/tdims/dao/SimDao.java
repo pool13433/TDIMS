@@ -297,9 +297,9 @@ public class SimDao {
             pstm.setString(8, sim.getSite());
             pstm.setString(9, sim.getUsageType());
 
-            pstm.setString(11, sim.getUpdateBy());
-            pstm.setString(12, sim.getSimStatus());
-            pstm.setString(13, sim.getSimId());
+            pstm.setString(10, sim.getUpdateBy());
+            pstm.setString(11, sim.getSimStatus());
+            pstm.setString(12, sim.getSimId());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
