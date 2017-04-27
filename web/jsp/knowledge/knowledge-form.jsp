@@ -36,10 +36,10 @@
                                         </c:forEach>    
                                     </select>
                                 </div>                            
-                                <label for="type" class="col-sm-2 control-label">Type</label>
+                                <label for="type" class="col-sm-2 control-label">Module</label>
                                 <div class="col-sm-3">
                                     <select class="form-control" id="type" name="type" >
-                                        <option value="" selected>    All Type  </option>
+                                        <option value="" selected>    All Module  </option>
                                         <c:forEach items="${typeList}" var="t">                            
                                             <c:choose>
                                                 <c:when test="${knowledge.type == t.moduleName}">                                                    
