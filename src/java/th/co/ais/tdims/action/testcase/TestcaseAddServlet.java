@@ -52,6 +52,7 @@ public class TestcaseAddServlet extends HttpServlet {
             String type = ""; 
             String detail = "";                        
             String project = "";
+            String automate = "";
             String testcaseId = "";
             String systems = "";
             String owner = "";
@@ -87,7 +88,9 @@ public class TestcaseAddServlet extends HttpServlet {
 				}else if("type".equals(fieldname)){
 					type = item.getString("UTF-8");
 				
-                                }else if("path".equals(fieldname)){
+                                }else if("automate".equals(fieldname)){
+					automate = item.getString("UTF-8");
+				}else if("path".equals(fieldname)){
 				
 					path = item.getString("UTF-8");
 	
@@ -106,6 +109,7 @@ public class TestcaseAddServlet extends HttpServlet {
             data.setTestcaseDetails(detail);
             data.setTestcaseTitle(testcase);
             data.setEnviroment(env);
+            data.setAutomate(automate);
             data.setStep(step);
             data.setType(type);
             data.setTestcaseId(testcaseId);

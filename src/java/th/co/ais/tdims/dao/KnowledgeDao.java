@@ -160,7 +160,7 @@ public class KnowledgeDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO knowledge ");
             sql.append(" (`file_name`, `team_id`, `type`, `details`, `path`, `create_date`, `create_by`, `update_date`, `update_by`) ");
-            sql.append(" VALUES (?,?,?,?,?,?,?,?,?)");
+            sql.append(" VALUES (?,?,?,?,?,NOW(),?,?,?)");
             
             pstm = conn.prepareStatement(sql.toString());     
             pstm.setString(1, knowledge.getFileName());
@@ -168,10 +168,9 @@ public class KnowledgeDao {
             pstm.setString(3, knowledge.getType());
             pstm.setString(4, knowledge.getDetails());
             pstm.setString(5, knowledge.getPath());
-            pstm.setString(6, knowledge.getCreateDate());
-            pstm.setString(7, knowledge.getCreateBy());
-            pstm.setString(8, knowledge.getUpdateDate());
-            pstm.setString(9, knowledge.getUpdateBy());
+            pstm.setString(6, knowledge.getCreateBy());
+            pstm.setString(7, knowledge.getUpdateDate());
+            pstm.setString(8, knowledge.getUpdateBy());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,7 +199,7 @@ public class KnowledgeDao {
             pstm.setString(3, knowledge.getType());
             pstm.setString(4, knowledge.getDetails());
             pstm.setString(5, knowledge.getPath());
-            pstm.setString(6, knowledge.getUpdateBy());
+            pstm.setString(6, knowledge.getCreateBy());
             pstm.setString(7, knowledge.getId());      
             exe = pstm.executeUpdate();
         } catch (Exception e) {

@@ -7,7 +7,7 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">ฟอร์มกรอกข้อมูล Knowledge</div>
         <div class="panel-body">
-            <a href="${context}/KnowledgeListServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
+            <a href="${context}/KnowledgeSearchServlet?menu=knowledge-search" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
         </div>
         <form action="${context}/KnowledgeSaveServlet" method="post" class="form-horizontal" style="padding-right: 100px;" enctype="multipart/form-data">
             <div class="form-group">
@@ -78,4 +78,57 @@
         </form>
     </div>
 </div>
+                    <script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#changed").val("");
+        $("#searchKnl").submit(function () {
+            var criteria = {};
+            $.each($(this).serializeArray(), function (_, kv) {
+                if (kv.value !== "") {
+                    criteria[kv.name] = kv.value;
+                }
+            });
+        });
+        
+        $('a[id="gotofile"]').click(function (event){            
+            event.preventDefault();
+            var name = $(this).attr('href');
+            $.get({
+                url:"KnowledgeSearchServlet?path="+name
+                        ,success:function(){
+                            return true;
+                        }
+            })
+            return false;
+        });
+        
+         $('select[id="team"]').change(function (event){            
+            event.preventDefault();
+            var teamId = $(this).val();
+            $.post({
+                url:"KnowledgeSearchServlet?teamId="+teamId,
+                datatype: 'json',
+                success:function(response){                    
+                    if(response != null){
+                        var select = $("#type");
+                        select.find("option").remove();
+                        $.each(response, function(index, value){
+                            $("#type").append($('<option>').text(value.moduleName).attr('value',value.id));
+                        });
+                        
+                        
+                    }
+                    
+                    //$("#changed").val("changed");
+                   //$("#searchKnl").submit();
+                }
+            })
+            return false;
+        });
+         
+
+
+    });
+</script>
 <jsp:include page="../include/inc_footer.jsp"/>

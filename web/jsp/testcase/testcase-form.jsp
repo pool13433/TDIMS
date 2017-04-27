@@ -8,7 +8,7 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">ฟอร์มกรอกข้อมูล Testcase</div>
         <div class="panel-body">
-            <a href="${context}/TestcaseListServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
+            <a href="${context}/TestcaseSearchServlet?menu=testcase_search" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></a>
         </div>
         <form action="${context}/TestcaseAddServlet" method="post" class="form-horizontal"   enctype="multipart/form-data">
             <input type="hidden" value="${testcase.testcaseId}" id="testcaseId" name="testcaseId">
@@ -130,10 +130,10 @@
                     <input type="text" class="form-control" value="${testcase.step}" id="manual" name="manual" placeholder="Manual" onchange="funtionStep();" required>
                 </div>  
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="" id="automate" name="automate" placeholder="Automate" onchange="funtionStep();" required>
+                    <input type="text" class="form-control" value="${testcase.automate}" id="automate" name="automate" placeholder="Automate" onchange="funtionStep();" required>
                 </div>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="" id="all" name="all" placeholder="All" required>
+                    <input type="text" class="form-control" value="${totalStep}" id="all" name="all" placeholder="All" required>
                 </div>
                 </div>
                 <div class="form-group">

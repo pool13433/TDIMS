@@ -146,10 +146,12 @@ public class ProfileDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
+            
             sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`,");
-            sql.append(" `mobile`, `email`, `position`, DATE_FORMAT(create_date,'%d-%m-%Y') create_date,");
-            sql.append(" `create_by`, DATE_FORMAT(update_date,'%d-%m-%Y') update_date, `update_by`, `status`  FROM profile p");
-            sql.append(" ORDER BY p.username ");
+            sql.append(" `mobile`, `email`,(SELECT ps.pos_name FROM position ps WHERE ps.pos_id = p.position) as `position`, DATE_FORMAT(create_date,'%d");
+            sql.append("%m-%Y') create_date,(SELECT t.username FROM profile t WHERE t.profile_id = p.create_by) as `create_by`,");
+            sql.append(" DATE_FORMAT(update_date,'%d-%m-%Y') update_date,(SELECT t.username FROM profile t WHERE t.profile_id = p.update_by) as");
+            sql.append(" `update_by`, `status`  FROM profile p ORDER BY p.username ");
             logger.info("sql ::==" + sql.toString());
             pstm = conn.prepareStatement(sql.toString());
             rs = pstm.executeQuery();
@@ -169,8 +171,9 @@ public class ProfileDao {
     private Profile getEntityProfile(ResultSet rs) throws SQLException {
         Profile user = new Profile();
         user.setProfileId(rs.getString("profile_id"));
-        user.setCreateBy(rs.getInt("create_by"));
-        user.setCreateByUsername("xxxx");
+        //user.setCreateBy(rs.getInt("create_by"));
+        user.setCreateByUsername(rs.getString("create_by"));
+        user.setUpdateByUsername(rs.getString("update_by"));
         user.setCreateDate(rs.getString("create_date"));
         user.setEmail(rs.getString("email"));
         user.setFirstName(rs.getString("fname"));
@@ -182,7 +185,7 @@ public class ProfileDao {
         user.setStatus(rs.getString("status"));
         user.setUsername(rs.getString("username"));
         user.setUpdateDate(rs.getString("update_date"));
-        user.setUpdateBy(rs.getInt("update_by"));
+        //user.setUpdateBy(rs.getInt("update_by"));
         return user;
     }
     

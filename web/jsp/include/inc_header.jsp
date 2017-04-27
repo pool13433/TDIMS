@@ -14,7 +14,8 @@
         <link href="${context}/asset/css/app-style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="${context}/asset/js/jquery.2.2.4.js"></script>
         <script type="text/javascript" src="${context}/asset/bootstrap/js/bootstrap.js"></script>        
-        <script type="text/javascript" src="${context}/asset/jquery-ui/jquery-ui.js"></script>    
+        <script type="text/javascript" src="${context}/asset/jquery-ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="${context}/asset/js/jquery.validate.js"></script>
         <script type="text/javascript" src="${context}/asset/js/app-core.js"></script>
         <script type="text/javascript" src="${context}/asset/js/Chart.bundle.min.js"></script>
         <script type="text/javascript" src="${context}/asset/js/Chart.bundle.js"></script>
