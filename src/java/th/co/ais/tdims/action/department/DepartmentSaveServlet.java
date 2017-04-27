@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.DepartmentDao;
 import th.co.ais.tdims.model.Department;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class DepartmentSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(DepartmentSaveServlet.class);
-    private String message;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -34,22 +34,29 @@ public class DepartmentSaveServlet extends HttpServlet {
             DepartmentDao depDao = new DepartmentDao();
             
             logger.info("depId ::=="+dep.getDepId());
-            
+            int exe = 0;
             if(dep.getDepId().equals("")){
                 logger.info(" create ");
-                depDao.createDepartment(dep);
+                exe = depDao.createDepartment(dep);
             }else{
                 logger.info(" update ");
                 dep.setUpdateBy(profile.getProfileId());
-                depDao.updateDepartment(dep);
+                exe = depDao.updateDepartment(dep);
             }
-            message = "save Department success";
+            
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
+
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save Department error", e);
-            message = "save Department error";
         }
-        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet?message=".concat(message));
+        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet");
     }
 }
