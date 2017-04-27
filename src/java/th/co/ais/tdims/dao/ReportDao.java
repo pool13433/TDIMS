@@ -97,14 +97,14 @@ public class ReportDao {
         }
         return report;
     }
-    
+
     public MonthObject getCountSimTransaction(String simStatus) {
         PreparedStatement pstm = null;
         ResultSet rs = null;
         MonthObject object = null;
         try {
             conn = new DbConnection().open();
-            StringBuilder sql = new StringBuilder();            
+            StringBuilder sql = new StringBuilder();
             sql.append(" SELECT YEAR(create_date) as year, ");
             sql.append(" COUNT(CASE WHEN MONTH(create_date) = 1 THEN 0 END) AS Jan, ");
             sql.append(" COUNT(CASE WHEN MONTH(create_date) = 2 THEN 0 END) AS Feb, ");
@@ -120,7 +120,7 @@ public class ReportDao {
             sql.append(" COUNT(CASE WHEN MONTH(create_date) = 12 THEN 0 END) AS December ");
             sql.append(" FROM sim_history WHERE status = ? AND YEAR(create_date) = YEAR(CURDATE()) ");
             sql.append(" GROUP BY 1 ");
-            logger.info(" sql ::=="+sql.toString());
+            logger.info(" sql ::==" + sql.toString());
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, simStatus);
             rs = pstm.executeQuery();
@@ -137,7 +137,7 @@ public class ReportDao {
                 object.setSeptember(rs.getString("Sep"));
                 object.setOctober(rs.getString("Oct"));
                 object.setNovember(rs.getString("Nov"));
-                object.setDecember(rs.getString("December"));   
+                object.setDecember(rs.getString("December"));
                 object.setYear(rs.getString("year"));
             }
         } catch (Exception e) {
@@ -148,22 +148,25 @@ public class ReportDao {
         }
         return object;
     }
-    
-    public Map<String,Integer>  getGroupSimStatus() {
+
+    public Map<String, Integer> getGroupSimStatus() {
         PreparedStatement pstm = null;
-        ResultSet rs = null;     
-        Map<String,Integer> data = new HashMap<String,Integer>();
+        ResultSet rs = null;
+        Map<String, Integer> data = new HashMap<String, Integer>();
         try {
             conn = new DbConnection().open();
-            StringBuilder sql = new StringBuilder();            
-            sql.append(" SELECT status,count(mobile_no) as cnt_sim");
-            sql.append(" FROM sim_history WHERE YEAR(create_date) = YEAR(CURDATE()) ");
-            sql.append(" GROUP BY status ");
-            logger.info(" sql ::=="+sql.toString());
-            pstm = conn.prepareStatement(sql.toString());            
-            rs = pstm.executeQuery();            
-            while (rs.next()) {                
-                data.put(rs.getString("status"), rs.getInt("cnt_sim"));                
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT s.sim_STATUS as status, COUNT(s.mobile_no) AS cnt_sim ");
+            sql.append(" FROM sim s ");
+            sql.append(" LEFT JOIN sim_history h ON s.mobile_no = h.mobile_no ");
+            sql.append(" WHERE YEAR (s.create_date) = YEAR(CURDATE()) ");
+            sql.append(" GROUP BY s.sim_STATUS ");
+
+            logger.info(" sql ::==" + sql.toString());
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                data.put(rs.getString("status"), rs.getInt("cnt_sim"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,5 +193,4 @@ public class ReportDao {
         }
     }
 
-    
 }

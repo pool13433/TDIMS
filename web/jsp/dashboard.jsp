@@ -44,6 +44,8 @@
 <script type="text/javascript">
     $(function () {
         var myBarChart = null;
+        var myBGColor = ["#C6FF00","#FF9800","#0091EA","#FF4081","#8E24AA","#F44336",
+                                    "#795548","#000000","#3F51B5","#4CAF50","#CDDC39","#FFFF00"];
         renderBarChart('Inused');
         renderRadarChart();
         $('input[name="simStatus"]').on('change', function () {
@@ -71,7 +73,7 @@
                         labels: labels,
                         datasets: [{
                                 data: values,
-                                backgroundColor: ["#C6FF00","#FF9800","#0091EA","#FF4081","#8E24AA"]
+                                backgroundColor: myBGColor
                             }]
                     },
                 });
@@ -102,9 +104,7 @@
                         datasets: [{
                                 label: '# ภายในปี ' + label,
                                 data: values,
-                                backgroundColor: ['#F44336', '#E91E63',
-                                    '#9C27B0', '#673AB7', '#2196F3', '#3F51B5', '#03A9F4', '#009688', '#00BCD4',
-                                    '#4CAF50', '#CDDC39', '#8BC34A'],
+                                backgroundColor: myBGColor,
                                 borderWidth: 2
                             }]
                     },
