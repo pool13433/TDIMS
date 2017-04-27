@@ -31,7 +31,7 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label class="col-sm-2 control-label">System</label>
+                <label class="col-sm-1 control-label">System</label>
                 <div class="col-sm-3">
                     <select class="form-control" class="form-control" id="system" name="system" placeholder="system">
                         <option value="" selected>   Select System  </option>                                                       
@@ -47,9 +47,9 @@
                         </c:forEach>
                     </select>
                 </div>
-                <label class="col-sm-2 control-label">Mobile No</label>
+                <label class="col-sm-1 control-label">Mobile No</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="" id="number" name="number" placeholder="number" >
+                    <input type="text" class="form-control" value="${number}" id="number" name="number" placeholder="number" >
                 </div>
             </div>
             <div class="form-group">
@@ -62,6 +62,7 @@
         <form action="${context}/SendMailServlet" method="post" class="form-horizontal">
             <input type="hidden" value="${team}" id="team" name="team">
             <input type="hidden" value="${system}" id="system" name="system">
+            <input type="hidden" value="${number}" id="system" name="number">
             <c:if test="${fn:length(simList) > 0}">
                 <div class="form-group">
                     <div class="col-sm-offset-0 col-sm-10">
