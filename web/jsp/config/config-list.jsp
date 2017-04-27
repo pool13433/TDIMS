@@ -8,18 +8,22 @@
         <div class="panel-heading">แสดงรายการ Configuration ทั้งหมด</div>
         <div class="panel-body">            
             <div class="row">
+                <!-- Alert Message -->
+                <c:if test="${!empty MessageUI}">
+                    <div class="alert alert-${MessageUI.cssClass} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>${MessageUI.title}!</strong> ${MessageUI.message}
+                    </div>
+                    <c:remove var="MessageUI" scope="session" />
+                </c:if>            
+                <!-- Alert Message -->
                 <div class="col-md-3"> 
                     <a href="${context}/ConfigFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                 </div>
                 <div class="col-md-9">
                     <c:import url="../include/inc_pagination.jsp"/>
                 </div>                
-            </div>  
-            <div class="">
-                <c:if test="${!empty message}">
-                    <p>Status : ${message}</p>
-                </c:if>
-            </div>
+            </div>            
         </div>
         <table class="table table-bordered table-striped">
             <thead>
