@@ -25,10 +25,13 @@ public class PositionListServlet extends HttpServlet {
         try {
             PositionDao positionDao = new PositionDao();
             request.setAttribute("positionList", positionDao.getPositionAll());
+            
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("PositionListServlet error", e);
         }
+        
+        request.setAttribute("message", request.getParameter("message"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/position/position-list.jsp");
         dispatcher.forward(request, response);
     }

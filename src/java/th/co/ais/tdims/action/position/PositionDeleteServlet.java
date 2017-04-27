@@ -17,18 +17,19 @@ import th.co.ais.tdims.util.CharacterUtil;
 
 public class PositionDeleteServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(PositionDeleteServlet.class);
+    private String message;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             int exe = new PositionDao().deletePosition(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("posId"))));
-            request.setAttribute("message", "delete position success");
+            message =  "delete position success";
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete position error", e);
-            request.setAttribute("message", "delete position error");
+            message =  "delete position error";
         }
-        response.sendRedirect(request.getContextPath() + "/PositionListServlet");
+        response.sendRedirect(request.getContextPath() + "/PositionListServlet?message=".concat(message));
     }
 }

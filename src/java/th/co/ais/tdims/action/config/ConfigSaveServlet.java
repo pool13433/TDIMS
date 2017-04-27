@@ -18,6 +18,7 @@ import th.co.ais.tdims.util.CharacterUtil;
 
 public class ConfigSaveServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ConfigSaveServlet.class);
+    private String message;
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -40,14 +41,14 @@ public class ConfigSaveServlet extends HttpServlet {
                 logger.info(" update ");
                 configDao.updateConfig(config);
             }
-            request.setAttribute("message", "save config success");
+            message = "save config success";
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save config error", e);
-            request.setAttribute("message", "save config error");
+            message = "save config error";
         }
-        response.sendRedirect(request.getContextPath() + "/ConfigListServlet");
+        response.sendRedirect(request.getContextPath() + "/ConfigListServlet?message=".concat(message));
     }
 
 }

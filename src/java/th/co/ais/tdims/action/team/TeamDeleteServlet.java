@@ -18,19 +18,20 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class TeamDeleteServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(TeamDeleteServlet.class);
+    private String message;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          try {
             int exe = new TeamDao().deleteTeam(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("teamId"))));
-            request.setAttribute("message", "delete team success");
+            message = "delete team success";
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete team error", e);
-            request.setAttribute("message", "delete team error");
+            message = "delete team error";
         }
-        response.sendRedirect(request.getContextPath() + "/TeamListServlet");
+        response.sendRedirect(request.getContextPath() + "/TeamListServlet?message=".concat(message));
         
     }
 

@@ -19,6 +19,7 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class PositionSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(PositionSaveServlet.class);
+    private String message;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,12 +44,13 @@ public class PositionSaveServlet extends HttpServlet {
                 position.setUpdateBy(profile.getProfileId());
                 positionDao.updatePosition(position);
             }
-            request.setAttribute("message", "save position success");
+            message = "save position success";
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save position error", e);
+            message = "save position error";
         }
-        response.sendRedirect(request.getContextPath() + "/PositionListServlet");
+        response.sendRedirect(request.getContextPath() + "/PositionListServlet?message=".concat(message));
 
     }
 

@@ -7,6 +7,7 @@
 package th.co.ais.tdims.action.team;
 
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class TeamSaveFormServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(TeamSaveFormServlet.class);
+    private String message;
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,14 +45,15 @@ public class TeamSaveFormServlet extends HttpServlet {
                 team.setUpdateBy(profile.getProfileId());
                 teamDao.updateTeam(team);
             }
-            request.setAttribute("message", "save Team success");
+            message =  "save Team success";
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save Team error", e);
-            request.setAttribute("message", "save Team error");
+            message = "save Team error";
         }
-        response.sendRedirect(request.getContextPath() + "/TeamListServlet");
+
+        response.sendRedirect(request.getContextPath() + "/TeamListServlet?message=".concat(message));
     }
     
     

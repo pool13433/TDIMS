@@ -19,6 +19,7 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class DepartmentSaveServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(DepartmentSaveServlet.class);
+    private String message;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -42,13 +43,13 @@ public class DepartmentSaveServlet extends HttpServlet {
                 dep.setUpdateBy(profile.getProfileId());
                 depDao.updateDepartment(dep);
             }
-            request.setAttribute("message", "save Department success");
+            message = "save Department success";
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save Department error", e);
-            request.setAttribute("message", "save Department error");
+            message = "save Department error";
         }
-        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet");
+        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet?message=".concat(message));
     }
 }

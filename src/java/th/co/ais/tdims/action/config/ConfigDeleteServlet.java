@@ -17,18 +17,19 @@ import th.co.ais.tdims.util.CharacterUtil;
 
 public class ConfigDeleteServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ConfigDeleteServlet.class);
+    private String message;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          try {
             int exe = new ConfigDao().deleteConfig(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("conId"))));
-            request.setAttribute("message", "delete config success");
+            message = "delete config success";
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete sim error", e);
-            request.setAttribute("message", "delete config error");
+            message = "delete config error";
         }
-        response.sendRedirect(request.getContextPath() + "/ConfigListServlet");
+        response.sendRedirect(request.getContextPath() + "/ConfigListServlet?message=".concat(message));
     }
 }

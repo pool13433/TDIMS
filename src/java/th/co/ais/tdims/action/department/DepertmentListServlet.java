@@ -28,6 +28,7 @@ public class DepertmentListServlet extends HttpServlet {
             e.printStackTrace();
             logger.error("confList Error", e);
         }
+        request.setAttribute("message", request.getParameter("message"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/department/department-list.jsp");
         dispatcher.forward(request, response);
     }

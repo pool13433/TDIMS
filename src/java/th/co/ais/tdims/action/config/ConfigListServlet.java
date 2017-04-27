@@ -40,6 +40,7 @@ public class ConfigListServlet extends HttpServlet {
             e.printStackTrace();
             logger.error("confList Error", e);
         }
+        request.setAttribute("message", request.getParameter("message"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/config/config-list.jsp");
         dispatcher.forward(request, response);
     }

@@ -18,19 +18,20 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class DepartmentDeleteServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(DepartmentDeleteServlet.class);
+    private String message;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          try {
             int exe = new DepartmentDao().deleteDepartment(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("depId"))));
-            request.setAttribute("message", "delete department success");
+            message = "delete department success";
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete sim error", e);
-            request.setAttribute("message", "delete department error");
+            message = "delete department error";
         }
-        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet");
+        response.sendRedirect(request.getContextPath() + "/DepertmentListServlet?message=".concat(message));
         
     }
 
