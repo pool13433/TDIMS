@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Team;
 import th.co.ais.tdims.util.CharacterUtil;
@@ -21,7 +22,6 @@ import th.co.ais.tdims.util.CharacterUtil;
 public class TeamSaveFormServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(TeamSaveFormServlet.class);
-    private String message;
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -36,24 +36,31 @@ public class TeamSaveFormServlet extends HttpServlet {
             TeamDao teamDao = new TeamDao();
             
             logger.info("teamId ::=="+ team.getTeamId());
-            
+            int exe = 0;
             if(team.getTeamId().equals("")){
                 logger.info(" create ");
-                teamDao.createTeam(team);
+                exe = teamDao.createTeam(team);
             }else{
                 logger.info(" update ");
                 team.setUpdateBy(profile.getProfileId());
-                teamDao.updateTeam(team);
+                exe = teamDao.updateTeam(team);
             }
-            message =  "save Team success";
+            
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
+
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save Team error", e);
-            message = "save Team error";
         }
 
-        response.sendRedirect(request.getContextPath() + "/TeamListServlet?message=".concat(message));
+        response.sendRedirect(request.getContextPath() + "/TeamListServlet");
     }
     
     

@@ -13,25 +13,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.TeamDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class TeamDeleteServlet extends HttpServlet {
 
     final static Logger logger = Logger.getLogger(TeamDeleteServlet.class);
-    private String message;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          try {
             int exe = new TeamDao().deleteTeam(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("teamId"))));
-            message = "delete team success";
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete team error", e);
-            message = "delete team error";
         }
-        response.sendRedirect(request.getContextPath() + "/TeamListServlet?message=".concat(message));
+        response.sendRedirect(request.getContextPath() + "/TeamListServlet");
         
     }
 

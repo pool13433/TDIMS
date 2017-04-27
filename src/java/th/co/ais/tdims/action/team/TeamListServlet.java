@@ -23,13 +23,11 @@ final static Logger logger = Logger.getLogger(TeamListServlet.class);
             throws ServletException, IOException {
         try {            
             request.setAttribute("teamList", new TeamDao().getTeamAll());
-            logger.info("message : " + request.getParameter("message"));
             
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("team list Error", e);
         }
-        request.setAttribute("message", request.getParameter("message"));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/team/team-list.jsp");
         dispatcher.forward(request, response);
     }
