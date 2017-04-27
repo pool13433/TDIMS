@@ -13,23 +13,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class ConfigDeleteServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ConfigDeleteServlet.class);
-    private String message;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          try {
             int exe = new ConfigDao().deleteConfig(Integer.parseInt(CharacterUtil.removeNull(request.getParameter("conId"))));
-            message = "delete config success";
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete sim error", e);
-            message = "delete config error";
         }
-        response.sendRedirect(request.getContextPath() + "/ConfigListServlet?message=".concat(message));
+        response.sendRedirect(request.getContextPath() + "/ConfigListServlet");
     }
 }
