@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ProjectDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.util.CharacterUtil;
 
 public class ProjectDeleteServlet extends HttpServlet {
@@ -25,11 +26,17 @@ public class ProjectDeleteServlet extends HttpServlet {
             String projectId = CharacterUtil.removeNull(request.getParameter("projectId"));
 
             int exe = new ProjectDao().deleteProject(Integer.parseInt(projectId));
-            request.setAttribute("message", "delete project success");
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
+            
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("delete project error", e);
-            request.setAttribute("message", "delete project error");
         }
         response.sendRedirect(request.getContextPath() + "/ProjectListServlet");
     }

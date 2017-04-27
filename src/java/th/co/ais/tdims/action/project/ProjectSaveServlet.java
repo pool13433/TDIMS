@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.action.sim.SimSaveServlet;
 import th.co.ais.tdims.dao.ProjectDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.model.Project;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -38,15 +39,24 @@ public class ProjectSaveServlet extends HttpServlet {
             ProjectDao simDao = new ProjectDao();
 
             logger.info("projId ::==" + projId);
+            int exe = 0;
             if (projId.equals("")) {
                 logger.info(" create ");
-                simDao.createProject(project);
+                exe = simDao.createProject(project);
             } else {
                 logger.info(" update ");
                 project.setProjId(projId);
-                simDao.updateProject(project);
+                exe = simDao.updateProject(project);
             }
-            request.setAttribute("message", "save project success");
+            
+            MessageUI message = null;
+            if (exe == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
+
 
         } catch (Exception e) {
             e.printStackTrace();
