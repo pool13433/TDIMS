@@ -22,12 +22,11 @@ import th.co.ais.tdims.model.Environment;
 import th.co.ais.tdims.model.ReportSim;
 import com.google.gson.Gson;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
 import th.co.ais.tdims.model.ReportTestCase;
 
-/**
- *
- * @author satan
- */
 public class ReportServlet extends HttpServlet {
     final static Logger logger = Logger.getLogger(ReportServlet.class);
     
@@ -43,80 +42,83 @@ public class ReportServlet extends HttpServlet {
         ArrayList<Integer> lostList = new ArrayList<Integer>();
         ArrayList<Integer> pendingList = new ArrayList<Integer>();
         ArrayList<Integer> unavailableList = new ArrayList<Integer>();
+        List<Integer> previousYearList = new ArrayList<Integer>();
+        List<Integer> thisYearList = new ArrayList<Integer>();
+        List<Integer> nextYearList = new ArrayList<Integer>();
+        List<Integer> manualStepList = new ArrayList<Integer>();
+        List<Integer> autoStepList = new ArrayList<Integer>();
         
         String env = request.getParameter("env");
         String siteString = request.getParameter("site");
         String type = request.getParameter("type");
-        String cases = request.getParameter("case");
+        String cases = request.getParameter("cases");
         try {
             ReportDao reportDao = new ReportDao();
             ConfigDao configDao = new ConfigDao();
             List<Config> chargeTypeList = configDao.getConfigList("CHARGE_TYPE");
             List<Config> usageTypeList = configDao.getConfigList("USAGE_TYPE");
+            List<Config> siteList = configDao.getConfigList("SITE");
             
             EnvironmentDao en = new EnvironmentDao();
             if ("sim".equals(type)) {
-                List<Environment> enList = new ArrayList<Environment>();
+                List<Config> enList = new ArrayList<Config>();
                 if (env.isEmpty() || env == "") {
-                    enList = en.getAllEnvirenment();
+                    enList = configDao.getConfigList("ENV");
                 } else {
-                    enList.add(en.getEnvirenment(env));
+                    Config envc = new Config();
+                    envc.setConName(env);
+                    envc.setConValue(env);
+                    enList.add(envc);
                 }
                 Gson g = new Gson();
-                for (Environment enEntry : enList) {
-                    String[] siteList = ( (String) enEntry.getEnvSite()).split(",");
-                    for (String site : siteList) {
+                for (Config enEntry : enList) {
+                    for (Config site : siteList) {
                         if (siteString.isEmpty() || siteString == "") {
                             for (Config chargeType : chargeTypeList) {
                                 for (Config usageType : usageTypeList) {
-                                    ReportSim report = reportDao.getSummaryReport(enEntry.getEnvCode(), "Site"+site, chargeType.getConName(), usageType.getConName());
-                                    reportList.add(report);
-                                    reportGsonList.add(g.toJson(report));
-                                    labelList.add(report.getEnv() + "_" + "SITE" + report.getSite() + ":" + report.getChargeType() + ":" + report.getUsageType());
-                                    availableList.add(report.getAvailable());
-                                    inUsedList.add(report.getInUse());
-                                    lostList.add(report.getLost());
-                                    pendingList.add(report.getPending());
-                                    unavailableList.add(report.getUnAvailable());
+                                    ReportSim report = reportDao.getSummaryReport(enEntry.getConValue(), site.getConValue(), chargeType.getConName(), usageType.getConName());
+                                    if (report.getTotal() > 0) {
+                                        reportList.add(report);
+                                        reportGsonList.add(g.toJson(report));
+                                        labelList.add(report.getEnv() + "_" + "SITE" + report.getSite() + ":" + report.getChargeType() + ":" + report.getUsageType());
+                                        availableList.add(report.getAvailable());
+                                        inUsedList.add(report.getInUse());
+                                        lostList.add(report.getLost());
+                                        pendingList.add(report.getPending());
+                                        unavailableList.add(report.getUnAvailable());
+                                    }
                                 }
                             }
-                        } else if (site.equals(siteString)) {
+                        } else if (site.getConValue().equals(siteString)) {
                             for (Config chargeType : chargeTypeList) {
                                 for (Config usageType : usageTypeList) {
-                                    ReportSim report = reportDao.getSummaryReport(enEntry.getEnvCode(), "Site"+site, chargeType.getConName(), usageType.getConName());
-                                    reportList.add(report);
-                                    reportGsonList.add(g.toJson(report));
-                                    labelList.add(report.getEnv() + "_" + "SITE" + report.getSite() + ":" + report.getChargeType() + ":" + report.getUsageType());
-                                    availableList.add(report.getAvailable());
-                                    inUsedList.add(report.getInUse());
-                                    lostList.add(report.getLost());
-                                    pendingList.add(report.getPending());
-                                    unavailableList.add(report.getUnAvailable());
+                                    ReportSim report = reportDao.getSummaryReport(enEntry.getConValue(), site.getConValue(), chargeType.getConName(), usageType.getConName());
+                                    if (report.getTotal() > 0) {
+                                        reportList.add(report);
+                                        reportGsonList.add(g.toJson(report));
+                                        labelList.add(report.getEnv() + "_" + "SITE" + report.getSite() + ":" + report.getChargeType() + ":" + report.getUsageType());
+                                        availableList.add(report.getAvailable());
+                                        inUsedList.add(report.getInUse());
+                                        lostList.add(report.getLost());
+                                        pendingList.add(report.getPending());
+                                        unavailableList.add(report.getUnAvailable());
+                                    }
                                 }
                             }
                         }
                         
                     }
                 }
-                request.setAttribute("enList", enList);
                 request.setAttribute("reportList", reportList);
                 request.setAttribute("reportGsonList", reportGsonList);
-                request.setAttribute("labelList", g.toJson(labelList));
-                request.setAttribute("availableList", g.toJson(availableList));
-                request.setAttribute("inUsedList", g.toJson(inUsedList));
-                request.setAttribute("lostList", g.toJson(lostList));
-                request.setAttribute("pendingList", g.toJson(pendingList));
-                request.setAttribute("unavailableList", g.toJson(unavailableList));
+                request.setAttribute("cases", "sim");
+                request.setAttribute("env", env);
+                request.setAttribute("site", siteString);
             } else if ("testcase".equals(type)) {
                 Gson g = new Gson();
-                List<Integer> previousYearList = new ArrayList<Integer>();
-                List<Integer> thisYearList = new ArrayList<Integer>();
-                List<Integer> nextYearList = new ArrayList<Integer>();
-                List<Integer> manualStepList = new ArrayList<Integer>();
-                List<Integer> autoStepList = new ArrayList<Integer>();
                 List<ReportTestCase> testcaseDetList = new ArrayList<ReportTestCase>();
                 ArrayList<String> yearList = new ArrayList<String>() {{
-                                                int year = Calendar.getInstance().get(Calendar.YEAR);
+                                                int year = Calendar.getInstance(new Locale("en", "US")).get(Calendar.YEAR);
                                                 add(Integer.toString(year - 1));
                                                 add(Integer.toString(year));
                                                 add(Integer.toString(year + 1));
@@ -138,28 +140,48 @@ public class ReportServlet extends HttpServlet {
                             }
                         }
                     }
-                    request.setAttribute("previousYearList", g.toJson(previousYearList));
-                    request.setAttribute("thisYearList", g.toJson(thisYearList));
-                    request.setAttribute("nextYearList", g.toJson(nextYearList));
                     request.setAttribute("cases", "isTestcase");
+                    Comparator<ReportTestCase> mapComparator = new Comparator<ReportTestCase>() {
+                        public int compare(ReportTestCase m1, ReportTestCase m2) {
+                            return m1.getYear().compareTo(m2.getYear());
+                        }
+                    };
+                    
+                    Collections.sort(testcaseDetList, mapComparator);
                 } else if ("isStep".equals(cases)) {
                     for (String year : yearList) {
                         labelList.add(year);
+                        int manual = 0;
+                        int auto = 0;
                         for (Config typeConfig : typeList) {
                             ReportTestCase reportTestcase = reportDao.getTestCaseReport(year, typeConfig.getConValue());
                             testcaseDetList.add(reportTestcase);
-                            manualStepList.add(reportTestcase.getManualStep());
-                            autoStepList.add(reportTestcase.getAutoStep());
+                            manual = manual + reportTestcase.getManualStep();
+                            auto = auto + reportTestcase.getAutoStep();
                         }
+                        manualStepList.add(manual);
+                        autoStepList.add(auto);
                     }
-                    request.setAttribute("manualStepList", g.toJson(manualStepList));
-                    request.setAttribute("autoStepList", g.toJson(autoStepList));
                     request.setAttribute("cases", "isStep");
                 }
                 request.setAttribute("testcaseDetList", testcaseDetList);
-                request.setAttribute("labelList", g.toJson(labelList));
             }
-            request.setAttribute("envSelectList", en.getAllEnvirenment());
+            
+            Gson g = new Gson();
+            System.out.println("============== " + manualStepList);
+            request.setAttribute("envSelectList", configDao.getConfigList("ENV"));
+            request.setAttribute("siteSelectList", configDao.getConfigList("SITE"));
+            request.setAttribute("availableList", g.toJson(availableList));
+            request.setAttribute("inUsedList", g.toJson(inUsedList));
+            request.setAttribute("lostList", g.toJson(lostList));
+            request.setAttribute("pendingList", g.toJson(pendingList));
+            request.setAttribute("unavailableList", g.toJson(unavailableList));
+            request.setAttribute("manualStepList", g.toJson(manualStepList));
+            request.setAttribute("autoStepList", g.toJson(autoStepList));
+            request.setAttribute("previousYearList", g.toJson(previousYearList));
+            request.setAttribute("thisYearList", g.toJson(thisYearList));
+            request.setAttribute("nextYearList", g.toJson(nextYearList));
+            request.setAttribute("labelList", g.toJson(labelList));
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Report Error", e);

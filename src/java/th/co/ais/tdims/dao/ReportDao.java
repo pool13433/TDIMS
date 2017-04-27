@@ -29,12 +29,12 @@ public class ReportDao {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder("SELECT "
                     + "COUNT(case s.sim_status when 'Available' then 1 else null end) as available, "
-                    + "COUNT(case s.sim_status when 'Inused' then 1 else null end) as inUsed, "
+                    + "COUNT(case s.sim_status when 'InUsed' then 1 else null end) as inUsed, "
                     + "COUNT(case s.sim_status when 'Lost' then 1 else null end) as lost, "
                     + "COUNT(case s.sim_status when 'Pending' then 1 else null end) as pending,"
                     + "COUNT(case s.sim_status when 'Unavailable' then 1 else null end) as unavailable,"
                     + "COUNT(*) as total FROM sim s");
-            sql.append(" WHERE s.env = ? AND s.site = ? AND s.charge_type = ? AND s.usage_type = ? ");
+            sql.append(" WHERE s.env = ? AND UPPER(s.site) = ? AND s.charge_type = ? AND s.usage_type = ? ");
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, env);
             pstm.setString(2, site);
@@ -69,25 +69,26 @@ public class ReportDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder("SELECT "
-                    + "COUNT(*) as all, "
-                    + "SUM(defect_no) as defect,"
-                    + "SUM(issue_no) as issue,"
-                    + "SUM(manual_step) as manualstep,"
-                    + "SUM(auto_step) as autoStep FROM testcase t");
-            sql.append(" WHERE t.create_date >= TO_DATE('" + year + "0101000000', 'yyyymmddhh24miss') AND t.create_date <= TO_DATE('" + year + "0101000000', 'yyyymmddhh24miss') "
+                    + "COUNT(*) as alltest, "
+                    + "SUM(t.defect_no) as defect,"
+                    + "SUM(t.issue_no) as issue,"
+                    + "SUM(t.step) as step,"
+                    + "SUM(t.automate) as automate FROM testcase t");
+            sql.append(" WHERE t.create_date >= '" + year + "-01-01 00:00:00' AND t.create_date <= '" + year + "-12-31 23:59:59' "
                     + "AND t.type = ?");
+            System.out.println("===sql " + sql.toString());
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, type);
             rs = pstm.executeQuery();
             if (rs.next()) {
                 report.setType(type);
                 report.setYear(year);
-                report.setTestcase(rs.getInt("all"));
+                report.setTestcase(rs.getInt("alltest"));
                 report.setDefect(rs.getInt("defect"));
                 report.setIssue(rs.getInt("issue"));
-                report.setManualStep(rs.getInt("manualstep"));
-                report.setAutoStep(rs.getInt("autoStep"));
-                report.setAllStep(rs.getInt("manualstep") + rs.getInt("autoStep"));
+                report.setManualStep(rs.getInt("step"));
+                report.setAutoStep(rs.getInt("automate"));
+                report.setAllStep(rs.getInt("step") + rs.getInt("automate"));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -20,11 +20,11 @@
                         <option value="" selected>   All  </option>                                                       
                         <c:forEach items="${envSelectList}" var="e">                            
                             <c:choose>
-                                <c:when test="${env == e.envCode}">
-                                    <option value="${e.envId}" selected>${e.envCode}</option>
+                                <c:when test="${env == e.conValue}">
+                                    <option value="${e.conValue}" selected>${e.conValue}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${e.envId}">${e.envCode}</option>
+                                    <option value="${e.conValue}">${e.conValue}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
@@ -32,7 +32,19 @@
                 </div>
                 <label class="col-sm-2 control-label">Site</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" value="" id="site" name="site" placeholder="site" >*Blank means all
+                    <select class="form-control" class="form-control" id="site" name="site" placeholder="site">
+                        <option value="" selected>   All  </option>                                                       
+                        <c:forEach items="${siteSelectList}" var="s">                            
+                            <c:choose>
+                                <c:when test="${site == s.conValue}">
+                                    <option value="${s.conValue}" selected>${s.conValue}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${s.conValue}">${s.conValue}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -47,16 +59,16 @@
     <div class="panel panel-ais">
         <div id="3" class="panel-heading">Test Case Report</div>
         <br>
-        <form action="${context}/ExpiredSimServlet" method="get" class="form-horizontal">
+        <form action="${context}/ReportServlet" method="get" class="form-horizontal">
             <input type="hidden" id="type" name="type" value="testcase"/>
             <div class="form-group">
                 <label class="col-sm-1 control-label">Test Case</label>
                 <div class="col-sm-3">
-                    <input type="radio" value="isTestcase" id="case" name="case" placeholder="site">
+                    <input type="radio" value="isTestcase" id="cases" name="cases" placeholder="cases">
                 </div>
-                <label class="col-sm-2 control-label">Site</label>
+                <label class="col-sm-2 control-label">Step</label>
                 <div class="col-sm-3">
-                    <input type="radio" value="isStep" id="case" name="case" placeholder="site">
+                    <input type="radio" value="isStep" id="cases" name="cases" placeholder="cases">
                 </div>
             </div>
             <div class="form-group">
@@ -68,45 +80,41 @@
     </div>
 </div>
 <br>
-<c:if test="${not empty reportList}">
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Summary All Env</th>
-                    <th>Total</th>
-                    <th>Available</th>
-                    <th>In Use</th>
-                    <th>Lost</th>
-                    <th>Unavailable</th>                    
-                    <th>Pending</th> 
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="report" items="${reportList}">
-                    <tr>
-                        <td>${report.env}_Site${report.site}:${report.chargeType}:${report.usageType}</td>
-                        <td>${report.total}</td>
-                        <td>${report.available}</td>
-                        <td>${report.inUse}</td>
-                        <td>${report.lost}</td>
-                        <td>${report.unAvailable}</td>                        
-                        <td>${report.pending}</td>  
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <canvas id="reportChart"></canvas>
-</c:if>
-
 <c:if test="${not empty cases}">
     <div class="table-responsive">
-        <c:if test="${cases} == isTestcase">
+        <c:if test="${cases eq 'sim'}">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Summary All Env</th>
+                        <th>Total</th>
+                        <th>Available</th>
+                        <th>In Use</th>
+                        <th>Lost</th>
+                        <th>Unavailable</th>                    
+                        <th>Pending</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="report" items="${reportList}">
+                        <tr>
+                            <td>${report.env}_SITE${report.site}:${report.chargeType}:${report.usageType}</td>
+                            <td>${report.total}</td>
+                            <td>${report.available}</td>
+                            <td>${report.inUse}</td>
+                            <td>${report.lost}</td>
+                            <td>${report.unAvailable}</td>                        
+                            <td>${report.pending}</td>  
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
+        <c:if test="${cases eq 'isTestcase'}">
                <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Year</th>
                         <th>Type</th>
                         <th>Test Case</th>
                         <th>Manual Step</th>
@@ -117,18 +125,20 @@
                 </thead>
                 <tbody>
                     <c:forEach var="step" items="${testcaseDetList}">
-                        <c:if test="${empty temptest}">
-                            <c:set var="temptest" value="${step.year}" />
-                            ${step.year}
-                        </c:if>
-                        
-                        <c:if test="${not empty temptest}">
-                            <c:if test="${temptest != step.year}">
-                                <c:set var="temptest" value="${step.year}" />
-                                ${step.year}
-                            </c:if>
-                        </c:if>
                         <tr>
+                            <td>
+                                <c:if test="${empty temptest}">
+                                    <c:set var="temptest" value="${step.year}" />
+                                    ${step.year}
+                                </c:if>
+
+                                <c:if test="${not empty temptest}">
+                                    <c:if test="${temptest ne step.year}">
+                                        <c:set var="temptest" value="${step.year}" />
+                                        ${step.year}
+                                    </c:if>
+                                </c:if>
+                            </td>
                             <td>${step.type}</td>
                             <td>${step.testcase}</td>
                             <td>${step.manualStep}</td>
@@ -141,10 +151,11 @@
             </table>
         </c:if>
         
-        <c:if test="${cases} == isStep">
+        <c:if test="${cases eq 'isStep'}">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Year</th>
                         <th>Type</th>
                         <th>Manual Step</th>
                         <th>Auto Step</th>
@@ -153,18 +164,20 @@
                 </thead>
                 <tbody>
                     <c:forEach var="step" items="${testcaseDetList}">
-                        <c:if test="${empty temptest}">
-                            <c:set var="temptest" value="${step.year}" />
-                            ${step.year}
-                        </c:if>
-                        
-                        <c:if test="${not empty temptest}">
-                            <c:if test="${temptest != step.year}">
-                                <c:set var="temptest" value="${step.year}" />
-                                ${step.year}
-                            </c:if>
-                        </c:if>
                         <tr>
+                            <td>
+                                <c:if test="${empty temptest}">
+                                    <c:set var="temptest" value="${step.year}" />
+                                    ${step.year}
+                                </c:if>
+
+                                <c:if test="${not empty temptest}">
+                                    <c:if test="${temptest ne step.year}">
+                                        <c:set var="temptest" value="${step.year}" />
+                                        ${step.year}
+                                    </c:if>
+                                </c:if>
+                            </td>
                             <td>${step.type}</td>
                             <td>${step.manualStep}</td>
                             <td>${step.autoStep}</td>
@@ -175,13 +188,14 @@
             </table>
         </c:if>
     </div>
-    <br>
-    <canvas id="reportChart"></canvas>
 </c:if>
-
+<br>
+<canvas id="reportChart"></canvas>
+    
+    
 <script type="text/javascript">
-    var ctx = document.getElementById("reportChart").getContext('2d');
-    if (${cases} == "" || ${cases} == null) {
+    if ("${cases}" == "sim") {
+        var ctx = document.getElementById("reportChart").getContext('2d');
         var reportChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -299,7 +313,8 @@
                 }
             }
         });
-    } else if (${cases} == "isTestcase") {
+    } else if ("${cases}" == "isTestcase") {
+        var ctx = document.getElementById("reportChart").getContext('2d');
         var year = new Date().getFullYear()
         var reportChart = new Chart(ctx, {
             type: 'bar',
@@ -354,7 +369,7 @@
                         'rgba(66, 227, 245, 1)',
                         'rgba(66, 227, 245, 1)',
                         'rgba(66, 227, 245, 1)',
-                        'rgba(66, 227, 245, 1)')'
+                        'rgba(66, 227, 245, 1)'
                     ],
                     borderColor: [
                         'rgba(66, 227, 245, 1)',
@@ -378,7 +393,8 @@
                 }
             }
         });
-    } else if (${cases} == "isStep") {
+    } else if ("${cases}" == "isStep") {
+        var ctx = document.getElementById("reportChart").getContext('2d');
         var reportChart = new Chart(ctx, {
             type: 'bar',
             data: {

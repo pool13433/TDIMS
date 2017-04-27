@@ -32,7 +32,7 @@ public class ExpiredSimServlet extends HttpServlet {
         try {
             int team = CharacterUtil.removeNullTo(request.getParameter("team"), 0);
             String system = request.getParameter("system") != null ? (String)request.getParameter("system") : null;
-            String mobile = request.getParameter("mobile") != null ? (String)request.getParameter("mobile") : null;
+            String number = request.getParameter("number") != null ? (String)request.getParameter("number") : null;
             SimDao simDao = new SimDao();
             TeamDao teamDao = new TeamDao();
             ConfigDao configDao = new ConfigDao();
@@ -42,12 +42,13 @@ public class ExpiredSimServlet extends HttpServlet {
             
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 300);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
-            List<ExpiredSim> es = simDao.getExpiredSim(team, system, mobile, limit, offset);
+            List<ExpiredSim> es = simDao.getExpiredSim(team, system, number, limit, offset);
             
             String pageUrl = request.getContextPath() + "/ExpiredSimServlet?"+request.getQueryString();
-            int countRecordAll = simDao.getCountExpiredSim(team, system, mobile);
+            int countRecordAll = simDao.getCountExpiredSim(team, system, number);
             Pagination pagination = new Pagination(pageUrl,countRecordAll, limit, offset);
             request.setAttribute("team", team);
+            request.setAttribute("number", number);
             request.setAttribute("teamName", chooseTeam.getTeamName());
             request.setAttribute("system", system);
             request.setAttribute("simList", es);
