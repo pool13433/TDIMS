@@ -214,4 +214,31 @@ public class ProjectDao {
             logger.error("getUser error", ex);
         }
     }
+    
+    public List<Combo> getProjectStatusOnComboList() {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Combo> combo = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT `proj_id`, `proj_name`, `proj_desc` FROM `project` where LOWER(proj_status) = 'on'  ORDER BY proj_name ASC");            
+            pstm = conn.prepareStatement(sql.toString());
+            rs = pstm.executeQuery();
+            combo = new ArrayList<Combo>();
+            while (rs.next()) {
+                Combo c = new Combo();
+                c.setId(rs.getString("proj_id"));
+                c.setValue1(rs.getString("proj_name"));
+                c.setValue2(rs.getString("proj_desc"));
+                combo.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getProjectStatusOnComboList error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return combo;
+    }
 }
