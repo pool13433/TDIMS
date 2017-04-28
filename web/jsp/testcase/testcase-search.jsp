@@ -107,7 +107,7 @@
                     <div class="form-group">
                         <label for="details" class="control-label col-sm-3">Details </label>
                         <div class="col-sm-9">
-                            <textarea class="form-control" rows="7" id="details" name="details" value="${details}">${testcase.testcaseDetails}</textarea>
+                            <textarea class="form-control" rows="7" id="details" name="details" value="${details}">${details}</textarea>
                         </div>
                     </div>
                      
@@ -168,15 +168,18 @@
                         <th>ProjectId</th>
                         <th>Create By</th>
                         <th>System</th>
-                        <th>Enviroment</th>  
-                        <th>IssurNO</th>
+                        <th>Environment</th>  
+                        <th>IssueNo</th>
                         <th>Path Dir</th>
                         <th>Testcase Details</th>
                         <th>Testcase Title</th>
                         <th>Defect No</th>
                         <th>Step</th> 
-                        <th>type</th>
+                        <th>Type</th>
                         <th>Create Date</th>
+                        <th>Create By</th>
+                        <th>Update Date</th>
+                        <th>Update By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -198,6 +201,9 @@
                             <td>${tc.step}</td>
                             <td>${tc.type}</td>
                             <td>${tc.createDate}</td>
+                            <td>${tc.createBy}</td>
+                            <td>${tc.updateDate}</td>
+                            <td>${tc.updateBy}</td>
                         </tr>
                     </c:forEach>
                     <c:if test="${testcaseList.isEmpty()}">
@@ -234,6 +240,21 @@
                     criteria[kv.name] = kv.value;
                 }
             });
+            
+           
+            var dateFrom = $("#startDate");
+            var dateTo = $("#toDate");                        
+
+            if("" !== dateFrom.val() && "" === dateTo.val()){
+                alert('กรุณาระบุ Date-To');
+                return false;
+            }
+
+            if("" == dateFrom.val() && "" !== dateTo.val()){
+                alert('กรุณาระบุ Date-From');
+                return false;
+            }
+                 
         });
         
         $('a[id="gotofile"]').click(function (event){            

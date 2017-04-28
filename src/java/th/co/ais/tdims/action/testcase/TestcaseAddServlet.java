@@ -5,27 +5,18 @@
  */
 package th.co.ais.tdims.action.testcase;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 import th.co.ais.tdims.model.Testcase;
-import th.co.ais.tdims.util.CharacterUtil;
-import th.co.ais.tdims.util.FileUploadUtil;
 
 /**
  *
@@ -101,6 +92,7 @@ public class TestcaseAddServlet extends HttpServlet {
 
             Testcase data = new Testcase();
             data.setCreateBy(owner);
+            data.setUpdateBy(owner);
             data.setDefectNo(td);
             data.setIssueNo(issue);
             data.setPathDir(path);
@@ -114,7 +106,7 @@ public class TestcaseAddServlet extends HttpServlet {
             data.setType(type);
             data.setTestcaseId(testcaseId);
             
-            TestcastDao testcaseDao = new TestcastDao();
+            TestcaseDao testcaseDao = new TestcaseDao();
             
             logger.info("testcaseId ::=="+testcaseId);
             if(testcaseId.equals("")){

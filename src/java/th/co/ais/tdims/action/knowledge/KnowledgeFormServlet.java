@@ -20,7 +20,7 @@ import th.co.ais.tdims.dao.ModuleDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
 import th.co.ais.tdims.dao.TeamDao;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 import th.co.ais.tdims.model.Knowledge;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;

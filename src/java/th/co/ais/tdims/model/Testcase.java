@@ -19,9 +19,11 @@ public class Testcase {
     private String defectNo;    
     private String createDate;
     private String step;
-     private String automate;
+    private String automate;
     private String createBy;
     private String type;
+    private String updateBy;
+    private String updateDate;
 
     public String getCreateDate() {
         return createDate;
@@ -139,6 +141,22 @@ public class Testcase {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
     
     

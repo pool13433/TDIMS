@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 import th.co.ais.tdims.util.CharacterUtil;
 
 /**
@@ -30,7 +30,7 @@ public class TestcaseDeleteServlet extends HttpServlet {
         
         try {            
             String testcaseId = CharacterUtil.removeNull(request.getParameter("testcaseId"));
-            TestcastDao testcaseDao = new TestcastDao();
+            TestcaseDao testcaseDao = new TestcaseDao();
             
              int exe = testcaseDao.deleteTestcase(Integer.parseInt(testcaseId));
             request.setAttribute("message", "delete testcase success");

@@ -15,10 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
-import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 import th.co.ais.tdims.model.Pagination;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;
@@ -61,7 +60,7 @@ final static Logger logger = Logger.getLogger(TestcaseSearchServlet.class);
             request.setAttribute("type", type);
             int limit = CharacterUtil.removeNullTo(request.getParameter("limit"), 5);
             int offset = CharacterUtil.removeNullTo(request.getParameter("offset"), 0);
-            TestcastDao testcaseDao= new TestcastDao();
+            TestcaseDao testcaseDao= new TestcaseDao();
             
             if("searching".equals(menu)){
                 tc.setProjectId(projectId);

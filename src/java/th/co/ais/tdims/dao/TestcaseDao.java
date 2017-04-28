@@ -9,15 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
-import static th.co.ais.tdims.dao.SimDao.logger;
 import th.co.ais.tdims.db.DbConnection;
-import th.co.ais.tdims.model.Sim;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -25,8 +22,8 @@ import th.co.ais.tdims.util.CharacterUtil;
  *
  * @author Administrator
  */
-public class TestcastDao {
-    final static Logger logger = Logger.getLogger(TestcastDao.class);
+public class TestcaseDao {
+    final static Logger logger = Logger.getLogger(TestcaseDao.class);
 
     private Connection conn = null;
     
@@ -44,6 +41,8 @@ public class TestcastDao {
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
             sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = t.update_by)  as  `update_by`, ");
+            sql.append(" DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date, `step`,`type` ");
             sql.append(" FROM `testcase` t ");
             logger.info("sql ::=="+sql);
@@ -71,8 +70,10 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `testcase_id`, (select p.proj_name from project p where p.proj_id = t.project_id)  as `project_id`,  ");
             sql.append(" (select pf.username from profile pf where pf.profile_id = t.create_by)  as  `create_by`, ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = t.update_by)  as  `update_by`, ");
             sql.append(" `systems`, `enviroment`, `issue_no`, `path_dir`, ");
             sql.append(" `testcase_details`, `testcase_title`,`defect_no`,`automate`, `step`, `type`, ");
+            sql.append(" DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date, ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date ");
             sql.append(" FROM `testcase` t ");            
             sql.append(getConditionBuilder(tc));            
@@ -119,8 +120,9 @@ public class TestcastDao {
                     SimpleDateFormat sd2 = new SimpleDateFormat("yyyy-mm-dd");
                     SimpleDateFormat td1 = new SimpleDateFormat("dd-mm-yyyy");
                     Date tdate = td1.parse(d[1]);
-                    SimpleDateFormat td2 = new SimpleDateFormat("yyyy-mm-dd");
-                    sql.append(" and `create_date` between '"+sd2.format(sdate)+"' and '"+td2.format(tdate)+"'");
+                    SimpleDateFormat td2 = new SimpleDateFormat("yyyy-mm-dd");                    
+                    sql.append(" and `create_date` between '"+sd2.format(sdate)+" 00:00:00' and '"+td2.format(tdate)+" 23:59:59'");
+                                        
                 }
             }
             if(!"".equals(CharacterUtil.removeNull(tc.getCreateBy()))){
@@ -175,6 +177,9 @@ public class TestcastDao {
         t.setType(rs.getString("type"));
         t.setAutomate(rs.getString("automate"));
         t.setCreateBy(rs.getString("create_by"));
+        t.setUpdateBy(rs.getString("update_by"));
+        t.setUpdateDate(rs.getString("update_date"));
+        
         
         return t;
         
@@ -265,7 +270,7 @@ public class TestcastDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" UPDATE `testcase` SET ");
             sql.append(" `testcase_title`=?,`testcase_details`=?,`systems`=?,`enviroment`=?,`defect_no`=?,");
-            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`create_by`=?,create_date=?,`step`=?,type=?,automate=?");
+            sql.append(" issue_no=?,`project_id`=?,path_dir=?,`update_by`=?,update_date=NOW(),`step`=?,type=?,automate=?");
             sql.append(" WHERE `testcase_id`=?");
 
             //logger.info("sql ::=="+sql);
@@ -279,12 +284,13 @@ public class TestcastDao {
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
             pstm.setString(8, testcase.getPathDir());
-            pstm.setString(9, testcase.getCreateBy());
-            pstm.setString(10, testcase.getCreateDate());
-            pstm.setString(11, testcase.getStep());
-             pstm.setString(12, testcase.getType());
-             pstm.setString(13, testcase.getAutomate());
-            pstm.setString(14, testcase.getTestcaseId());
+            pstm.setString(9, testcase.getUpdateBy());
+            //pstm.setString(10, testcase.getUpdateDate());
+            pstm.setString(10, testcase.getStep());
+            pstm.setString(11, testcase.getType());
+            pstm.setString(12, testcase.getAutomate());
+            pstm.setString(13, testcase.getTestcaseId());
+            logger.debug(pstm);
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -305,6 +311,8 @@ public class TestcastDao {
             sql.append(" SELECT `testcase_id`, `testcase_title`, `testcase_details`, ");
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`, `automate`, `type`,  ");
             sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
+            sql.append(" (select pf.username from profile pf where pf.profile_id = t.update_by)  as `update_by`, ");
+            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , `step` ");
             sql.append(" FROM `testcase` t WHERE testcase_id = ?");
             logger.info("sql ::=="+sql);

@@ -18,7 +18,7 @@ import th.co.ais.tdims.dao.ConfigDao;
 import th.co.ais.tdims.dao.EnvironmentDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 import th.co.ais.tdims.model.Testcase;
 import th.co.ais.tdims.util.CharacterUtil;
 
@@ -37,7 +37,7 @@ public class TestcaseFormServlet extends HttpServlet {
         try {
             ConfigDao configDao = new ConfigDao();
             ProjectDao projecDao = new ProjectDao();
-            TestcastDao testcaseDao = new TestcastDao();
+            TestcaseDao testcaseDao = new TestcaseDao();
             
            String testcaseId = CharacterUtil.removeNull(request.getParameter("testcaseId"));
             Testcase testcase = null;

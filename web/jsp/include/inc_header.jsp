@@ -100,18 +100,12 @@
                                 <a href="${context}/SimHistoryServlet?menu=sim_history"><i class="glyphicon glyphicon-credit-card"></i> SIM History Log</a>
                             </li> 
                         </ul>
-                        <ul class="nav nav-sidebar">
-                            <!--<li class="<c:out value="${menu == 'knowledge' ? 'active': ''}"/>">                                                            
-                                <a href="${context}/KnowledgeListServlet?menu=knowledge"><i class="glyphicon glyphicon-education"></i> จัดการ Knowledge</a>
-                            </li>-->
+                        <ul class="nav nav-sidebar">                            
                             <li class="<c:out value="${menu == 'knowledge_search' ? 'active': ''}"/>">
-                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge-search"><i class="glyphicon glyphicon-education"></i> Manage Knowledge</a>
+                                <a href="${context}/KnowledgeSearchServlet?menu=knowledge_search"><i class="glyphicon glyphicon-education"></i> Manage Knowledge</a>
                             </li>
                         </ul>
-                        <ul class="nav nav-sidebar">
-                            <!--<li class="<c:out value="${menu == 'testcase' ? 'active': ''}"/>">
-                                <a href="${context}/TestcaseListServlet?menu=testcase"><i class="glyphicon glyphicon-folder-open"></i> จัดการ Testcase</a>
-                            </li>-->
+                        <ul class="nav nav-sidebar">                            
                             <li class="<c:out value="${menu == 'testcase_search' ? 'active': ''}"/>">
                                 <a href="${context}/TestcaseSearchServlet?menu=testcase_search"><i class="glyphicon glyphicon-folder-open"></i> Manage Testcase</a>
                             </li>
