@@ -14,12 +14,14 @@
     <c:set var="page" value="${pagination.pages}" />
 </c:if>
 
-<!--pageCurrent :: ${pagination.pageCurrent} <br/>
+<!--
+pageCurrent :: ${pagination.pageCurrent} <br/>
 paginLimit :: ${pagination.paginLimit} <br/>
 recordCurrent :: ${pagination.recordCurrent} <br/>
 recordLimit :: ${pagination.recordLimit} <br/>
 pages :: ${page} <br/>
-pageUrl :: ${pagination.pageUrl} <br/>-->
+pageUrl :: ${pagination.pageUrl} <br/>
+-->
 <nav aria-label="Page navigation pull-right">
     <ul class="pagination pagination-sm pull-right">
         <li><a href="${pagination.pageUrl}"> First</a></li>
@@ -58,7 +60,7 @@ pageUrl :: ${pagination.pageUrl} <br/>-->
         </li>
         <li>
             <a href="#" aria-label="Next">
-                <span aria-hidden="true">${pagination.countRecordAll} Record ,${page +1} Pages</span>
+                <span aria-hidden="true">${pagination.countRecordAll} Record ,${page} Pages</span>
             </a>
         </li>
     </ul>
