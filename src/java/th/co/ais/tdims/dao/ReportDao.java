@@ -132,7 +132,7 @@ public class ReportDao {
                 object.setMarch(rs.getString("Mar"));
                 object.setApril(rs.getString("Apr"));
                 object.setMay(rs.getString("May"));
-                object.setJanuary(rs.getString("Jun"));
+                object.setJune(rs.getString("Jun"));
                 object.setJuly(rs.getString("Jul"));
                 object.setAugust(rs.getString("Aug"));
                 object.setSeptember(rs.getString("Sep"));
