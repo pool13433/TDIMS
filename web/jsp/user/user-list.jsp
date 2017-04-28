@@ -8,6 +8,15 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">แสดงรายการ User ทั้งหมด</div>
         <div class="panel-body">
+            <!-- Alert Message -->
+            <c:if test="${!empty MessageUI}">
+                <div class="alert alert-${MessageUI.cssClass} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>${MessageUI.title}!</strong> ${MessageUI.message}
+                </div>
+                <c:remove var="MessageUI" scope="session" />
+            </c:if>            
+            <!-- Alert Message -->
             <a href="${context}/UserFormServlet" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                 <c:if test="${!empty message}">
                     <p>Status : ${message}</p>

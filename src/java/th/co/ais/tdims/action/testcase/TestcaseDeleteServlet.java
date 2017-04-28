@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.TestcaseDao;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.util.CharacterUtil;
 
 /**
@@ -32,9 +33,14 @@ public class TestcaseDeleteServlet extends HttpServlet {
             String testcaseId = CharacterUtil.removeNull(request.getParameter("testcaseId"));
             TestcaseDao testcaseDao = new TestcaseDao();
             
-             int exe = testcaseDao.deleteTestcase(Integer.parseInt(testcaseId));
-            request.setAttribute("message", "delete testcase success");
-            
+             int exec = testcaseDao.deleteTestcase(Integer.parseInt(testcaseId));
+            MessageUI message = null;
+            if (exec == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
             
         } catch (Exception e) {
             e.printStackTrace();

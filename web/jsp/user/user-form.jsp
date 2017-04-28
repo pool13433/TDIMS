@@ -14,6 +14,10 @@
                          <input type="hidden" class="form-control" id="profileId" name="profileId" value="${profile.profileId}" >
                         <input type="text" class="form-control" id="username" name="username" value="${profile.username}" placeholder="username" required>
                     </div>
+                     <label for="mobile" class="col-sm-2 control-label">Mobile No</label>
+                    <div class="col-sm-4">                   
+                        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="mobile" value="${profile.mobile}" required>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password" class="col-sm-2 control-label">password</label>
@@ -36,10 +40,22 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mobile" class="col-sm-2 control-label">Mobile No</label>
-                    <div class="col-sm-4">                   
-                        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="mobile" value="${profile.mobile}" required>
+                    <label for="department" class="col-sm-2 control-label">Department</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="department" name="department" required>
+                            <c:forEach items="${depList}" var="dep">
+                                <c:choose>
+                                <c:when test="${profile.department == dep.depId}">
+                                   <option value="${dep.depId}" selected>${dep.depName}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${dep.depId}">${dep.depName}</option>
+                                </c:otherwise>
+                            </c:choose>
+                            </c:forEach>
+                        </select>
                     </div>
+                   
                     <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-4">                   
                         <input type="email" class="form-control" id="email" name="email" value="${profile.email}" placeholder="email" required>
@@ -49,7 +65,7 @@
                     <label for="position" class="col-sm-2 control-label">Position</label>
                     <div class="col-sm-4">
                         <div class="col-sm-4">
-                            <select class="form-control" id="chargeType" name="position" placeholder="position" required>
+                            <select class="form-control" id="position" name="position" placeholder="position" required>
                                 <c:forEach items="${positionList}" var="position">
                                     <c:choose>
                                 <c:when test="${profile.position == position.posId}">
@@ -95,6 +111,8 @@
                         </select>
                     </div>
                     
+                    
+                    
                 </div>
 
                 <div class="form-group">
@@ -108,6 +126,65 @@
     </div>
 </div>
                         <script>
+                            
+        $(document).ready(function () {
+           getPosition();
+           
+            
+            function getPosition(){
+                var depId = $('select[id="department"] option:selected').val();
+                console.log(depId);
+            $.post({
+                url:"UserFormServlet?depId="+depId,
+                datatype: 'json',
+                success:function(response){                    
+                    if(response != null){
+                        var select = $("#position");
+                        select.find("option").remove();
+                        $.each(response, function(index, value){
+                            $("#position").append($('<option>').text(value.posName).attr('value',value.posId));
+                        });
+                        
+                        $('select[id="position"] option[value=${profile.position}]').attr('selected','selected');
+                        
+                    }
+                    
+                    //$("#changed").val("changed");
+                   //$("#searchKnl").submit();
+                }
+           
+            });
+        }
+            
+        
+        
+         $('select[id="department"]').change(function (event){            
+            event.preventDefault();
+            var depId = $(this).val();
+            $.post({
+                url:"UserFormServlet?depId="+depId,
+                datatype: 'json',
+                success:function(response){                    
+                    if(response != null){
+                        var select = $("#position");
+                        select.find("option").remove();
+                        $.each(response, function(index, value){
+                            $("#position").append($('<option>').text(value.posName).attr('value',value.posId));
+                        });
+                        
+                        
+                    }
+                    
+                    //$("#changed").val("changed");
+                   //$("#searchKnl").submit();
+                }
+            })
+            return false;
+        });
+         
+
+
+    });
 
 $( "#userFrom" ).validate({
   rules: {

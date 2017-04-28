@@ -85,6 +85,36 @@ public class PositionDao {
         return position;
     }
     
+     public List<Position> getPositionByDep(String depId) {
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        Position position = null;
+        List<Position> positionList = null;
+        try {
+            conn = new DbConnection().open();
+            StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT * FROM `position` p WHERE p.dep_id = ?");
+            //logger.info("sql ::=="+sql);
+            pstm = conn.prepareStatement(sql.toString());
+            pstm.setString(1, depId);
+            rs = pstm.executeQuery();
+            positionList = new ArrayList<Position>();
+            while (rs.next()) {
+                position = new Position();
+                position.setPosId(rs.getString("pos_id"));
+                position.setPosName(rs.getString("pos_name"));
+                position.setPosDesc(rs.getString("pos_desc"));
+                positionList.add(position);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("getPosition error", e);
+        } finally {
+            this.close(pstm, rs);
+        }
+        return positionList;
+    }
+    
     public int createPosition(Position position){
         int exe = 0;
         PreparedStatement pstm = null;

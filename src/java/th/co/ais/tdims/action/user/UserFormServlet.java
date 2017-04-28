@@ -5,6 +5,7 @@
  */
 package th.co.ais.tdims.action.user;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ConfigDao;
+import th.co.ais.tdims.dao.DepartmentDao;
 import th.co.ais.tdims.dao.EnvironmentDao;
+import th.co.ais.tdims.dao.ModuleDao;
 import th.co.ais.tdims.dao.PositionDao;
 import th.co.ais.tdims.dao.ProfileDao;
 import th.co.ais.tdims.dao.ProjectDao;
@@ -50,6 +53,7 @@ public class UserFormServlet extends HttpServlet {
             request.setAttribute("positionList", positionDao.getPositionAll());
             request.setAttribute("genderList", new ConfigDao().getConfigList("PROFILE_GENDER"));
             request.setAttribute("roleList", new ConfigDao().getConfigList("ROLE"));
+            request.setAttribute("depList", new DepartmentDao().getAllDepartment());
             request.setAttribute("profile", profile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,6 +61,23 @@ public class UserFormServlet extends HttpServlet {
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/user/user-form.jsp");
         dispatcher.forward(request, response);
+    }
+    
+     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+           
+            String json = new Gson().toJson(new PositionDao().getPositionByDep(request.getParameter("depId")));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+            System.out.println(" JSON :"+json);
+            
+        } catch (Exception e) {
+            logger.error("doPost UsernameFormServlet "+e.getMessage());
+        }
+        
     }
 
 }

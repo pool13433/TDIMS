@@ -16,6 +16,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.TestcaseDao;
+import th.co.ais.tdims.model.MessageUI;
+import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.model.Testcase;
 
 /**
@@ -33,7 +35,8 @@ public class TestcaseAddServlet extends HttpServlet {
             throws ServletException, IOException {
         logger.info(" save testcase ");
         try {
-       
+            Profile profile2 = (Profile)request.getSession().getAttribute("USER_PROFILE");
+            int profileNow = Integer.parseInt(profile2.getProfileId());
             String td = "";
             String issue = "";
             String date = "";
@@ -95,7 +98,7 @@ public class TestcaseAddServlet extends HttpServlet {
             data.setUpdateBy(owner);
             data.setDefectNo(td);
             data.setIssueNo(issue);
-            data.setPathDir(path);
+            data.setPathDir(path.replace("\\", "/"));
             data.setSystems(systems);
             data.setProjectId(project);
             data.setTestcaseDetails(detail);
@@ -105,20 +108,26 @@ public class TestcaseAddServlet extends HttpServlet {
             data.setStep(step);
             data.setType(type);
             data.setTestcaseId(testcaseId);
+            data.setUpdateById(profileNow);
             
             TestcaseDao testcaseDao = new TestcaseDao();
-            
+            int exec = 0;
             logger.info("testcaseId ::=="+testcaseId);
             if(testcaseId.equals("")){
                 logger.info(" create ");
-                testcaseDao.createTestcase(data);
+               exec = testcaseDao.createTestcase(data);
             }else{
                 logger.info(" update ");
                 data.setTestcaseId(testcaseId);
-                testcaseDao.updateTestcase(data);
+               exec = testcaseDao.updateTestcase(data);
             }
-            request.setAttribute("message", "save testacse success");
-            
+            MessageUI message = null;
+            if (exec == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message); 
             
 
         } catch (Exception e) {

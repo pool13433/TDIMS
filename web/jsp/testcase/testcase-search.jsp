@@ -6,7 +6,15 @@
     <div id="2" class="panel panel-ais">        
         <div id="3" class="panel-heading">Manage Testcase</div>
         <div id="4" class="panel-body">
-
+            <!-- Alert Message -->
+            <c:if test="${!empty MessageUI}">
+                <div class="alert alert-${MessageUI.cssClass} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>${MessageUI.title}!</strong> ${MessageUI.message}
+                </div>
+                <c:remove var="MessageUI" scope="session" />
+            </c:if>            
+            <!-- Alert Message -->
             <form id="searching" method="get" action="${context}/TestcaseSearchServlet" class="form-horizontal">          
                 <input type="hidden" id="menu" name="menu" value="searching"/>
                 <input type="hidden" name="offset" value="${recordCurrent}"/>
