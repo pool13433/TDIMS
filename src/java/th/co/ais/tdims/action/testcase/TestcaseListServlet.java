@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 
 /**
  *
@@ -29,7 +29,7 @@ public class TestcaseListServlet extends HttpServlet {
         
         try {            
             
-            TestcastDao testcaseDao = new TestcastDao();
+            TestcaseDao testcaseDao = new TestcaseDao();
             
             request.setAttribute("testcaseList", testcaseDao.getTestcaseAll());
             

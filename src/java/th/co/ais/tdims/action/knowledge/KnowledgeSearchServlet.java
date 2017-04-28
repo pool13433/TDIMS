@@ -7,7 +7,9 @@ package th.co.ais.tdims.action.knowledge;
 
 import com.google.gson.Gson;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -65,6 +67,7 @@ final static Logger logger = Logger.getLogger(KnowledgeSearchServlet.class);
             Desktop desktop = Desktop.getDesktop();
             File dirToOpen = null;
             try {
+                BufferedReader reader = new BufferedReader(new FileReader(dirToOpen));
                 dirToOpen = new File(path);
                 desktop.open(dirToOpen);
             } catch (Exception e) {

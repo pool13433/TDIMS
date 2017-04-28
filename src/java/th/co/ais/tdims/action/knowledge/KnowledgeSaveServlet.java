@@ -102,7 +102,7 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
             e.printStackTrace();
             logger.error("save register error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/KnowledgeSearchServlet");
+        response.sendRedirect(request.getContextPath() + "/BudgetplanSearchServlet");
     }
 
 }

@@ -97,11 +97,11 @@
                     <select class="form-control" class="form-control" id="usageType" name="site" >
                         <c:forEach items="${siteList}" var="site">                            
                             <c:choose>
-                                <c:when test="${sim.site == site.conName}">
-                                    <option value="${site.conName}" selected>${site.conValue}</option>
+                                <c:when test="${sim.site == site.conValue}">
+                                    <option value="${site.conValue}" selected>${site.conName}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${site.conName}">${site.conValue}</option>
+                                    <option value="${site.conValue}">${site.conName}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>

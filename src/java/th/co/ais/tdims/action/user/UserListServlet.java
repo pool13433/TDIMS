@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.ProfileDao;
-import th.co.ais.tdims.dao.TestcastDao;
+import th.co.ais.tdims.dao.TestcaseDao;
 
 /**
  *
