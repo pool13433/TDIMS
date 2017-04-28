@@ -19,7 +19,9 @@ public class Pagination {
 
     public Pagination(String pageUrl, int countRecordAll, int limit, int offset) {
         this.countRecordAll = countRecordAll;
-        this.pages = countRecordAll / limit;
+        double calPage = (double)countRecordAll / limit;
+        calPage=Math .round(calPage+0.4);     
+        this.pages = (int)(calPage+0.5d);
         this.pageCurrent = (offset / limit);
         this.recordCurrent = offset;
         this.recordLimit = limit;
