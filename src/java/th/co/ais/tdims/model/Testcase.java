@@ -23,6 +23,8 @@ public class Testcase {
     private String createBy;
     private String type;
     private String updateBy;
+    private int updateById;
+    private int createById;
     private String updateDate;
 
     public String getCreateDate() {
@@ -157,6 +159,22 @@ public class Testcase {
 
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
+    }
+    
+    public int getUpdateById() {
+        return updateById;
+    }
+
+    public void setUpdateById(int updateById) {
+        this.updateById = updateById;
+    }
+    
+    public int getCreateById() {
+        return createById;
+    }
+
+    public void setCreateById(int createById) {
+        this.updateById = createById;
     }
     
     

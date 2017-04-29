@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.KnowledgeDao;
 import th.co.ais.tdims.model.Knowledge;
+import th.co.ais.tdims.model.MessageUI;
 import th.co.ais.tdims.model.Profile;
 import th.co.ais.tdims.util.FileUploadUtil;
 
@@ -36,6 +37,7 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
             Profile profile2 = (Profile)request.getSession().getAttribute("USER_PROFILE");
             String profileNow = profile2.getProfileId();
             int knlId = 0;
+            int exec = 0;
             String fileName = "";
             String id = "";
             String path = "";
@@ -80,7 +82,7 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
             knowledge.setCreateBy(profileNow);
             
             knowledge.setFileName(fileName);
-            knowledge.setPath(path);
+            knowledge.setPath(path.replace("\\", "/"));
             knowledge.setTeamId(team);
             knowledge.setType(type);
             knowledge.setDetails(detail);
@@ -91,18 +93,25 @@ final static Logger logger = Logger.getLogger(KnowledgeSaveServlet.class);
              logger.info("knlId ::=="+id);
             if(id.equals("")){
                 logger.info(" create ");
-                knowledgeDao.createKnowledge(knowledge);
+               exec = knowledgeDao.createKnowledge(knowledge);
             }else{
                 logger.info(" update ");
                 knowledge.setId(id);
-                knowledgeDao.updateKnowledge(knowledge);
+                //knowledge.setUpdateBy(profileNow);
+               exec =  knowledgeDao.updateKnowledge(knowledge);
             }
-           
+           MessageUI message = null;
+            if (exec == 0) {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการบันทึกข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการบันทึกข้อมูล", "บันทึกข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("save register error", e);
         }
-        response.sendRedirect(request.getContextPath() + "/BudgetplanSearchServlet");
+        response.sendRedirect(request.getContextPath() + "/KnowledgeSearchServlet");
     }
 
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import th.co.ais.tdims.dao.KnowledgeDao;
+import th.co.ais.tdims.model.MessageUI;
 
 /**
  *
@@ -29,9 +30,14 @@ final static Logger logger = Logger.getLogger(KnowledgeDeleteServlet.class);
         int id = Integer.parseInt(request.getParameter("knlId"));
         try {
             KnowledgeDao knowledgeDao = new KnowledgeDao();
-            knowledgeDao.deleteKnowledge(id);
-       request.setAttribute("message", "delete knowledge success");
-            
+            int exec = knowledgeDao.deleteKnowledge(id);
+      MessageUI message = null;
+            if (exec == 0) {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "เกิดข้อผิดพลาดในขั้นตอนการลบข้อมูล", "danger");
+            } else {
+                message = new MessageUI(true, "สถานะการลบข้อมูล", "ลบข้อมูลสำเร็จ", "info");
+            }
+            request.getSession().setAttribute("MessageUI", message);
             
         } catch (Exception e) {
             e.printStackTrace();

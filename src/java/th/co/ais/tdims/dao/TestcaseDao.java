@@ -230,11 +230,11 @@ public class TestcaseDao {
             sql.append(" INSERT INTO `testcase` ");
             sql.append(" (`testcase_title`, `testcase_details`, `systems`, `enviroment`,");
             sql.append("  `defect_no`, `issue_no`, project_id,`path_dir`, `create_by`, ");
-            sql.append("  `create_date`,`step`, `type`, `automate`) ");
+            sql.append("  `create_date`,`step`, `type`, `automate`, `update_by`, `update_date`) ");
             sql.append(" VALUES ");
             sql.append(" (?,?,?,?,");
             sql.append(" ?,?,?,?,?,");
-            sql.append(" ?,?,?,? )");
+            sql.append(" ?,?,?,?,?,NOW() )");
 
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
@@ -252,6 +252,7 @@ public class TestcaseDao {
             pstm.setString(11, testcase.getStep());
             pstm.setString(12, testcase.getType());
              pstm.setString(13, testcase.getAutomate());
+             pstm.setInt(14, testcase.getUpdateById());
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,7 +285,7 @@ public class TestcaseDao {
             pstm.setString(6, testcase.getIssueNo());
             pstm.setString(7, testcase.getProjectId());
             pstm.setString(8, testcase.getPathDir());
-            pstm.setString(9, testcase.getUpdateBy());
+            pstm.setInt(9, testcase.getUpdateById());
             //pstm.setString(10, testcase.getUpdateDate());
             pstm.setString(10, testcase.getStep());
             pstm.setString(11, testcase.getType());
@@ -312,7 +313,7 @@ public class TestcaseDao {
             sql.append(" `systems`, `enviroment`, `defect_no`, `issue_no`, `project_id`, `automate`, `type`,  ");
             sql.append(" `path_dir`, (select pf.username from profile pf where pf.profile_id = t.create_by)  as `create_by`,  ");
             sql.append(" (select pf.username from profile pf where pf.profile_id = t.update_by)  as `update_by`, ");
-            sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , ");
+            sql.append(" DATE_FORMAT(update_date,").append(DATE_TO_STR).append(") update_date , ");
             sql.append(" DATE_FORMAT(create_date,").append(DATE_TO_STR).append(") create_date , `step` ");
             sql.append(" FROM `testcase` t WHERE testcase_id = ?");
             logger.info("sql ::=="+sql);

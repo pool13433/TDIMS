@@ -10,6 +10,7 @@ public class Profile {
     private String profileId;
     private String username;
     private String password;
+    private String department;
     private String firstName;
     private String lastName;
     private String mobile;
@@ -161,6 +162,14 @@ public class Profile {
 
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
+    }
+    
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
 }

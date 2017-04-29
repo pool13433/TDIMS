@@ -6,6 +6,16 @@
     <div class="panel panel-ais">        
         <div class="panel-heading">Manage Knowledge</div>
         <div class="panel-body">
+            
+            <!-- Alert Message -->
+            <c:if test="${!empty MessageUI}">
+                <div class="alert alert-${MessageUI.cssClass} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>${MessageUI.title}!</strong> ${MessageUI.message}
+                </div>
+                <c:remove var="MessageUI" scope="session" />
+            </c:if>            
+            <!-- Alert Message -->
 
             <form id="searchKnl" method="get" action="${context}/KnowledgeSearchServlet" class="form-horizontal">          
                 <input type="hidden" id="menu" name="menu" value="searching"/>

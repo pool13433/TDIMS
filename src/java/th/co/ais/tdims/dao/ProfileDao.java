@@ -30,7 +30,7 @@ public class ProfileDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`,");
             sql.append(" `mobile`, `email`, `position`, DATE_FORMAT(create_date,'%d-%m-%Y') create_date,");
-            sql.append(" `create_by`, DATE_FORMAT(update_date,'%d-%m-%Y') update_date, `update_by`, `status`  FROM profile p");
+            sql.append(" `create_by`, DATE_FORMAT(update_date,'%d-%m-%Y') update_date, `update_by`, `status`, `department`  FROM profile p");
             sql.append(" WHERE p.username = ? AND p.password = md5(?)");            
             logger.info("sql ::=="+sql.toString());
             logger.info("username ::=="+username);
@@ -59,9 +59,9 @@ public class ProfileDao {
             StringBuilder sql = new StringBuilder();
             sql.append(" INSERT INTO `profile` ");
             sql.append(" ( `username`, `password`, `fname`, `lname`, `gender`, ");
-            sql.append(" `mobile`, `email`, `position`, `status`,create_date,create_by,update_date,update_by) ");
+            sql.append(" `mobile`, `email`, `position`, `status`,create_date,create_by,update_date,update_by,department) ");
             sql.append(" VALUES (?,md5(?),?,?,?, ");
-            sql.append(" ?,?,?,?,NOW(),?,NOW(),? ) ");
+            sql.append(" ?,?,?,?,NOW(),?,NOW(),?,? ) ");
             //logger.info("sql ::=="+sql);
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, profile.getUsername());
@@ -74,7 +74,8 @@ public class ProfileDao {
             pstm.setInt(8, Integer.parseInt(profile.getPosition()));
             pstm.setString(9, profile.getStatus());            
             pstm.setInt(10, profile.getCreateBy());        
-            pstm.setInt(11, profile.getUpdateBy());    
+            pstm.setInt(11, profile.getUpdateBy()); 
+            pstm.setString(12, profile.getDepartment()); 
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,7 +149,7 @@ public class ProfileDao {
             StringBuilder sql = new StringBuilder();
             
             sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`,");
-            sql.append(" `mobile`, `email`,(SELECT ps.pos_name FROM position ps WHERE ps.pos_id = p.position) as `position`, DATE_FORMAT(create_date,'%d");
+            sql.append(" `mobile`, `email`, `department`,(SELECT ps.pos_name FROM position ps WHERE ps.pos_id = p.position) as `position`, DATE_FORMAT(create_date,'%d");
             sql.append("%m-%Y') create_date,(SELECT t.username FROM profile t WHERE t.profile_id = p.create_by) as `create_by`,");
             sql.append(" DATE_FORMAT(update_date,'%d-%m-%Y') update_date,(SELECT t.username FROM profile t WHERE t.profile_id = p.update_by) as");
             sql.append(" `update_by`, `status`  FROM profile p ORDER BY p.username ");
@@ -171,6 +172,7 @@ public class ProfileDao {
     private Profile getEntityProfile(ResultSet rs) throws SQLException {
         Profile user = new Profile();
         user.setProfileId(rs.getString("profile_id"));
+        user.setDepartment(rs.getString("department"));
         //user.setCreateBy(rs.getInt("create_by"));
         user.setCreateByUsername(rs.getString("create_by"));
         user.setUpdateByUsername(rs.getString("update_by"));
@@ -196,7 +198,7 @@ public class ProfileDao {
         try {
             conn = new DbConnection().open();
             StringBuilder sql = new StringBuilder();
-            sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`,");
+            sql.append(" SELECT `profile_id`, `username`, `password`, `fname`, `lname`, `gender`, `department`,");
             sql.append(" `mobile`, `email`, `position`, DATE_FORMAT(create_date,'%d-%m-%Y') create_date,");
             sql.append(" `create_by`, DATE_FORMAT(update_date,'%d-%m-%Y') update_date, `update_by`, `status`  FROM profile p WHERE profile_id=?");
             sql.append(" ORDER BY p.username ");
@@ -225,7 +227,7 @@ public class ProfileDao {
             sql.append(" UPDATE `profile` SET ");
             sql.append(" `fname`=?,`lname`=?,`gender`=?,");
             sql.append(" `mobile`=?,`email`=?,`position`=?,");
-            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=md5(?), `status`=?  ");
+            sql.append(" update_date=NOW(),update_by=?, `username`=?, `password`=md5(?), `status`=?, `department`=?  ");
             sql.append(" WHERE profile_id=? ");
             pstm = conn.prepareStatement(sql.toString());
             pstm.setString(1, profile.getFirstName());
@@ -238,7 +240,8 @@ public class ProfileDao {
             pstm.setString(8, profile.getUsername());
              pstm.setString(9, profile.getPassword());
               pstm.setString(10, profile.getStatus());
-            pstm.setInt(11, Integer.parseInt(profile.getProfileId()));       
+              pstm.setString(11, profile.getDepartment());
+            pstm.setInt(12, Integer.parseInt(profile.getProfileId()));       
             exe = pstm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
